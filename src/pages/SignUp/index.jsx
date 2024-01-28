@@ -134,6 +134,11 @@ function index() {
                                 <div class="alert alert-danger" role="alert">
                                     {generalErrors}
                                 </div>
+                            } {
+                                succesMessage &&
+                                <div class="alert alert-success" role="alert">
+                                    {succesMessage}
+                                </div>
                             }
                             <div className="form-check">
                                 <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
