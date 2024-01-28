@@ -5,10 +5,13 @@ import { RouterProvider } from 'react-router-dom'
 import TopBar from "./components/header/TopBar"
 import "./locales/i18nConfiguration"
 import './index.scss'
-import router from './router'
+import createBrowserRouter from './router/index'
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
+
+const router = createBrowserRouter;
+
 
 root.render(
   <StrictMode>
