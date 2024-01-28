@@ -1,0 +1,9 @@
+.navbar-brand img {
+margin-right: 15px;
+}
+
+.lang ul li {
+    display: inline;
+    list-style: none;
+    padding: 0 5px;
+}
