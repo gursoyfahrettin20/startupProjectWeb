@@ -1,5 +1,5 @@
 import React from 'react';
-import defaultPicture from "../../assets/profile.png";
+import defaultPicture from "@/assets/profile.png";
 
 const ProfileImageWithDefault = (props) => {
     const {user, style, className, tempImg} = props;

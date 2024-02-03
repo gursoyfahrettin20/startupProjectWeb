@@ -2,9 +2,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import _ from 'lodash';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import { singUp } from "../../api/apiCalls.js";
-import { FormItem } from "../../components/formItem/formItem.jsx";
+import { singUp } from "@/api/apiCalls.js";
+import { FormItem } from "@/components/formItem/formItem.jsx";
 import { useTranslation } from "react-i18next"
+import  Alert  from "@/components/alert"
 
 function index() {
     const { t } = useTranslation();
@@ -12,7 +13,7 @@ function index() {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [passwordRepeat, setPasswordRepeat] = useState();
-    const [succesMessage, setSuccesMessage] = useState();
+    const [successMessage, setSuccessMessage] = useState();
     const [submittable, setSubmittable] = useState(false);
     const [apiProgress, setApiProgress] = useState(false);
     const [errors, setErrors] = useState({});
@@ -43,7 +44,7 @@ function index() {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        setSuccesMessage();
+        setSuccessMessage();
         setGeneralErrors();
         setApiProgress(true);
         const data = {
@@ -53,7 +54,7 @@ function index() {
         };
         try {
             const response = await singUp(data);
-            setSuccesMessage(response.data?.message)
+            setSuccessMessage(response.data?.message)
             setUsername();
             setPassword();
             setPasswordRepeat();
@@ -121,28 +122,17 @@ function index() {
                                 type="password"
                                 onChange={(e) => setPasswordRepeat(e.target.value)}
                             />
-                             {
-                                generalErrors &&
-                                <div class="alert alert-danger" role="alert">
-                                    {generalErrors}
-                                </div>
-                            } {
-                                succesMessage &&
-                                <div class="alert alert-success" role="alert">
-                                    {succesMessage}
-                                </div>
+                            {
+                                generalErrors && (<Alert status={generalErrors} styleType={"danger"} />)
                             }
-                            <div className="form-check">
-                                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                                <label className="form-check-label" htmlFor="flexCheckDefault">
-                                    {t("remember")}
-                                </label>
-                            </div>
+                            {
+                                successMessage && (<Alert status={successMessage} styleType={"success"} />)
+                            }
                             <div className='text-center'>
                                 <button className='btn btn-primary' disabled={apiProgress ? apiProgress : !submittable}>
                                     <Spin style={{ display: apiProgress ? "inline" : "none" }}
                                         indicator={<LoadingOutlined style={{ fontSize: 24, marginRight: 15 }} spin />} />
-                                    {apiProgress ? "Yeni Üye Oluşturuluyor..." : t("singup")}
+                                    {apiProgress ? "Yeni Üye Oluşturuluyor..." : t("singUp")}
                                 </button>
                             </div>
                         </div>
