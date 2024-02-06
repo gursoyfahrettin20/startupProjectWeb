@@ -34,7 +34,6 @@ function User() {
                     <h2>User Detail</h2>
                     <p>ID: {userState.id}</p>
                     <p>Name: {userState.username}</p>
-                    {/* Diğer kullanıcı bilgileri buraya eklenebilir */}
                 </div>
             )}
 
