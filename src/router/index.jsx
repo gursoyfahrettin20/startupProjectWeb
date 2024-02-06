@@ -1,9 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
-import SignUp from "../pages/SingUp"
-import App from "../App"
-import Home from "../pages/Home"
-import Login from "../pages/Login"
-import { Activation } from '../pages/Activation/index'
+import SignUp from "@/pages/SingUp"
+import App from "@/App"
+import Home from "@/pages/Home"
+import Login from "@/pages/Login"
+import { Activation } from '@/pages/Activation/index'
+import User from '@/pages/User/index'
 
 export default createBrowserRouter([
     {
@@ -28,6 +29,9 @@ export default createBrowserRouter([
             }, {
                 path: '/activation/:token',
                 Component: Activation
+            }, {
+                path: '/user/:id',
+                Component: User
             },
         ]
     }

@@ -1,8 +1,9 @@
+import UserList from "../UserList";
 
 function index() {
   return (
     <>
-      Web tarafının Ana sayfası
+      <UserList />
     </>
   );
 }

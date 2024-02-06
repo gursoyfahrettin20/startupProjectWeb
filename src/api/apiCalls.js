@@ -21,3 +21,12 @@ export const activateUser = (token) => {
     return http.patch(getBaseUrl() + `/users/${token}/active`);
 }
 
+// Kullanıcıları listeler.
+export const loadUser = (page = 0, size = 10) => {
+    return http.get(getBaseUrl() + `/users`, { params: { page, size } });
+}
+
+// Kullanıcı'yı id sine göre getirir.
+export const getUser = (id) => {
+    return http.get(getBaseUrl() + `/users/${id}`);
+}

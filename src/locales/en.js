@@ -18,7 +18,7 @@ export const en = {
         "thereAreNoHoaxes": "There are no hoaxes",
         "loadOldHoaxes": "Load Old Hoaxes",
         "remember": "Remember",
-        "newMember": "Creating a New Member..."
+        "newMember": "Creating a New Member...",
     }
 }
 
