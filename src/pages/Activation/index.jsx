@@ -22,7 +22,7 @@ export function Activation() {
             }
         }
         activate();
-    }, [])
+    }, [token])
 
     return (
         <>

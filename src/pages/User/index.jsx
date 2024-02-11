@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getUser } from "@/api/apiCalls.js";
+import  ProfileCard  from "@/pages/ProfileCard";
 
 function User() {
     const { id } = useParams();
@@ -29,13 +30,8 @@ function User() {
                 <span className="spinner-border" aria-hidden="true"></span>
             )}
 
-            {userState && (
-                <div>
-                    <h2>User Detail</h2>
-                    <p>ID: {userState.id}</p>
-                    <p>Name: {userState.username}</p>
-                </div>
-            )}
+            
+            {userState && <ProfileCard user={userState} />}
 
             {errorMessage && (
                 <div className="alert alert-danger" role="alert">

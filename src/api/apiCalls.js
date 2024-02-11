@@ -30,3 +30,8 @@ export const loadUser = (page = 0, size = 10) => {
 export const getUser = (id) => {
     return http.get(getBaseUrl() + `/users/${id}`);
 }
+
+// Kullanıcı girişi.
+export const Login = body => {
+    return http.post(getBaseUrl() + '/auth', body);
+}

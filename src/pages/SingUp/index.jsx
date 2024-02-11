@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import _ from 'lodash';
-import { Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
 import { singUp } from "@/api/apiCalls.js";
 import { FormItem } from "@/components/formItem/formItem.jsx";
 import { useTranslation } from "react-i18next"
-import  Alert  from "@/components/alert"
+import Alert from "@/components/alert";
+import Buttons from "@/components/customButton";
 
 function index() {
     const { t } = useTranslation();
@@ -129,11 +128,12 @@ function index() {
                                 successMessage && (<Alert status={successMessage} styleType={"success"} />)
                             }
                             <div className='text-center'>
-                                <button className='btn btn-primary' disabled={apiProgress ? apiProgress : !submittable}>
-                                    <Spin style={{ display: apiProgress ? "inline" : "none" }}
-                                        indicator={<LoadingOutlined style={{ fontSize: 24, marginRight: 15 }} spin />} />
-                                    {apiProgress ? "Yeni Üye Oluşturuluyor..." : t("singUp")}
-                                </button>
+                                <Buttons
+                                    className={"btn btn-primary"}
+                                    apiProgress={apiProgress}
+                                    label={t("singUp")}
+                                    disabled={apiProgress ? apiProgress : !submittable}
+                                />
                             </div>
                         </div>
                     </div>

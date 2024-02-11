@@ -18,7 +18,8 @@ export const tr = {
         "thereAreNoHoaxes": "Hoaxlar Bulunamadı",
         "loadOldHoaxes": "Eski Hoaxları Getir",
         "remember": "Hatırla",
-        "newMember": "Yeni Üye Oluşturuluyor..."
+        "newMember": "Yeni Üye Oluşturuluyor...",
+        "loading": "Bekleyiniz"
     }
 }
 
