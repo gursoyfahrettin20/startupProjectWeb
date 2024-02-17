@@ -4,7 +4,6 @@ import { loadUser } from "@/api/apiCalls"
 import { useCallback, useEffect, useState } from "react";
 import { LoadingOutlined } from '@ant-design/icons';
 import UserListItem from './UserListItem';
-import { Link } from 'react-router-dom';
 
 function UserList() {
     const { t } = useTranslation();
@@ -36,7 +35,7 @@ function UserList() {
     return (
         <div className="card">
             <div className="card-header text-center fs-4">User List</div>
-            <ul className="list-group  list-group-flush">
+            <ul className="list-group  list-group-flush" id={"user-list-group"} key={123123}>
                 {
                     userPage.content.map((user, key) => {
                         return (
