@@ -1,56 +1,37 @@
 import axios from "axios";
+import http from "../lib/http";
 
+// Dil değişimi için alan
 export const changeLanguage = lang => {
     axios.defaults.headers['accept-language'] = lang;
 }
 
+// Genel url uzantısı
 export const getBaseUrl = () => {
-     return import.meta.env.VITE_REACT_APP_REST_SERVICE_URL;
+    return import.meta.env.VITE_REACT_APP_REST_SERVICE_URL;
 }
 
-export const saveUser = body => {
-    return axios.post(getBaseUrl() + '/users', body);
-}
-
+// Yeni kullanıcı oluşturur.
 export const singUp = body => {
-    return axios.post(getBaseUrl() + '/users', body);
+    return http.post(getBaseUrl() + '/users', body);
 }
 
-export const login = data => {
-    return axios.post(getBaseUrl() + '/auth', {}, {auth: data});
+// Kullanıcı'yı aktif hale getirir.
+export const activateUser = (token) => {
+    return http.patch(getBaseUrl() + `/users/${token}/active`);
 }
 
-export const getUsers = (page, size) => {
-    return axios.get(getBaseUrl() + `/users?currentPage=${page ? page : 0}&pageSize=${size ? size : 3}`);
+// Kullanıcıları listeler.
+export const loadUser = (page = 0, size = 10) => {
+    return http.get(getBaseUrl() + `/users`, { params: { page, size } });
 }
 
-export const setAuthorizationHeader = ({username, password, isLoggedIn}) => {
-    if (isLoggedIn) {
-        let authorizationHeaderValue = `Basic ${btoa(username + ':' + password)}`
-        axios.defaults.headers['Authorization'] = authorizationHeaderValue;
-    } else {
-        delete axios.defaults.headers['Authorization'];
-    }
+// Kullanıcı'yı id sine göre getirir.
+export const getUser = (id) => {
+    return http.get(getBaseUrl() + `/users/${id}`);
 }
 
-export const getUser = (userName) => {
-    return axios.get(getBaseUrl() + `/users/${userName}`);
-}
-
-export const updateUser = (userName, body) => {
-    return axios.put(getBaseUrl() + `/users/${userName}`, body);
-}
-
-export const postHoax = hoax => {
-    return axios.post(getBaseUrl() + "/hoaxes", hoax);
-}
-
-export const getHoaxes = (userName, page = 0) => {
-    const path = userName ? `/users/${userName}/hoaxes?currentPage=` : "/hoaxes?currentPage="
-    return axios.get(getBaseUrl() + path + page);
-}
-
-export const getOldHoaxes = (id, userName) => {
-    const path = userName ? `/users/${userName}/hoaxes/${id}` : `/hoaxes/${id}`;
-    return axios.get(getBaseUrl() + path);
+// Kullanıcı girişi.
+export const Login = body => {
+    return http.post(getBaseUrl() + '/auth', body);
 }

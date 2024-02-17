@@ -1,8 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
-import SignUp from "../adminPanel/SignUp"
-import App from "../App"
-import Home from "../web/Home/index"
-import Login from "../adminPanel/Login/index"
+import SignUp from "@/pages/SingUp"
+import App from "@/App"
+import Home from "@/pages/Home"
+import Login from "@/pages/Login"
+import { Activation } from '@/pages/Activation/index'
+import User from '@/pages/User/index'
 
 export default createBrowserRouter([
     {
@@ -13,18 +15,23 @@ export default createBrowserRouter([
             {
                 path: '/',
                 index: true,
-                Component: Home
+                Component: Home,
             }, {
                 path: '/iletisim',
                 element: (<div>İletişim Sayfası</div>)
             },
-            // Admin panel ile alakalı url listesi
             {
                 path: '/login',
                 Component: Login
             }, {
-                path: '/signup',
+                path: '/singup',
                 Component: SignUp
+            }, {
+                path: '/activation/:token',
+                Component: Activation
+            }, {
+                path: '/user/:id',
+                Component: User
             },
         ]
     }
