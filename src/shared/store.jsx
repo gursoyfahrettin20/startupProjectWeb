@@ -1,20 +1,20 @@
 import { useReducer, useEffect } from "react";
-import { authReducer, AuthContext, AuthDispatchContext } from "./context";
+import { propsReducer, PropsContext, PropsDispatchContext } from "./context";
 import { loadAuthState, storeAuthState } from "./localStorage";
 
 
-export function AuthenticationContex({ children }) {
-    const [authState, dispatch] = useReducer(authReducer, loadAuthState());
+export function AuthenticationContext({ children }) {
+    const [propsState, dispatch] = useReducer(propsReducer, loadAuthState());
 
     useEffect(() => {
-        storeAuthState(authState);
-    }, [authState]);
+        storeAuthState(propsState);
+    }, [propsState]);
 
     return (
-        <AuthContext.Provider value={authState}>
-            <AuthDispatchContext.Provider value={dispatch}>
+        <PropsContext.Provider value={propsState}>
+            <PropsDispatchContext.Provider value={dispatch}>
                 {children}
-            </AuthDispatchContext.Provider>
-        </AuthContext.Provider>
+            </PropsDispatchContext.Provider>
+        </PropsContext.Provider>
     );
 }

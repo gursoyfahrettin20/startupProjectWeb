@@ -1,23 +1,26 @@
-import { createContext, useContext } from "react";
+import {createContext, useContext} from "react";
+import {setToken} from "@/lib/http.js";
 
-export const AuthContext = createContext();
-export const AuthDispatchContext = createContext();
+export const PropsContext = createContext();
+export const PropsDispatchContext = createContext();
 
-export const authReducer = (authState, action) => {
+export const propsReducer = (authState, action) => {
     switch (action.type) {
         case "login-success":
-            return action.data;
+            setToken(action.data.token);
+            return action.data.user;
         case "logout-success":
-            return { id: 0 }
+            setToken();
+            return {id: 0}
         default:
             throw new Error(`unknown action: ${action.type}`)
     }
 }
 
-export function useAuthState() {
-    return useContext(AuthContext);
+export function usePropState() {
+    return useContext(PropsContext);
 }
 
-export function useAuthDispatch() {
-    return useContext(AuthDispatchContext);
+export function usePropDispatch() {
+    return useContext(PropsDispatchContext);
 }

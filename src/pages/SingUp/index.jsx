@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import _ from 'lodash';
 import { singUp } from "@/api/apiCalls.js";
-import { FormItem } from "@/components/formItem/formItem.jsx";
+import { FormItem } from "@/components/formItem/FormItem";
 import { useTranslation } from "react-i18next"
 import Alert from "@/components/alert";
-import Buttons from "@/components/customButton";
+import Buttons from "@/components/customButton/Buttons"
 
 function index() {
     const { t } = useTranslation();

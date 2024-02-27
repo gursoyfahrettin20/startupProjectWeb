@@ -4,12 +4,12 @@ import { useTranslation } from "react-i18next";
 import LanguageSelector from "./LanguageSelector";
 import "./index.css"
 import { Link } from "react-router-dom";
-import { useAuthState, useAuthDispatch } from "@/shared/context";
+import { usePropState, usePropDispatch } from "@/shared/context";
 
 const TopBar = () => {
     const { t } = useTranslation();
-    const authState = useAuthState();
-    const dispatch = useAuthDispatch();
+    const authState = usePropState();
+    const dispatch = usePropDispatch();
 
     const onHandlerLogout = () => {
         dispatch({ type: "logout-success", data: {} });

@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
-import _ from 'lodash';
-import { FormItem } from "@/components/formItem/formItem.jsx";
+import { FormItem } from "@/components/formItem/FormItem";
 import { useTranslation } from "react-i18next";
 import Alert from "@/components/alert";
-import Buttons from "@/components/customButton";
+import Buttons from "@/components/customButton/Buttons"
 import { Login } from '@/api/apiCalls';
-import { useAuthDispatch } from '@/shared/context';
+import { usePropDispatch } from '@/shared/context';
 import { useNavigate } from 'react-router-dom';
 
-function index() {
+function Index() {
     const { t } = useTranslation();
-    const dispatch = useAuthDispatch();
+    const dispatch = usePropDispatch();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [apiProgress, setApiProgress] = useState(false);
@@ -40,7 +39,7 @@ function index() {
         };
         try {
             const response = await Login(data);
-            dispatch({ type: "login-success", data: response.data.user });
+            dispatch({ type: "login-success", data: response.data });
             navigate("/");
             setPassword();
             setEmail();
@@ -103,4 +102,4 @@ function index() {
     );
 }
 
-export default index
+export default Index

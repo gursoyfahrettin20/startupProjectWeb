@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import SignUp from "@/pages/SingUp"
 import App from "@/App"
 import Home from "@/pages/Home"
-import Login from "@/pages/Login"
+import Login from "@/pages/Login/Index.jsx"
 import { Activation } from '@/pages/Activation/index'
 import User from '@/pages/User/index'
 
