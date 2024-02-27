@@ -1,16 +1,18 @@
-import { Outlet } from 'react-router-dom'
+import {Outlet} from 'react-router-dom'
 import TopBar from "./components/header/TopBar"
+import {AuthenticationContext} from '@/shared/store';
+import {StrictMode} from "react";
 
 function App() {
 
     return (
-        <>
-            <TopBar />
+        <AuthenticationContext>
+            <TopBar/>
             <div className='container mt-3'>
-                <Outlet />
+                <Outlet/>
             </div>
-        </>
-    );
+        </AuthenticationContext>
+    );d
 }
 
 export default App;

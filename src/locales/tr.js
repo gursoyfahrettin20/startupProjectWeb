@@ -19,7 +19,8 @@ export const tr = {
         "loadOldHoaxes": "Eski Hoaxları Getir",
         "remember": "Hatırla",
         "newMember": "Yeni Üye Oluşturuluyor...",
-        "loading": "Bekleyiniz"
+        "loading": "Bekleyiniz",
+        "edit": "Düzenle"
     }
 }
 

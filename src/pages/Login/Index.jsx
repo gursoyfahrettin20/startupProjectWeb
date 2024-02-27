@@ -1,20 +1,21 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import _ from 'lodash';
-import { FormItem } from "@/components/formItem/formItem.jsx";
+import React, { useState, useEffect, useContext } from 'react';
+import { FormItem } from "@/components/formItem/FormItem";
 import { useTranslation } from "react-i18next";
 import Alert from "@/components/alert";
-import Buttons from "@/components/customButton";
+import Buttons from "@/components/customButton/Buttons"
 import { Login } from '@/api/apiCalls';
+import { usePropDispatch } from '@/shared/context';
+import { useNavigate } from 'react-router-dom';
 
-function index() {
+function Index() {
     const { t } = useTranslation();
+    const dispatch = usePropDispatch();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [apiProgress, setApiProgress] = useState(false);
     const [errors, setErrors] = useState({});
     const [generalErrors, setGeneralErrors] = useState(null);
-    const [submittable, setSubmittable] = useState(false);
-    const [successMessage, setSuccessMessage] = useState();
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -29,7 +30,6 @@ function index() {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        // setSuccessMessage();
         setGeneralErrors();
         setApiProgress(true);
 
@@ -39,7 +39,8 @@ function index() {
         };
         try {
             const response = await Login(data);
-            // setSuccessMessage(response.data?.message);
+            dispatch({ type: "login-success", data: response.data });
+            navigate("/");
             setPassword();
             setEmail();
         } catch (responseError) {
@@ -58,17 +59,6 @@ function index() {
             setApiProgress(false);
         }
     }
-
-    // TODO: Login butonu disabled durumlarına bakıyor.
-    useEffect(() => {
-        let _submittable = false;
-        if (_.isUndefined(password) || _.isNull(password) || _.isEmpty(password) || _.isUndefined(email) || _.isNull(email) || _.isEmpty(email)) {
-            _submittable = false;
-        } else {
-            _submittable = true;
-        }
-        setSubmittable(_submittable);
-    });
 
     return (
         <div className='container'>
@@ -94,7 +84,7 @@ function index() {
                         {
                             generalErrors && (<Alert status={generalErrors} styleType={"danger"} />)
                         }
-                       {/*  {
+                        {/*  {
                             successMessage && (<Alert status={successMessage} styleType={"success"} />)
                         } */}
                         <div className='text-center'>
@@ -112,4 +102,4 @@ function index() {
     );
 }
 
-export default index
+export default Index

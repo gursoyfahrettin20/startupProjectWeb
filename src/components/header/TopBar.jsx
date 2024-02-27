@@ -4,9 +4,16 @@ import { useTranslation } from "react-i18next";
 import LanguageSelector from "./LanguageSelector";
 import "./index.css"
 import { Link } from "react-router-dom";
+import { usePropState, usePropDispatch } from "@/shared/context";
 
 const TopBar = () => {
     const { t } = useTranslation();
+    const authState = usePropState();
+    const dispatch = usePropDispatch();
+
+    const onHandlerLogout = () => {
+        dispatch({ type: "logout-success", data: {} });
+    }
 
     return (
         <div className={"shadow-sm bg-light mb-2"}>
@@ -20,13 +27,24 @@ const TopBar = () => {
                             </Link>
                         </div>
                         <div className={"col-2"}>
-                            <ul className="navbar-nav navbar-right" style={{float:"right", marginTop:"-15px"}}>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to={"/login"}>{t("login")}</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to={"/singup"}>{t("singUp")}</Link>
-                                </li>
+                            <ul className="navbar-nav navbar-right" style={{ float: "right", marginTop: "-15px" }}>
+                                {authState.id == 0 ? <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to={"/login"}>{t("login")}</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to={"/singup"}>{t("singUp")}</Link>
+                                    </li>
+                                </> :
+                                    <>
+                                        <li className="nav-item">
+                                            <Link className="nav-link" to={`/user/${authState.id}`}>{t("myProfile")}</Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <span className="nav-link" role="button" onClick={() => onHandlerLogout()}>{t("logout")}</span>
+                                        </li>
+                                    </>
+                                }
                             </ul>
                         </div>
                         <div className={"col-2"}>

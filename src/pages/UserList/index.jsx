@@ -1,14 +1,15 @@
-import { Spin } from 'antd';
-import { useTranslation } from "react-i18next"
-import { loadUser } from "@/api/apiCalls"
-import { useCallback, useEffect, useState } from "react";
-import { LoadingOutlined } from '@ant-design/icons';
+import {Spin} from 'antd';
+import {useTranslation} from "react-i18next"
+import {loadUser} from "@/api/apiCalls"
+import {useCallback, useEffect, useState} from "react";
+import {LoadingOutlined} from '@ant-design/icons';
 import UserListItem from './UserListItem';
-import { Link } from 'react-router-dom';
+import {v4 as uuidv4} from 'uuid';
 
 function UserList() {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const [apiProgress, setApiProgress] = useState(false);
+
     const [userPage, setUsersPage] = useState({
         content: [],
         number: 0,
@@ -21,11 +22,11 @@ function UserList() {
         try {
             const response = await loadUser(page, 5);
             setUsersPage(response.data);
-        }
-        catch (error) {
+        } catch (error) {
 
+        } finally {
+            setApiProgress(false);
         }
-        finally { setApiProgress(false); }
 
     }, []);
 
@@ -36,12 +37,13 @@ function UserList() {
     return (
         <div className="card">
             <div className="card-header text-center fs-4">User List</div>
-            <ul className="list-group  list-group-flush">
+            <ul className="list-group  list-group-flush" id={"user-list-group"} key={123123}>
                 {
                     userPage.content.map((user, key) => {
                         return (
-                            <a className='text-decoration-none' style={{ textDecoration: "none" }} href={`/user/${user.id}`} >
-                                <UserListItem key={key} user={user} />
+                            <a className='text-decoration-none' key={uuidv4()} style={{textDecoration: "none"}}
+                               href={`/user/${user.id}`}>
+                                <UserListItem key={uuidv4()} user={user}/>
                             </a>
                         )
                     })
@@ -60,8 +62,8 @@ function UserList() {
 
 
                 {
-                    apiProgress && <Spin style={{ display: apiProgress ? "inline" : "none" }}
-                        indicator={<LoadingOutlined style={{ fontSize: 24, marginRight: 15 }} spin />} />
+                    apiProgress && <Spin style={{display: apiProgress ? "inline" : "none"}}
+                                         indicator={<LoadingOutlined style={{fontSize: 24, marginRight: 15}} spin/>}/>
                 }
                 {
                     (!apiProgress && !userPage.last) &&

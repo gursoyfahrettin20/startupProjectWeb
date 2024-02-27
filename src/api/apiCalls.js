@@ -23,7 +23,7 @@ export const activateUser = (token) => {
 
 // Kullanıcıları listeler.
 export const loadUser = (page = 0, size = 10) => {
-    return http.get(getBaseUrl() + `/users`, { params: { page, size } });
+    return http.get(getBaseUrl() + `/users`, {params: {page, size}});
 }
 
 // Kullanıcı'yı id sine göre getirir.
@@ -34,4 +34,10 @@ export const getUser = (id) => {
 // Kullanıcı girişi.
 export const Login = body => {
     return http.post(getBaseUrl() + '/auth', body);
+}
+
+// Kullanıcı Kendi Bilgilerini Güncelleme Alanı.
+
+export const updateUser = (id, body) => {
+    return http.put(getBaseUrl() + `/users/${id}`, body);
 }

@@ -19,7 +19,8 @@ export const en = {
         "loadOldHoaxes": "Load Old Hoaxes",
         "remember": "Remember",
         "newMember": "Creating a New Member...",
-        "loading": "Loading"
+        "loading": "Loading",
+        "edit": "Edit"
     }
 }
 

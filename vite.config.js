@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 3434,
-      open: true,
+      open: false,
       host: "localhost",
     },
     review: {
