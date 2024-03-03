@@ -9,6 +9,7 @@ export function FormItem({name, label, onChange, errors, type, defaultValue}) {
                    className={errors ? 'form-control is-invalid' : 'form-control'}
                    type={type ? type : "text"}
                    onChange={onChange}
+                   // value={defaultValue}
                    defaultValue={defaultValue}
             />
             <div className='invalid-feedback'>{errors}</div>

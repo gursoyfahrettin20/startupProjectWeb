@@ -46,7 +46,7 @@ function Index() {
         } catch (responseError) {
             if (responseError.response?.data) {
                 if (responseError.response?.data.status === 400) {
-                    setErrors(responseError.response?.data.validationErrors)
+                    setErrors(responseError.response?.data["validationErrors"])
                 }
                 else {
                     setGeneralErrors(responseError.response?.data.message)
@@ -87,6 +87,7 @@ function Index() {
                         {/*  {
                             successMessage && (<Alert status={successMessage} styleType={"success"} />)
                         } */}
+
                         <div className='text-center'>
                             <Buttons
                                 className={"btn btn-primary"}

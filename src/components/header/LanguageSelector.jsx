@@ -3,7 +3,6 @@ import { changeLanguage } from "@/api/apiCalls";
 import { useTranslation } from "react-i18next";
 import trFlag from "@/assets/tr.png"
 import enFlag from "@/assets/en.png"
-import { initReactI18next } from "react-i18next";
 
 const LanguageSelector = () => {
     const { i18n } = useTranslation();
