@@ -15,7 +15,8 @@ export const propsReducer = (props, action) => {
         case "user-update-data":
             return {
                 ...props,
-                username: action.data.username
+                username: action.data.username,
+                image: action.data.image
             }
         default:
             throw new Error(`unknown action: ${action.type}`)

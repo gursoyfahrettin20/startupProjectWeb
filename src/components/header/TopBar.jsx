@@ -39,7 +39,7 @@ const TopBar = () => {
                                 <li className="nav-item">
                                     <Link className="nav-link" to={`/user/${authState.id}`}>
                                         {<>
-                                            <ProfileImage style={{width: 20, height: 20}}/>
+                                            <ProfileImage style={{width: 20, height: 20}} image={authState.image}/>
                                             <span className={"ms-2"}>
                                                     {authState.username}
                                                 </span>

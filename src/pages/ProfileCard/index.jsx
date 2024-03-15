@@ -9,6 +9,7 @@ function ProfileCard(props) {
     const {t} = useTranslation();
     const propState = usePropState();
     const [isEdit, setIsEdit] = useState(false);
+    const [tempImage, setTempImage] = useState();
 
     const onHandlerEditMode = (event) => {
         setIsEdit(event);
@@ -22,7 +23,7 @@ function ProfileCard(props) {
     return (
         <div className={"card"}>
             <div className={"card-image text-center"}>
-                <ProfileImage style={{width: 200, height: 200}}/>
+                <ProfileImage style={{width: 200, height: 200}} tempImage={tempImage} image={props.user.image}/>
             </div>
             <div className={"card-body d-block text-center"}>
                 {!isEdit && (<div className="fs-3 d-block"> {props.user.username}</div>)}
@@ -31,7 +32,9 @@ function ProfileCard(props) {
                     <UserEditForm
                         setEditMode={onHandlerEditMode}
                         user={props.user}
-                        isUpdated={(data) => userUpdate(data)}/>)}
+                        isUpdated={(data) => userUpdate(data)}
+                        setTempImage={setTempImage}
+                    />)}
             </div>
         </div>
     );

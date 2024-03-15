@@ -5,8 +5,8 @@ import Buttons from "@/components/customButton/Buttons.jsx";
 import {updateUser} from "@/api/apiCalls.js";
 import {usePropDispatch, usePropState} from "@/shared/context.jsx";
 import {useTranslation} from "react-i18next";
-import {storeAuthState} from "@/shared/localStorage.js";
-import _ from "lodash";
+import {Space} from 'antd';
+import {Col, Row} from "antd";
 
 function UserEditForm(props) {
     const {t} = useTranslation();
@@ -17,6 +17,7 @@ function UserEditForm(props) {
     const [errors, setErrors] = useState({});
     const [generalErrors, setGeneralErrors] = useState(null);
     const [isUpdated, setIsUpdated] = useState(false);
+    const [newImage, setNewImage] = useState();
 
     useEffect(() => {
         setNewUsername(props.user.username);
@@ -25,7 +26,31 @@ function UserEditForm(props) {
 
     const onChangeUsername = (event) => {
         setNewUsername(event.target.value);
-        setErrors({});
+        setErrors((lastErrors) => {
+            return {...lastErrors, username: undefined}
+        })
+        setGeneralErrors(null)
+    }
+
+    const onSelectImage = (event) => {
+        if (event.target.files < 1) {
+            return;
+        }
+        setErrors((lastErrors) => {
+            return {
+                ...lastErrors,
+                image: undefined
+            }
+        })
+        setGeneralErrors(null)
+        const file = event.target.files[0];
+        const fileReader = new FileReader();
+        fileReader.onloadend = () => {
+            const data = fileReader.result;
+            setNewImage(data);
+            props.setTempImage(data);
+        }
+        fileReader.readAsDataURL(file);
     }
 
     const onClickSave = async () => {
@@ -33,9 +58,9 @@ function UserEditForm(props) {
         setErrors({});
         setGeneralErrors();
         try {
-            await updateUser(props.user.id, {username: newUsername});
+            const {data} = await updateUser(props.user.id, {username: newUsername, image: newImage});
             if (propState.id === props.user.id) {
-                dispatch({type: "user-update-data", data: {username: newUsername}})
+                dispatch({type: "user-update-data", data: {username: data.username, image: data.image}})
             }
             props.isUpdated(true);
             props.setEditMode(false);
@@ -57,30 +82,56 @@ function UserEditForm(props) {
     const onChangeCancel = () => {
         props.setEditMode(false);
         setNewUsername(props.user.username);
+        setNewImage();
+        props.setTempImage();
     }
+
     return (
-        <>
-            <FormItem
-                name="Username"
-                label={t("Username")}
-                defaultValue={newUsername}
-                errors={errors.username}
-                onChange={onChangeUsername}
-            />
-            {
-                generalErrors && (<Alert status={generalErrors} styleType={"danger"}/>)
-            }
-            <Buttons
-                label={t("save")}
-                apiProgress={apiProgress}
-                onClick={onClickSave}/>
-            <div className={"d-inline m-1"}></div>
-            <Buttons
-                label={t("cancel")}
-                styleType={"outline-secondary"}
-                onClick={onChangeCancel}
-            />
-        </>
+        <Row gutter={[12, 12]} justify="start">
+            <Col className={"gutter-row"} xxl={12} xl={12} lg={12} sm={24} md={24} xs={24}>
+                <FormItem
+                    name="username"
+                    label={t("username")}
+                    defaultValue={newUsername}
+                    errors={errors.username}
+                    onChange={onChangeUsername}
+                />
+            </Col>
+            <Col xxl={12} xl={12} lg={24} sm={24} md={24} xs={24}>
+                <Space direction="vertical" style={{width: '100%', textAlign: "left"}} size="large">
+                    <FormItem
+                        name="picture"
+                        label={t("picture")}
+                        onChange={onSelectImage}
+                        type={"file"}
+                        errors={errors.image}
+                    />
+                </Space>
+            </Col>
+
+            {generalErrors && (
+                <Col span={24}>
+                    <Alert status={generalErrors} styleType={"danger"}/>
+                </Col>
+            )}
+            <Col className={"gutter-row"} span={24}>
+                <Row gutter={[12, 12]} justify="end">
+                    <Col className={"gutter-row"}>
+                        <Buttons
+                            label={t("save")}
+                            apiProgress={apiProgress}
+                            onClick={onClickSave}/>
+                    </Col>
+                    <Col className={"gutter-row"}>
+                        <Buttons
+                            label={t("cancel")}
+                            styleType={"outline-secondary"}
+                            onClick={onChangeCancel}
+                        />
+                    </Col>
+                </Row>
+            </Col>
+        </Row>
     );
 }
 
