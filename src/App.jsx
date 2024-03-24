@@ -1,7 +1,6 @@
 import {Outlet} from 'react-router-dom'
 import TopBar from "./components/header/TopBar"
 import {AuthenticationContext} from '@/shared/store';
-import {StrictMode} from "react";
 
 function App() {
 
@@ -12,7 +11,7 @@ function App() {
                 <Outlet/>
             </div>
         </AuthenticationContext>
-    );d
+    );
 }
 
 export default App;

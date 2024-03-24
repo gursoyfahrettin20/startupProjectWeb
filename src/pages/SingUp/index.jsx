@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import _ from 'lodash';
 import { singUp } from "@/api/apiCalls.js";
 import { FormItem } from "@/components/formItem/FormItem";
@@ -61,7 +61,7 @@ function index() {
         } catch (responseError) {
             if (responseError.response?.data) {
                 if (responseError.response?.data.status === 400) {
-                    setErrors(responseError.response?.data.validationErrors)
+                    setErrors(responseError.response?.data["validationErrors"])
                 }
                 else {
                     setGeneralErrors(responseError.response?.data.message)

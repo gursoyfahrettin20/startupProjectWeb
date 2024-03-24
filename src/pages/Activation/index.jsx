@@ -21,7 +21,7 @@ export function Activation() {
                 setApiProgress(false);
             }
         }
-        activate();
+        activate().then();
     }, [token])
 
     return (

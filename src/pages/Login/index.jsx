@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FormItem } from "@/components/formItem/FormItem";
-import { useTranslation } from "react-i18next";
+import {useState, useEffect} from 'react';
+import {FormItem} from "@/components/formItem/FormItem";
+import {useTranslation} from "react-i18next";
 import Alert from "@/components/alert";
 import Buttons from "@/components/customButton/Buttons"
-import { Login } from '@/api/apiCalls';
-import { usePropDispatch } from '@/shared/context';
-import { useNavigate } from 'react-router-dom';
+import {Login} from '@/api/apiCalls';
+import {usePropDispatch} from '@/shared/context';
+import {useNavigate} from 'react-router-dom';
 
 function Index() {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const dispatch = usePropDispatch();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -19,12 +19,16 @@ function Index() {
 
 
     useEffect(() => {
-        setErrors((lastErrors) => { return { ...lastErrors, email: undefined } })
+        setErrors((lastErrors) => {
+            return {...lastErrors, email: undefined}
+        })
         setGeneralErrors(null)
     }, [email])
 
     useEffect(() => {
-        setErrors((lastErrors) => { return { ...lastErrors, password: undefined } })
+        setErrors((lastErrors) => {
+            return {...lastErrors, password: undefined}
+        })
         setGeneralErrors(null)
     }, [password])
 
@@ -39,20 +43,18 @@ function Index() {
         };
         try {
             const response = await Login(data);
-            dispatch({ type: "login-success", data: response.data });
+            dispatch({type: "login-success", data: response.data});
             navigate("/");
             setPassword();
             setEmail();
         } catch (responseError) {
             if (responseError.response?.data) {
                 if (responseError.response?.data.status === 400) {
-                    setErrors(responseError.response?.data.validationErrors)
-                }
-                else {
+                    setErrors(responseError.response?.data["validationErrors"])
+                } else {
                     setGeneralErrors(responseError.response?.data.message)
                 }
-            }
-            else {
+            } else {
                 setGeneralErrors("Tahmin Edilemeyen Hatalarda gösterilecektir. / Unexpected error occured. Pleace try again.");
             }
         } finally {
@@ -82,11 +84,12 @@ function Index() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         {
-                            generalErrors && (<Alert status={generalErrors} styleType={"danger"} />)
+                            generalErrors && (<Alert status={generalErrors} styleType={"danger"}/>)
                         }
                         {/*  {
                             successMessage && (<Alert status={successMessage} styleType={"success"} />)
                         } */}
+
                         <div className='text-center'>
                             <Buttons
                                 className={"btn btn-primary"}

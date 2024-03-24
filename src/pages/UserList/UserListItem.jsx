@@ -1,12 +1,8 @@
-import defaultProfileImage from "@/assets/profile.png"
-import { v5 as uuIdv5 } from 'uuid';
+import ProfileImage from "@/components/header/ProfileImage.jsx";
 function UserListItem({user}) {
     return (
         <li className={"list-group-item list-group-item-action"}>
-            <img
-                className={"img-fluit rounded-circle shadow-sm"}
-                src={defaultProfileImage}
-                style={{width: 30, height: 30}}/>
+            <ProfileImage style={{width: 30, height: 30}} image={user.image}/>
             <span className="ms-2">
                 {user.username}
             </span>

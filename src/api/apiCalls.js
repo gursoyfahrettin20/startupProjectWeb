@@ -13,31 +13,35 @@ export const getBaseUrl = () => {
 
 // Yeni kullanıcı oluşturur.
 export const singUp = body => {
-    return http.post(getBaseUrl() + '/users', body);
+    return http.post(getBaseUrl() + '/api/v1/users', body);
 }
 
 // Kullanıcı'yı aktif hale getirir.
 export const activateUser = (token) => {
-    return http.patch(getBaseUrl() + `/users/${token}/active`);
+    return http.patch(getBaseUrl() + `/api/v1/users/${token}/active`);
 }
 
 // Kullanıcıları listeler.
 export const loadUser = (page = 0, size = 10) => {
-    return http.get(getBaseUrl() + `/users`, {params: {page, size}});
+    return http.get(getBaseUrl() + `/api/v1/users`, {params: {page, size}});
 }
 
 // Kullanıcı'yı id sine göre getirir.
 export const getUser = (id) => {
-    return http.get(getBaseUrl() + `/users/${id}`);
+    return http.get(getBaseUrl() + `/api/v1/users/${id}`);
 }
 
 // Kullanıcı girişi.
 export const Login = body => {
-    return http.post(getBaseUrl() + '/auth', body);
+    return http.post(getBaseUrl() + '/api/v1/auth', body);
 }
 
 // Kullanıcı Kendi Bilgilerini Güncelleme Alanı.
-
 export const updateUser = (id, body) => {
-    return http.put(getBaseUrl() + `/users/${id}`, body);
+    return http.put(getBaseUrl() + `/api/v1/users/${id}`, body);
+}
+
+//Kullanıcıyı admin panel sisteminden çıkış / logout İşlemleri
+export const logout = body => {
+    return http.post(getBaseUrl() + '/api/v1/logout');
 }
