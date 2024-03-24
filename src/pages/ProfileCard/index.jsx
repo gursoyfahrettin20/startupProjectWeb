@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {usePropDispatch, usePropState} from "@/shared/context";
+import {useState} from "react";
+import {usePropState} from "@/shared/context";
 import {useTranslation} from "react-i18next";
 import Buttons from "@/components/customButton/Buttons"
 import ProfileImage from "@/components/header/ProfileImage.jsx";

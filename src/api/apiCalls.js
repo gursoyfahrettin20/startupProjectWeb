@@ -37,7 +37,11 @@ export const Login = body => {
 }
 
 // Kullanıcı Kendi Bilgilerini Güncelleme Alanı.
-
 export const updateUser = (id, body) => {
     return http.put(getBaseUrl() + `/api/v1/users/${id}`, body);
+}
+
+//Kullanıcıyı admin panel sisteminden çıkış / logout İşlemleri
+export const logout = body => {
+    return http.post(getBaseUrl() + '/api/v1/logout');
 }

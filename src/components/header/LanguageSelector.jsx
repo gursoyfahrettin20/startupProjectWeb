@@ -1,4 +1,3 @@
-import React from "react";
 import { changeLanguage } from "@/api/apiCalls";
 import { useTranslation } from "react-i18next";
 import trFlag from "@/assets/tr.png"

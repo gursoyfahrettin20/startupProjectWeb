@@ -1,5 +1,4 @@
 import ProfileImage from "@/components/header/ProfileImage.jsx";
-import React from "react";
 function UserListItem({user}) {
     return (
         <li className={"list-group-item list-group-item-action"}>

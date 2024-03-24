@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import _ from 'lodash';
 import { singUp } from "@/api/apiCalls.js";
 import { FormItem } from "@/components/formItem/FormItem";

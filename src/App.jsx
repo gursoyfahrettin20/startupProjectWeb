@@ -11,7 +11,7 @@ function App() {
                 <Outlet/>
             </div>
         </AuthenticationContext>
-    );d
+    );
 }
 
 export default App;

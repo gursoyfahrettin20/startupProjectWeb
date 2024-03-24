@@ -1,9 +1,10 @@
-import { useReducer, useEffect } from "react";
-import { propsReducer, PropsContext, PropsDispatchContext } from "./context";
-import { loadAuthState, storeAuthState } from "./localStorage";
+import {useReducer, useEffect} from "react";
+import {propsReducer, PropsContext, PropsDispatchContext} from "./context";
+import {loadAuthState, storeAuthState} from "./localStorage";
 
 
-export function AuthenticationContext({ children }) {
+export function AuthenticationContext(props) {
+    const {children} = props;
     const [propsState, dispatch] = useReducer(propsReducer, loadAuthState());
 
     useEffect(() => {

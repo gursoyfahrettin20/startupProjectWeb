@@ -1,4 +1,3 @@
-import React from "react";
 import logo from "@/assets/vite.svg"
 import {useTranslation} from "react-i18next";
 import LanguageSelector from "./LanguageSelector";
@@ -6,14 +5,21 @@ import "./index.css"
 import {Link} from "react-router-dom";
 import {usePropState, usePropDispatch} from "@/shared/context";
 import ProfileImage from "@/components/header/ProfileImage.jsx";
+import {logout} from "@/api/apiCalls.js";
 
 const TopBar = () => {
     const {t} = useTranslation();
     const authState = usePropState();
     const dispatch = usePropDispatch();
 
-    const onHandlerLogout = () => {
-        dispatch({type: "logout-success", data: {}});
+    const onHandlerLogout = async () => {
+        try {
+            await logout()
+        } catch (e) {
+
+        } finally {
+            dispatch({type: "logout-success", data: {}});
+        }
     }
 
     return (<div className={"shadow-sm bg-light mb-2"}>

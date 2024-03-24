@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import FormItem from "@/components/formItem/FormItem.jsx";
 import Alert from "@/components/alert/index.jsx";
 import Buttons from "@/components/customButton/Buttons.jsx";
@@ -16,7 +16,6 @@ function UserEditForm(props) {
     const [apiProgress, setApiProgress] = useState(false);
     const [errors, setErrors] = useState({});
     const [generalErrors, setGeneralErrors] = useState(null);
-    const [isUpdated, setIsUpdated] = useState(false);
     const [newImage, setNewImage] = useState();
 
     useEffect(() => {
@@ -112,6 +111,11 @@ function UserEditForm(props) {
             {generalErrors && (
                 <Col span={24}>
                     <Alert status={generalErrors} styleType={"danger"}/>
+                </Col>
+            )}
+            {errors.image && (
+                <Col span={24}>
+                    <Alert status={errors.image} styleType={"danger"}/>
                 </Col>
             )}
             <Col className={"gutter-row"} span={24}>

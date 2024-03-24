@@ -1,4 +1,3 @@
-import React from 'react';
 import defaultProfileImage from "@/assets/profileDefaultImage.png";
 
 function ProfileImage(props) {
