@@ -100,7 +100,7 @@ function UserEditForm(props) {
                 <Space direction="vertical" style={{width: '100%', textAlign: "left"}} size="large">
                     <FormItem
                         name="picture"
-                        label={t("picture")}
+                        label={t("userPictureAdd")}
                         onChange={onSelectImage}
                         type={"file"}
                         errors={errors.image}
@@ -122,14 +122,15 @@ function UserEditForm(props) {
                 <Row gutter={[12, 12]} justify="end">
                     <Col className={"gutter-row"}>
                         <Buttons
+                            styleType={"success"}
                             label={t("save")}
                             apiProgress={apiProgress}
                             onClick={onClickSave}/>
                     </Col>
                     <Col className={"gutter-row"}>
                         <Buttons
+                            styleType={"danger"}
                             label={t("cancel")}
-                            styleType={"outline-secondary"}
                             onClick={onChangeCancel}
                         />
                     </Col>

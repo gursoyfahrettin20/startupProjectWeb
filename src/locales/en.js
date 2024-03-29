@@ -20,7 +20,12 @@ export const en = {
         "remember": "Remember",
         "newMember": "Creating a New Member...",
         "loading": "Loading",
-        "edit": "Edit"
+        "edit": "Edit",
+        "save": "Save",
+        "userPictureAdd": "User Picture Add",
+        "deleteThisUser": "Delete This User",
+        "delete": "Delete",
+        "administrator": "Administrator",
     }
 }
 

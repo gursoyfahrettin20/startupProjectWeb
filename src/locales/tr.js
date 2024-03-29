@@ -20,7 +20,12 @@ export const tr = {
         "remember": "Hatırla",
         "newMember": "Yeni Üye Oluşturuluyor...",
         "loading": "Bekleyiniz",
-        "edit": "Düzenle"
+        "edit": "Düzenle",
+        "save": "Kaydet",
+        "userPictureAdd": "Kullanıcı Resmi Ekle",
+        "deleteThisUser": "Bu Kullanıcıyı Sil",
+        "delete": "Sil",
+        "administrator": "Yönetici",
     }
 }
 
