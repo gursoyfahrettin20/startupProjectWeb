@@ -45,3 +45,8 @@ export const updateUser = (id, body) => {
 export const logout = body => {
     return http.post(getBaseUrl() + '/api/v1/logout');
 }
+
+// Kullanıcı'yı id sine göre getirir.
+export const deleteUser = (id) => {
+    return http.delete(getBaseUrl() + `/api/v1/users/${id}`);
+}
