@@ -21,7 +21,7 @@ function UserList() {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         setApiProgress(true);
         try {
-            const response = await loadUser(page, 5, token);
+            const response = await loadUser(page, 14, token);
             setUsersPage(response.data);
         } catch (error) {
 
