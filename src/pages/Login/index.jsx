@@ -5,7 +5,7 @@ import Alert from "@/components/alert";
 import Buttons from "@/components/customButton/Buttons"
 import {Login} from '@/api/apiCalls';
 import {usePropDispatch} from '@/shared/context';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 function Index() {
     const {t} = useTranslation();
@@ -98,6 +98,9 @@ function Index() {
                                 disabled={apiProgress}
                             />
                         </div>
+                    </div>
+                    <div className={"card-footer text-center"}>
+                        <Link to={"/password-reset/request"}>Forget Password ?</Link>
                     </div>
                 </div>
             </form>

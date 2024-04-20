@@ -1,10 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom'
 import SignUp from "@/pages/SingUp"
 import App from "@/App"
-import Home from "@/pages/Home"
+import Dashboard from "@/pages/Dashboard/index.jsx"
 import Login from "@/pages/Login"
+import UserList from "@/pages/UserList";
 import { Activation } from '@/pages/Activation'
 import User from '@/pages/User'
+import PasswordResetRequest from "@/pages/PasswordReset/Request/index.jsx";
 
 export default createBrowserRouter([
     {
@@ -15,7 +17,7 @@ export default createBrowserRouter([
             {
                 path: '/',
                 index: true,
-                Component: Home,
+                Component: Dashboard,
             }, {
                 path: '/iletisim',
                 element: (<div>İletişim Sayfası</div>)
@@ -23,6 +25,9 @@ export default createBrowserRouter([
             {
                 path: '/login',
                 Component: Login
+            },{
+                path: '/userList',
+                Component: UserList
             }, {
                 path: '/singup',
                 Component: SignUp
@@ -32,6 +37,9 @@ export default createBrowserRouter([
             }, {
                 path: '/user/:id',
                 Component: User
+            }, {
+                path: '/password-reset/request',
+                Component: PasswordResetRequest
             },
         ]
     }

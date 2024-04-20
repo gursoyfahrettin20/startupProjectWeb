@@ -31,6 +31,7 @@ export default defineConfig(({mode}) => {
         },
         server: {
             proxy: {
+                '/api': 'http://localhost:5555',
                 '/assets': 'http://localhost:5555/'
             },
             port: 3434,
@@ -41,9 +42,6 @@ export default defineConfig(({mode}) => {
             port: 3401,
             open: true,
             host: "localhost"
-        },
-        define: {
-            "process.env.VITE_REACT_APP_REST_SERVICE_URL": JSON.stringify(mode)
         }
     }
 })

@@ -1,3 +1,52 @@
 //$primary: #818;
 
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+body,
+.ant-layout {
+  background: #d4d4d4;
+}
+
+header {
+  padding: 0 !important;
+  height: 95px !important;
+  box-shadow: 10px 10px 5px 12px #ccc;
+}
+
+.header-container .navbar-brand {
+  padding: 0 20px;
+}
+
+.header-container .lang {
+  margin-top: 8px;
+}
+
+.ant-layout {
+  height: 80vh;
+  margin-top: 2.5vh;
+}
+
+.ant-layout-content {
+  overflow: auto;
+  margin: 0 10px;
+}
+
+.leftMenu {
+  border-radius: 15px;
+}
+
+.leftMenu .ant-layout-sider-children {
+  background: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+footer {
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f8f9fa !important;
+  z-index: 1;
+  box-shadow: 10px 10px 5px 12px #ccc;
+}

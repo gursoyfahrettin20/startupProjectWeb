@@ -2,19 +2,31 @@ import logo from "@/assets/vite.svg"
 import {useTranslation} from "react-i18next";
 import LanguageSelector from "./LanguageSelector";
 import "./index.css"
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {usePropState, usePropDispatch} from "@/shared/context";
 import ProfileImage from "@/components/header/ProfileImage.jsx";
 import {logout} from "@/api/apiCalls.js";
+import {useEffect} from "react";
+import {loadAuthState} from "@/shared/localStorage.js";
+import {Col, Row} from "antd";
 
 const TopBar = () => {
     const {t} = useTranslation();
     const authState = usePropState();
     const dispatch = usePropDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const _isLogin = loadAuthState();
+        if (_isLogin.id === 0) {
+            navigate("/login");
+        }
+    }, []);
 
     const onHandlerLogout = async () => {
         try {
-            await logout()
+            await logout();
+            location.reload();
         } catch (e) {
 
         } finally {
@@ -22,50 +34,54 @@ const TopBar = () => {
         }
     }
 
-    return (<div className={"shadow-sm bg-light mb-2"}>
-        <nav className="navbar navbar-light navbar-expand container">
-            <div className='container'>
-                <div className={"row"} style={{display: "contents"}}>
-                    <div className={"col-8"}>
-                        <Link className="navbar-brand" to={"/"}>
-                            <img src={logo} width={60} alt={"Empty Project"} title={"Empty Project"}/>
-                            Empty Project - web
-                        </Link>
-                    </div>
-                    <div className={"col-2"}>
-                        <ul className="navbar-nav navbar-right" style={{float: "right", marginTop: "-15px"}}>
-                            {authState.id == 0 ? <>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to={"/login"}>{t("login")}</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to={"/singup"}>{t("singUp")}</Link>
-                                </li>
-                            </> : <>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to={`/user/${authState.id}`}>
-                                        {<>
-                                            <ProfileImage style={{width: 20, height: 20}} image={authState.image}/>
-                                            <span className={"ms-2"}>
-                                                    {authState.username}
-                                                </span>
-                                        </>}
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                            <span className="nav-link" role="button"
-                                                  onClick={() => onHandlerLogout()}>{t("logout")}</span>
-                                </li>
-                            </>}
-                        </ul>
-                    </div>
-                    <div className={"col-2"}>
-                        <LanguageSelector/>
-                    </div>
+    return (
+        <div className={"shadow-sm bg-light"}>
+            <nav className="navbar navbar-light navbar-expand">
+                <div className='header-container' style={{display: "contents"}}>
+                    <Row gutter={16} style={{display: "contents"}}>
+                        <Col span={16}>
+                            <Link className="navbar-brand" to={"/"}>
+                                <img src={logo} width={60} alt={"Empty Project"} title={"Empty Project"}/>
+                                Empty Project - web
+                            </Link>
+                        </Col>
+                        <Col className="gutter-row" span={8} style={{textAlign: "right", padding:"0 20px"}}>
+                            <ul className="navbar-nav navbar-right" style={{float: "right", marginTop: "-15px"}}>
+                                {authState.id === 0 ? <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to={"/login"}>{t("login")}</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to={"/singup"}>{t("singUp")}</Link>
+                                    </li>
+                                </> : <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to={`/user/${authState.id}`}>
+                                            {<>
+                                                <ProfileImage style={{width: 20, height: 20}} image={authState.image}/>
+                                                <span className={"ms-2"}>
+                                                 {authState.username}
+                                            </span>
+                                            </>}
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                    <span className="nav-link" role="button"
+                                          onClick={() => onHandlerLogout()}>
+                                        {t("logout")}
+                                    </span>
+                                    </li>
+                                    <li>
+                                        <LanguageSelector/>
+                                    </li>
+                                </>}
+                            </ul>
+                        </Col>
+                    </Row>
                 </div>
-            </div>
-        </nav>
-    </div>);
+            </nav>
+        </div>
+    );
 }
 
 export default TopBar;

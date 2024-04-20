@@ -8,45 +8,56 @@ export const changeLanguage = lang => {
 
 // Genel url uzantısı
 export const getBaseUrl = () => {
-    return import.meta.env.VITE_REACT_APP_REST_SERVICE_URL;
+    return "http://localhost:5555/api/v1";
 }
 
 // Yeni kullanıcı oluşturur.
 export const singUp = body => {
-    return http.post(getBaseUrl() + '/api/v1/users', body);
+    return http.post(getBaseUrl() + '/users', body);
 }
 
 // Kullanıcı'yı aktif hale getirir.
 export const activateUser = (token) => {
-    return http.patch(getBaseUrl() + `/api/v1/users/${token}/active`);
+    return http.patch(getBaseUrl() + `/users/${token}/active`);
 }
 
 // Kullanıcıları listeler.
-export const loadUser = (page = 0, size = 10) => {
-    return http.get(getBaseUrl() + `/api/v1/users`, {params: {page, size}});
+export const loadUser = (page = 0, size = 10, token = null) => {
+    return http.get(getBaseUrl() + `/users`, {params: {page, size}}, token);
 }
 
 // Kullanıcı'yı id sine göre getirir.
 export const getUser = (id) => {
-    return http.get(getBaseUrl() + `/api/v1/users/${id}`);
+    return http.get(getBaseUrl() + `/users/${id}`);
 }
 
 // Kullanıcı girişi.
 export const Login = body => {
-    return http.post(getBaseUrl() + '/api/v1/auth', body);
+    return http.post(getBaseUrl() + '/auth', body);
 }
 
 // Kullanıcı Kendi Bilgilerini Güncelleme Alanı.
 export const updateUser = (id, body) => {
-    return http.put(getBaseUrl() + `/api/v1/users/${id}`, body);
+    return http.put(getBaseUrl() + `/users/${id}`, body);
 }
 
 //Kullanıcıyı admin panel sisteminden çıkış / logout İşlemleri
 export const logout = body => {
-    return http.post(getBaseUrl() + '/api/v1/logout');
+    return http.post(getBaseUrl() + '/logout');
 }
 
-// Kullanıcı'yı id sine göre getirir.
+// Kullanıcı'yı id sine göre siler.
 export const deleteUser = (id) => {
-    return http.delete(getBaseUrl() + `/api/v1/users/${id}`);
+    return http.delete(getBaseUrl() + `/users/${id}`);
+}
+
+
+// Kullanıcı şifresini unuttuğunda yeni password için token isteiği attığı alan.
+export function passwordResetRequest(body) {
+    return http.post(getBaseUrl() + '/users/password-reset', body);
+}
+
+// Kullanıcı şifresini unuttuğunda yeni password setlediği alan.
+export const resetPassword = (token, body) => {
+    return http.patch(getBaseUrl() + `/users/${token}/password`, body);
 }
