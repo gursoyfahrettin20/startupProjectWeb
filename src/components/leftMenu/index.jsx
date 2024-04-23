@@ -6,11 +6,11 @@ import {
     ClusterOutlined, CodepenOutlined,
     EnvironmentOutlined,
     FileTextOutlined,
-    FlagOutlined, LaptopOutlined, MobileOutlined,
-    ReadOutlined,
+    FlagOutlined, InfoCircleOutlined, LaptopOutlined, MailOutlined, MobileOutlined,
+    ReadOutlined, SecurityScanOutlined,
     SettingOutlined, ShareAltOutlined,
     SlidersOutlined,
-    UserOutlined
+    UserOutlined, UserSwitchOutlined
 } from "@ant-design/icons";
 
 const Index = () => {
@@ -24,35 +24,32 @@ const Index = () => {
     }
 
     const items = [
-        getItem('Admin İşlemleri', 'admnMenu1', <BranchesOutlined/>, [
-            getItem(
-                <a href="/userList">
-                    Kullanıcı Listesi
-                </a>,
-                'userListLink',
-                <UserOutlined/>,
-            )
+        getItem('Admin İşlemleri', 'admnMenu1', <SecurityScanOutlined/>, [
+            getItem(<a href="/userList">Kullanıcı Listesi</a>, 'userListLink', <UserOutlined/>),
+            getItem(<a href="/userAdministratorPage">Kullanıcı Yetkilendirme</a>, 'userAdministratorPage', <UserSwitchOutlined/>),
+            getItem(<a href="/mailSettings">Mail Ayarları</a>, 'mailSettings', <MailOutlined/>),
+            getItem(<a href="/siteSettings">Site Ayarları</a>, 'siteSettings', <SettingOutlined/>),
         ]),
         getItem('Ana Sayfa İşlemleri', 'mainPage', <AppstoreOutlined/>, [
-            getItem('Slider', 'slider', <SlidersOutlined/>),
-            getItem('Haber Slider', 'news', <SlidersOutlined/>),
+            getItem(<a href="/slider">Slider</a>, 'slider', <SlidersOutlined/>),
+            getItem(<a href="/news">Haber Slider</a>, 'news', <SlidersOutlined/>),
             getItem('İçerikler', 'content', <ClusterOutlined/>, [
-                getItem('İçerik - 1', 'content-1', <FileTextOutlined/>),
-                getItem('İçerik - 2', 'content-2', <FileTextOutlined/>),
-                getItem('İçerik - 3', 'content-3', <FileTextOutlined/>),
-                getItem('İçerik - 4', 'content-4', <FileTextOutlined/>),
+                getItem(<a href="/content">İçerik - 1</a>, 'content1', <FileTextOutlined/>),
+                getItem(<a href="/content">İçerik - 2</a>, 'content2', <FileTextOutlined/>),
+                getItem(<a href="/content">İçerik - 3</a>, 'content3', <FileTextOutlined/>),
+                getItem(<a href="/content">İçerik - 4</a>, 'content4', <FileTextOutlined/>),
             ]),
         ]),
         getItem('Ürün Kategorisi', 'products', <ShareAltOutlined/>, [
-            getItem('Akıllı Sistemler', 'product-1', <MobileOutlined/>),
-            getItem('Kamera Sistemleri', 'product-2', <LaptopOutlined/>),
-            getItem('Güvenlik Sistemleri', 'product-3', <CodepenOutlined/>)
+            getItem(<a href="/product">Akıllı Sistemler</a>, 'product1', <MobileOutlined/>),
+            getItem(<a href="/product">Kamera Sistemleri</a>, 'product2', <LaptopOutlined/>),
+            getItem(<a href="/product">Güvenlik Sistemleri</a>, 'product3', <CodepenOutlined/>)
         ]),
-        getItem('Sayfa Detay', 'about', <SettingOutlined/>, [
-            getItem('Hakkımızda', 'about-us', <ReadOutlined/>),
-            getItem('Vizyonumuz', 'our-vision', <FlagOutlined/>),
-            getItem('Misyonumuz', 'our-Mission', <FlagOutlined/>),
-            getItem('İletişim', 'contact', <EnvironmentOutlined/>),
+        getItem('Site Detay', 'about', <InfoCircleOutlined/>, [
+            getItem(<a href="/aboutUs">Hakkımızda</a>, 'aboutUs', <ReadOutlined/>),
+            getItem(<a href="/ourVision">Vizyonumuz</a>, 'ourVision', <FlagOutlined/>),
+            getItem(<a href="/ourMission">Misyonumuz</a>, 'ourMission', <FlagOutlined/>),
+            getItem(<a href="/contact">İletişim</a>, 'contact', <EnvironmentOutlined/>),
         ])
     ];
     return (

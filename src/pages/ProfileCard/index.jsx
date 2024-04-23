@@ -5,12 +5,13 @@ import Buttons from "@/components/customButton/Buttons"
 import ProfileImage from "@/components/header/ProfileImage.jsx";
 import UserEditForm from "@/pages/ProfileCard/UserEditForm.jsx";
 import {deleteUser} from "@/api/apiCalls.js";
+import {useNavigate} from "react-router-dom";
 
 function ProfileCard(props) {
     const {t} = useTranslation();
     const propState = usePropState();
     const dispatch = usePropDispatch();
-
+    const navigate = useNavigate();
     const [isEdit, setIsEdit] = useState(false);
     const [tempImage, setTempImage] = useState();
     const [apiProgress, setApiProgress] = useState(false);

@@ -11,6 +11,8 @@ export const getBaseUrl = () => {
     return "http://localhost:5555/api/v1";
 }
 
+// ======================== Kullanıcı İşlemleri ===========================
+
 // Yeni kullanıcı oluşturur.
 export const singUp = body => {
     return http.post(getBaseUrl() + '/users', body);
@@ -60,4 +62,25 @@ export function passwordResetRequest(body) {
 // Kullanıcı şifresini unuttuğunda yeni password setlediği alan.
 export const resetPassword = (token, body) => {
     return http.patch(getBaseUrl() + `/users/${token}/password`, body);
+}
+
+// ======================== İletişim İşlemleri ===========================
+
+// İletişim listesini getirir.
+export const loadContact = () => {
+    return http.get(getBaseUrl() + `/contact`);
+}
+
+// Yeni İletişim Bilgilerini Ekleme Alanı.
+export const newAddContact = (id, body, token = null) => {
+    return http.post(getBaseUrl() + `/newContact/${id}`, body, token);
+}
+
+// İletişim Bilgilerini Güncelleme Alanı.
+export const updateContact = (id, body, token = null) => {
+    return http.put(getBaseUrl() + `/contact/${id}`, body, token);
+}
+// İletişim Bilgilerini Silme Alanı.
+export const deleteContact = (id, token = null) => {
+    return http.post(getBaseUrl() + `/contact/${id}`, token);
 }

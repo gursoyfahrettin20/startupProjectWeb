@@ -52,7 +52,7 @@ const TopBar = () => {
                                         <Link className="nav-link" to={"/login"}>{t("login")}</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={"/singup"}>{t("singUp")}</Link>
+                                        <Link className="nav-link" to={"/singUp"}>{t("singUp")}</Link>
                                     </li>
                                 </> : <>
                                     <li className="nav-item">
