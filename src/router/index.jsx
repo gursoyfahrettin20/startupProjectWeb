@@ -12,9 +12,7 @@ import MailSettings from "@/pages/MailSettings/index.jsx";
 import SiteSettings from "@/pages/SiteSettings/index.jsx";
 import Slider from "@/pages/Slider/index.jsx";
 import Contact from "@/pages/Contact/index.jsx";
-import OurMission from "@/pages/OurMission/index.jsx";
-import OurVision from "@/pages/OurVision/index.jsx";
-import AboutUs from "@/pages/AboutUs/index.jsx";
+import OurWeb from "@/pages/OurWeb/index.jsx";
 import Product from "@/pages/Product/index.jsx";
 import Content from "@/pages/Content/index.jsx";
 import News from "@/pages/News/index.jsx";
@@ -39,9 +37,6 @@ export default createBrowserRouter([
                 path: '/activation/:token',
                 Component: Activation
             }, {
-                path: '/user/:id',
-                Component: User
-            }, {
                 path: '/password-reset/request',
                 Component: PasswordResetRequest
             }, {
@@ -49,13 +44,13 @@ export default createBrowserRouter([
                 Component: Contact
             }, {
                 path: '/ourMission',
-                Component: OurMission
+                element: <OurWeb id={1} elementName={"ourMission"}/>
             }, {
                 path: '/ourVision',
-                Component: OurVision
+                element: <OurWeb id={2} elementName={"ourVision"}/>
             }, {
                 path: '/aboutUs',
-                Component: AboutUs
+                element: <OurWeb id={3} elementName={"aboutUs"}/>
             }, {
                 path: '/product',
                 Component: Product
@@ -69,8 +64,8 @@ export default createBrowserRouter([
                 path: '/slider',
                 Component: Slider
             }, {
-                path: '/userList',
-                Component: UserList
+                path: '/user/:id',
+                Component: User
             }, {
                 path: '/userList',
                 Component: UserList

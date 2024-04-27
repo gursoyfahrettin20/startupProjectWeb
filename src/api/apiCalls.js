@@ -77,10 +77,22 @@ export const newAddContact = (id, body, token = null) => {
 }
 
 // İletişim Bilgilerini Güncelleme Alanı.
-export const updateContact = (id, body, token = null) => {
-    return http.put(getBaseUrl() + `/contact/${id}`, body, token);
+export const updateContact = (id, body, token = null, ourId) => {
+    return http.put(getBaseUrl() + `/contact/${id}`, body, token, ourId);
 }
 // İletişim Bilgilerini Silme Alanı.
 export const deleteContact = (id, token = null) => {
     return http.post(getBaseUrl() + `/contact/${id}`, token);
+}
+
+// ======================== Hakkımızda İşlemleri ===========================
+
+// Hakkımızda Bilgilerini Güncelleme Alanı.
+export const updateOurWeb = (id, body, token = null) => {
+    return http.put(getBaseUrl() + `/ourWeb/${id}`, body, token);
+}
+
+// İletişim listesini getirir.
+export const loadOurWeb = () => {
+    return http.get(getBaseUrl() + `/ourWeb`);
 }

@@ -16,7 +16,7 @@ const Index = () => {
     const [updateItem, setUpdateItem] = useState({});
     const navigate = useNavigate();
 
-    const getContact = useCallback(async (page) => {
+    const getContact = useCallback(async () => {
         const response = await loadContact();
         setContactList(response.data);
     }, []);
@@ -139,6 +139,13 @@ const Index = () => {
                             onChange={(e) => updateItemHandler(e, e.target.value)}
                         />
                     </Col>
+                    <Col className={"gutter-row"} span={24}>
+                        <FormItem
+                            name="maps"
+                            label={"Harita"}
+                            onChange={(e) => updateItemHandler(e, e.target.value)}
+                        />
+                    </Col>
                 </Row>
             </Col>
             <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
@@ -153,94 +160,114 @@ const Index = () => {
         </Row>
     );
 
-    return (<div className={"card"}>
-        <div className={"card-header text-center fs-4"}>İletişim Sayfası Düzenleme</div>
-        <div className={"card-body"}>
-            <Button className={"success"} title={"Yeni İletişim Bilgileri Ekle"} icon={<PlusOutlined/>}
-                    onClick={newContact}>
-                Yeni İletişim Bilgileri Ekle
-            </Button>
-        </div>
-        <div className={"contactList card-body"}>
-            {isNewContact && (emptyForm)}
-            <List
-                itemLayout="horizontal"
-                dataSource={contactList}
-                renderItem={(item) => (<List.Item>
-                    <List.Item.Meta
-                        title={isUpdateId === item.id ? (<Row gutter={[12, 12]} justify="start">
-                            <Col className={"gutter-row"} span={18}>
-                                <FormItem
-                                    name="branchName"
-                                    label={"Şube Adı"}
-                                    defaultValue={item.branchName}
-                                    // errors={errors.branchName}
-                                    onChange={(e) => updateItemHandler(e, e.target.value)}
-                                />
-                            </Col>
-                        </Row>) : <span>{item.branchName}</span>}
-                        description={<Row gutter={[12, 12]} justify="start">
-                            <Col className={"gutter-row"} span={18}>
-                                <Row gutter={[12, 12]} justify="start">
-                                    <Col className={"gutter-row"} span={24}>
-                                        {isUpdateId === item.id ? (<FormItem
-                                            name="address"
-                                            label={"Şube Adresi"}
-                                            defaultValue={item.address}
-                                            // errors={errors.address}
-                                            onChange={(e) => updateItemHandler(e, e.target.value)}
-                                        />) : <span>{item.address}</span>}
-                                    </Col>
-                                    <Col className={"gutter-row"} span={24}>
-                                        {isUpdateId === item.id ? (<FormItem
-                                            name="mobilNumber"
-                                            label={"Cep Numarası"}
-                                            defaultValue={item.mobilNumber}
-                                            // errors={errors.mobilNumber}
-                                            onChange={(e) => updateItemHandler(e, e.target.value)}
-                                        />) : <span>{item.mobilNumber}</span>}
-                                    </Col>
-                                    <Col className={"gutter-row"} span={24}>
-                                        {isUpdateId === item.id ? (<FormItem
-                                            name="branchNumber"
-                                            label={"Şirket Numarası"}
-                                            defaultValue={item.branchNumber}
-                                            // errors={errors.mobilNumber}
-                                            onChange={(e) => updateItemHandler(e, e.target.value)}
-                                        />) : <span>{item.branchNumber}</span>}
-                                    </Col>
-                                    <Col className={"gutter-row"} span={24}>
-                                        {isUpdateId === item.id ? (<FormItem
-                                            name="mail"
-                                            label={"Şirket Mail"}
-                                            defaultValue={item.mail}
-                                            // errors={errors.mail}
-                                            onChange={(e) => updateItemHandler(e, e.target.value)}
-                                        />) : <span>{item.mail}</span>}
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
-                                {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {
-                                    editingHandler(e, item)
-                                }}>
-                                    <Radio.Button className={"save"} value="save">Kaydet</Radio.Button>
-                                    <Radio.Button className={"cancel"} value="cancel"
-                                                  danger>İptal</Radio.Button>
-                                </Radio.Group>) : (<Radio.Group onChange={(e) => {
-                                    editHandler(e, item)
-                                }}>
-                                    <Radio.Button className={"update"} value={"update"}>Düzenle</Radio.Button>
-                                    <Radio.Button className={"delete"} value={"delete"}
-                                                  danger>Sil</Radio.Button>
-                                </Radio.Group>)}
-                            </Col>
-                        </Row>}
-                    />
-                </List.Item>)}
-            />
-        </div>
-    </div>);
+    return (
+        <div className={"card"}>
+            <div className={"card-header text-center fs-4"}>İletişim Sayfası Düzenleme</div>
+            <div className={"card-body"}>
+                <Button className={"success"} title={"Yeni İletişim Bilgileri Ekle"} icon={<PlusOutlined/>}
+                        onClick={newContact}>
+                    Yeni İletişim Bilgileri Ekle
+                </Button>
+            </div>
+            <div className={"contactList card-body"}>
+                {isNewContact && (emptyForm)}
+                <List
+                    itemLayout="horizontal"
+                    dataSource={contactList}
+                    renderItem={(item) => (<List.Item>
+                        <List.Item.Meta
+                            title={isUpdateId === item.id ? (<Row gutter={[12, 12]} justify="start">
+                                <Col className={"gutter-row"} span={18}>
+                                    <FormItem
+                                        name="branchName"
+                                        label={"Şube Adı"}
+                                        defaultValue={item.branchName}
+                                        // errors={errors.branchName}
+                                        onChange={(e) => updateItemHandler(e, e.target.value)}
+                                    />
+                                </Col>
+                            </Row>) : <span>{item.branchName}</span>}
+                            description={<Row gutter={[12, 12]} justify="start">
+                                <Col className={"gutter-row"} span={18}>
+                                    <Row gutter={[12, 12]} justify="start">
+                                        <Col className={"gutter-row"} span={24}>
+                                            {isUpdateId === item.id ? (<FormItem
+                                                name="address"
+                                                label={"Şube Adresi"}
+                                                defaultValue={item.address}
+                                                // errors={errors.address}
+                                                onChange={(e) => updateItemHandler(e, e.target.value)}
+                                            />) : <span>{item.address}</span>}
+                                        </Col>
+                                        <Col className={"gutter-row"} span={24}>
+                                            {isUpdateId === item.id ? (<FormItem
+                                                name="mobilNumber"
+                                                label={"Cep Numarası"}
+                                                defaultValue={item.mobilNumber}
+                                                // errors={errors.mobilNumber}
+                                                onChange={(e) => updateItemHandler(e, e.target.value)}
+                                            />) : <span>{item.mobilNumber}</span>}
+                                        </Col>
+                                        <Col className={"gutter-row"} span={24}>
+                                            {isUpdateId === item.id ? (<FormItem
+                                                name="branchNumber"
+                                                label={"Şirket Numarası"}
+                                                defaultValue={item.branchNumber}
+                                                // errors={errors.mobilNumber}
+                                                onChange={(e) => updateItemHandler(e, e.target.value)}
+                                            />) : <span>{item.branchNumber}</span>}
+                                        </Col>
+                                        <Col className={"gutter-row"} span={24}>
+                                            {isUpdateId === item.id ? (<FormItem
+                                                name="mail"
+                                                label={"Şirket Mail"}
+                                                defaultValue={item.mail}
+                                                // errors={errors.mail}
+                                                onChange={(e) => updateItemHandler(e, e.target.value)}
+                                            />) : <span>{item.mail}</span>}
+                                        </Col>
+                                        <Col className={"gutter-row"} span={24}>
+                                            {
+                                                isUpdateId === item.id ? (<FormItem
+                                                    name="maps"
+                                                    label={"Harita"}
+                                                    defaultValue={item.maps}
+                                                    // errors={errors.maps}
+                                                    onChange={(e) => updateItemHandler(e, e.target.value)}
+                                                />) : (
+                                                    <iframe
+                                                        src={"https://www.google.com/maps/embed?" + item.maps.toString()}
+                                                        width="600" height="450" style={{border: "0"}}
+                                                        allowFullScreen=""
+                                                        loading="lazy"
+                                                        referrerPolicy="no-referrer-when-downgrade"></iframe>
+
+                                                )
+                                            }
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
+                                    {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {
+                                        editingHandler(e, item)
+                                    }}>
+                                        <Radio.Button className={"save"} value="save">Kaydet</Radio.Button>
+                                        <Radio.Button className={"cancel"} value="cancel"
+                                                      danger>İptal</Radio.Button>
+                                    </Radio.Group>) : (<Radio.Group onChange={(e) => {
+                                        editHandler(e, item)
+                                    }}>
+                                        <Radio.Button className={"update"} value={"update"}>Düzenle</Radio.Button>
+                                        <Radio.Button className={"delete"} value={"delete"}
+                                                      danger>Sil</Radio.Button>
+                                    </Radio.Group>)}
+                                </Col>
+                            </Row>}
+                        />
+                    </List.Item>)}
+                />
+            </div>
+        </div>);
 };
 
 export default Index;

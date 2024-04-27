@@ -17,7 +17,9 @@
     "sass": "^1.70.0",
     "uuid": "^9.0.1",
     "vite-plugin-pwa": "^0.17.4",
-    "vitest": "^1.2.1"
+    "vitest": "^1.2.1",
+    "jodit-react": "4.0.30",
+    "html-react-parser": "5.1.10"
   },
   "scripts": {
     "dev": "vite",
