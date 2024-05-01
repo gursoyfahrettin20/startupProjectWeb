@@ -14,6 +14,7 @@ import Slider from "@/pages/Slider/index.jsx";
 import Contact from "@/pages/Contact/index.jsx";
 import OurWeb from "@/pages/OurWeb/index.jsx";
 import Product from "@/pages/Product/index.jsx";
+import Categories from "@/pages/Product/Categories.jsx";
 import Content from "@/pages/Content/index.jsx";
 import News from "@/pages/News/index.jsx";
 
@@ -54,6 +55,9 @@ export default createBrowserRouter([
             }, {
                 path: '/product',
                 Component: Product
+            }, {
+                path: '/categories',
+                Component: Categories
             }, {
                 path: '/content',
                 Component: Content

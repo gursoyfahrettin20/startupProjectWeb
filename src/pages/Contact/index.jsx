@@ -6,6 +6,7 @@ import {PlusOutlined} from "@ant-design/icons";
 import FormItem from "@/components/formItem/FormItem.jsx";
 import {usePropState} from "@/shared/context.jsx";
 import {useNavigate} from "react-router-dom";
+import _ from "lodash";
 
 const Index = () => {
     const propState = usePropState();
@@ -47,8 +48,12 @@ const Index = () => {
         }
     }
     const updateItemHandler = (e, value) => {
+        let _value = _.cloneDeep(value);
+        if (e.target.name === "maps" && value !== "") {
+            _value = _value.split('src="')[1].split('" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>')[0];
+        }
         const newData = {
-            ...updateItem, [e.target.id]: value
+            ...updateItem, [e.target.id]: _value
         }
         setUpdateItem(newData);
     }
@@ -229,20 +234,22 @@ const Index = () => {
                                         <Col className={"gutter-row"} span={24}>
                                             {
                                                 isUpdateId === item.id ? (<FormItem
-                                                    name="maps"
-                                                    label={"Harita"}
-                                                    defaultValue={item.maps}
-                                                    // errors={errors.maps}
-                                                    onChange={(e) => updateItemHandler(e, e.target.value)}
-                                                />) : (
-                                                    <iframe
-                                                        src={"https://www.google.com/maps/embed?" + item.maps.toString()}
-                                                        width="600" height="450" style={{border: "0"}}
-                                                        allowFullScreen=""
-                                                        loading="lazy"
-                                                        referrerPolicy="no-referrer-when-downgrade"></iframe>
+                                                        name="maps"
+                                                        label={"Harita"}
+                                                        defaultValue={item.maps}
+                                                        // errors={errors.maps}
+                                                        onChange={(e) => updateItemHandler(e, e.target.value)}
+                                                    />) :
+                                                    item.maps && (
+                                                        <iframe
+                                                            src={item.maps.toString()}
+                                                            width="100%" height="450" style={{border: "0"}}
+                                                            allowFullScreen=""
+                                                            loading="lazy"
+                                                            referrerPolicy="no-referrer-when-downgrade"></iframe>
 
-                                                )
+                                                    )
+
                                             }
                                         </Col>
                                     </Row>
@@ -267,7 +274,8 @@ const Index = () => {
                     </List.Item>)}
                 />
             </div>
-        </div>);
+        </div>
+    );
 };
 
 export default Index;

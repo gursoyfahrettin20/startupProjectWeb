@@ -80,6 +80,7 @@ export const newAddContact = (id, body, token = null) => {
 export const updateContact = (id, body, token = null, ourId) => {
     return http.put(getBaseUrl() + `/contact/${id}`, body, token, ourId);
 }
+
 // İletişim Bilgilerini Silme Alanı.
 export const deleteContact = (id, token = null) => {
     return http.post(getBaseUrl() + `/contact/${id}`, token);
@@ -95,4 +96,25 @@ export const updateOurWeb = (id, body, token = null) => {
 // İletişim listesini getirir.
 export const loadOurWeb = () => {
     return http.get(getBaseUrl() + `/ourWeb`);
+}
+
+// ======================== Kategori İşlemleri ===========================
+
+// Kategori Ekleme Alanı.
+export const addCategories = (body, token = null) => {
+    return http.post(getBaseUrl() + '/newCategories', body, token);
+}
+// Kategori listesini getirir.
+export const loadCategory = () => {
+    return http.get(getBaseUrl() + `/categories`);
+}
+
+// Kategori Bilgilerini Güncelleme Alanı.
+export const updateCategory= (body, token = null) => {
+    return http.put(getBaseUrl() + `/categories`, body, token);
+}
+
+// Kategori Bilgilerini Silme Alanı.
+export const deleteCategory = (id, token = null) => {
+    return http.delete(getBaseUrl() + `/categories/${id}`, token);
 }

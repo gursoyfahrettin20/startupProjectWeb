@@ -1,8 +1,8 @@
 import React from 'react';
 import {Menu} from "antd";
 import {
+    AppstoreAddOutlined,
     AppstoreOutlined,
-    BranchesOutlined,
     ClusterOutlined, CodepenOutlined,
     EnvironmentOutlined,
     FileTextOutlined,
@@ -24,24 +24,20 @@ const Index = () => {
     }
 
     const items = [
-        getItem('Admin İşlemleri', 'admnMenu1', <SecurityScanOutlined/>, [
+        getItem('Admin İşlemleri', 'adminMenu', <SecurityScanOutlined/>, [
             getItem(<a href="/userList">Kullanıcı Listesi</a>, 'userListLink', <UserOutlined/>),
-            getItem(<a href="/userAdministratorPage">Kullanıcı Yetkilendirme</a>, 'userAdministratorPage', <UserSwitchOutlined/>),
+            getItem(<a href="/userAdministratorPage">Kullanıcı Yetkilendirme</a>, 'userAdministratorPage',
+                <UserSwitchOutlined/>),
             getItem(<a href="/mailSettings">Mail Ayarları</a>, 'mailSettings', <MailOutlined/>),
             getItem(<a href="/siteSettings">Site Ayarları</a>, 'siteSettings', <SettingOutlined/>),
         ]),
         getItem('Ana Sayfa İşlemleri', 'mainPage', <AppstoreOutlined/>, [
             getItem(<a href="/slider">Slider</a>, 'slider', <SlidersOutlined/>),
-            getItem(<a href="/news">Haber Slider</a>, 'news', <SlidersOutlined/>),
-            getItem('İçerikler', 'content', <ClusterOutlined/>, [
-                getItem(<a href="/content">İçerik - 1</a>, 'content1', <FileTextOutlined/>),
-                getItem(<a href="/content">İçerik - 2</a>, 'content2', <FileTextOutlined/>),
-                getItem(<a href="/content">İçerik - 3</a>, 'content3', <FileTextOutlined/>),
-                getItem(<a href="/content">İçerik - 4</a>, 'content4', <FileTextOutlined/>),
-            ]),
+            getItem(<a href="/news">Haber Slider</a>, 'news', <SlidersOutlined/>)
         ]),
         getItem('Ürün Kategorisi', 'products', <ShareAltOutlined/>, [
-            getItem(<a href="/product">Akıllı Sistemler</a>, 'product1', <MobileOutlined/>),
+            getItem(<a href="/categories">Kategori Oluştur</a>, 'categories', <AppstoreAddOutlined/>),
+            getItem(<a href="/product">Akıllı Sistemler</a>, 'product1', <MobileOutlined/>,),
             getItem(<a href="/product">Kamera Sistemleri</a>, 'product2', <LaptopOutlined/>),
             getItem(<a href="/product">Güvenlik Sistemleri</a>, 'product3', <CodepenOutlined/>)
         ]),
@@ -55,7 +51,7 @@ const Index = () => {
     return (
         <Menu
             style={{width: "299px"}}
-            defaultOpenKeys={['mainPage']}
+            defaultOpenKeys={['products']}
             mode={'inline'}
             theme={"light"}
             items={items}

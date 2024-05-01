@@ -2,7 +2,7 @@ import {useCallback, useState} from "react";
 import {usePropDispatch, usePropState} from "@/shared/context";
 import {useTranslation} from "react-i18next";
 import Buttons from "@/components/customButton/Buttons"
-import ProfileImage from "@/components/header/ProfileImage.jsx";
+import ProfileImage from "@/components/Image/ProfileImage.jsx";
 import UserEditForm from "@/pages/ProfileCard/UserEditForm.jsx";
 import {deleteUser} from "@/api/apiCalls.js";
 import {useNavigate} from "react-router-dom";
@@ -45,10 +45,10 @@ function ProfileCard(props) {
 
     const isEditButtonVisible = !isEdit && (propState.id === props.user.id || (propState["isAdministrator"] ? propState["isAdministrator"] : false));
     return (<div className={"card"}>
-        {(propState["isAdministrator"] && propState.id === props.user.id) && <span className="badge text-bg-warning"
-                                                                                   style={{
-                                                                                       float: "right", margin: "10px 0"
-                                                                                   }}>{t("administrator")}</span>}
+        {(propState["isAdministrator"] && propState.id === props.user.id) &&
+            <span className="badge text-bg-warning" style={{float: "right", margin: "10px 0"}}>
+                {t("administrator")}
+        </span>}
         {(!(propState["isAdministrator"] && propState.id === props.user.id) && (isEditButtonVisible || isEdit)) && <div>
             <Buttons
                 styleType={"danger"}

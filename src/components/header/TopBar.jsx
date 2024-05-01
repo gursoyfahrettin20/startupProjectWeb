@@ -4,7 +4,7 @@ import LanguageSelector from "./LanguageSelector";
 import "./index.css"
 import {Link, useNavigate} from "react-router-dom";
 import {usePropState, usePropDispatch} from "@/shared/context";
-import ProfileImage from "@/components/header/ProfileImage.jsx";
+import ProfileImage from "@/components/Image/ProfileImage.jsx";
 import {logout} from "@/api/apiCalls.js";
 import {useEffect} from "react";
 import {loadAuthState} from "@/shared/localStorage.js";

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import JoditEditor from 'jodit-react';
-import {loadContact, loadOurWeb, updateOurWeb} from "@/api/apiCalls.js";
+import {loadOurWeb, updateOurWeb} from "@/api/apiCalls.js";
 import {usePropState} from "@/shared/context.jsx";
 import {Radio} from 'antd';
 import {useNavigate} from "react-router-dom";
@@ -15,7 +15,9 @@ function Index(props) {
 
     const getContact = useCallback(async (id) => {
         const response = await loadOurWeb();
-        let _id = _.findIndex(response.data, function(o) { return o.id === id; })
+        let _id = _.findIndex(response.data, function (o) {
+            return o.id === id;
+        })
         setContent(response.data[_id].detail);
     }, []);
 

@@ -11,6 +11,7 @@ export function FormItem(props) {
                 <Col className={"gutter-row"} span={18}>
                     <input
                         id={props.name}
+                        name={props.name}
                         className={props.errors ? 'form-control is-invalid' : 'form-control'}
                         type={props.type ? props.type : "text"}
                         onChange={props.onChange}
