@@ -152,7 +152,7 @@ const Categories = () => {
     </Row>);
 
     return (<div className={"card"}>
-        <div className={"card-header text-center fs-4"}>Kategori Sayfası Ekleme</div>
+        <div className={"card-header text-center fs-4"}>Kategori Ekleme Sayfası</div>
         <div className={"card-body"}>
             <Button className={"success"} title={"Yeni Kategori Ekle"} icon={<PlusOutlined/>}
                     onClick={newCategory}>

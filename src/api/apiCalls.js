@@ -118,3 +118,29 @@ export const updateCategory= (body, token = null) => {
 export const deleteCategory = (id, token = null) => {
     return http.delete(getBaseUrl() + `/categories/${id}`, token);
 }
+
+// ======================== Ürün İşlemleri ===========================
+
+// Ürün Ekleme Alanı.
+export const addProduct = (body, token = null) => {
+    return http.post(getBaseUrl() + '/newProducts', body, token);
+}
+// Ürün listesini getirir.
+export const loadProduct = () => {
+    return http.get(getBaseUrl() + `/products`);
+}
+
+// Ürün Bilgilerini Güncelleme Alanı.
+export const updateProduct= (body, token = null) => {
+    return http.put(getBaseUrl() + `/products`, body, token);
+}
+
+// Ürün Bilgilerini Silme Alanı.
+export const deleteProduct = (id, token = null) => {
+    return http.delete(getBaseUrl() + `/products/${id}`, token);
+}
+
+// Ürün Resmi Ekleme Alanı.
+export const addProductImage = (body, token = null) => {
+    return http.post(getBaseUrl() + '/newProductToImage', body, token);
+}

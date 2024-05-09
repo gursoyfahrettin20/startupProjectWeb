@@ -36,10 +36,8 @@ const Index = () => {
             getItem(<a href="/news">Haber Slider</a>, 'news', <SlidersOutlined/>)
         ]),
         getItem('Ürün Kategorisi', 'products', <ShareAltOutlined/>, [
-            getItem(<a href="/categories">Kategori Oluştur</a>, 'categories', <AppstoreAddOutlined/>),
-            getItem(<a href="/product">Akıllı Sistemler</a>, 'product1', <MobileOutlined/>,),
-            getItem(<a href="/product">Kamera Sistemleri</a>, 'product2', <LaptopOutlined/>),
-            getItem(<a href="/product">Güvenlik Sistemleri</a>, 'product3', <CodepenOutlined/>)
+            getItem(<a href="/categories">Kategori Oluştur / Listele</a>, 'categories', <AppstoreAddOutlined/>),
+            getItem(<a href="/product">Ürün Oluştur / Listele</a>, 'product', <MobileOutlined/>,)
         ]),
         getItem('Site Detay', 'about', <InfoCircleOutlined/>, [
             getItem(<a href="/aboutUs">Hakkımızda</a>, 'aboutUs', <ReadOutlined/>),
