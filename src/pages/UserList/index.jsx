@@ -18,9 +18,10 @@ function UserList() {
     });
 
     const getUsers = useCallback(async (page) => {
+        const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         setApiProgress(true);
         try {
-            const response = await loadUser(page, 5);
+            const response = await loadUser(page, 14, token);
             setUsersPage(response.data);
         } catch (error) {
 
@@ -37,11 +38,12 @@ function UserList() {
     return (
         <div className="card">
             <div className="card-header text-center fs-4">User List</div>
-            <ul className="list-group  list-group-flush" id={"user-list-group"} key={123123}>
+            <ul className="list-group  list-group-flush" id={"user-list-group"}>
                 {
                     userPage.content.map((user, key) => {
                         return (
-                            <a className='text-decoration-none' key={uuidv4()} style={{textDecoration: "none"}} href={`/user/${user.id}`}>
+                            <a className='text-decoration-none' key={uuidv4()} style={{textDecoration: "none"}}
+                               href={`/user/${user.id}`}>
                                 <UserListItem key={uuidv4()} user={user}/>
                             </a>
                         )
@@ -58,11 +60,12 @@ function UserList() {
                         {t("preview")}
                     </button>
                 }
-
-
                 {
-                    apiProgress && <Spin style={{display: apiProgress ? "inline" : "none"}}
-                                         indicator={<LoadingOutlined style={{fontSize: 24, marginRight: 15}} spin/>}/>
+                    apiProgress && <Spin
+                        style={{display: apiProgress ? "inline" : "none"}}
+                        indicator={
+                            <LoadingOutlined style={{fontSize: 24, marginRight: 15}} spin/>
+                        }/>
                 }
                 {
                     (!apiProgress && !userPage.last) &&

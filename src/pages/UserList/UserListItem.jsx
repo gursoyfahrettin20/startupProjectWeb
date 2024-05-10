@@ -1,4 +1,4 @@
-import ProfileImage from "@/components/header/ProfileImage.jsx";
+import ProfileImage from "@/components/Image/ProfileImage.jsx";
 function UserListItem({user}) {
     return (
         <li className={"list-group-item list-group-item-action"}>
