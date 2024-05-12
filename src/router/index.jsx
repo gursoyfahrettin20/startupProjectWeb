@@ -13,10 +13,12 @@ import SiteSettings from "@/pages/SiteSettings/index.jsx";
 import Slider from "@/pages/Slider/index.jsx";
 import Contact from "@/pages/Contact/index.jsx";
 import OurWeb from "@/pages/OurWeb/index.jsx";
+import MainPage from "@/pages/MainPage/index.jsx";
 import Product from "@/pages/Product/index.jsx";
 import Categories from "@/pages/Product/Categories.jsx";
 import Content from "@/pages/Content/index.jsx";
 import News from "@/pages/News/index.jsx";
+import ProductNews from "@/pages/Product/ProductNews.jsx";
 
 export default createBrowserRouter([
     {
@@ -53,11 +55,14 @@ export default createBrowserRouter([
                 path: '/aboutUs',
                 element: <OurWeb id={3} elementName={"aboutUs"}/>
             }, {
+                path: '/categories',
+                Component: Categories
+            }, {
                 path: '/product',
                 Component: Product
             }, {
-                path: '/categories',
-                Component: Categories
+                path: '/productNews',
+                Component: ProductNews
             }, {
                 path: '/content',
                 Component: Content
@@ -82,6 +87,18 @@ export default createBrowserRouter([
             }, {
                 path: '/siteSettings',
                 Component: SiteSettings
+            }, {
+                path: '/mainPage',
+                element: <MainPage id={4} elementName={"mainPage"}/>
+            }, {
+                path: '/mainHeadline',
+                element: <MainPage id={5} elementName={"mainHeadline"}/>
+            }, {
+                path: '/breakHeadline',
+                element: <MainPage id={6} elementName={"breakHeadline"}/>
+            }, {
+                path: '/lastHeadline',
+                element: <MainPage id={7} elementName={"lastHeadline"}/>
             },
         ]
     }
