@@ -7,10 +7,13 @@ import FormItem from "@/components/formItem/FormItem.jsx";
 import {PlusOutlined} from "@ant-design/icons";
 import JoditEditor from 'jodit-react';
 import CategoryImage from "@/components/Image/CategoryImage.jsx";
+import ReadEditor from "@/components/editor/ReadEditor.jsx";
+import _ from "lodash";
 
 const Categories = () => {
     const propState = usePropState();
     const editor = useRef(null);
+    const editorRead = useRef(null);
     const [errorMessage, setErrorMessage] = useState("");
     const [categoryList, setCategoryList] = useState([]);
     const [isUpdateId, setIsUpdateId] = useState(0);
@@ -39,9 +42,9 @@ const Categories = () => {
 
     const editingHandler = (e, item) => {
         const newData = {
-            name: categoryName,
-            image: newImage,
-            detail: categoryDetail
+            name: !_.isEmpty(categoryName) ? categoryName : item.name,
+            image: !_.isEmpty(newImage) ? newImage : item.image,
+            detail: !_.isEmpty(categoryDetail) ? categoryDetail : item.detail
         }
         if (e.target.value === "save") {
             newData["id"] = item.id;
@@ -151,82 +154,94 @@ const Categories = () => {
         </Col>
     </Row>);
 
-    return (<div className={"card"}>
-        <div className={"card-header text-center fs-4"}>Kategori Ekleme Sayfası</div>
-        <div className={"card-body"}>
-            <Button className={"success"} title={"Yeni Kategori Ekle"} icon={<PlusOutlined/>}
-                    onClick={newCategory}>
-                Yeni Kategori Ekle
-            </Button>
-        </div>
-        <div className={"categoryList card-body"}>
-            {isNewCategory && (emptyForm)}
-            <List
-                itemLayout="horizontal"
-                dataSource={categoryList}
-                renderItem={(item) => (<List.Item>
-                    <List.Item.Meta
-                        title={isUpdateId === item.id ? (<Row gutter={[12, 12]} justify="start">
-                            <Col className={"gutter-row"} span={18}>
-                                <FormItem
-                                    name="categoryName"
-                                    label={"Kategori Adı"}
-                                    defaultValue={item.name}
-                                    // errors={errors.branchName}
-                                    onChange={(e) => setCategoryName(e.target.value)}
-                                />
-                            </Col>
-                        </Row>) : <span>{item.name}</span>}
-                        description={
-                            <Row gutter={[12, 12]} justify="start">
+    return (
+        <div className={"card"}>
+            <div className={"card-header text-center fs-4"}>Kategori Ekleme Sayfası</div>
+            <div className={"card-body"}>
+                <Button className={"success"} title={"Yeni Kategori Ekle"} icon={<PlusOutlined/>}
+                        onClick={newCategory}>
+                    Yeni Kategori Ekle
+                </Button>
+            </div>
+            <div className={"categoryList card-body"}>
+                {isNewCategory && (emptyForm)}
+                <List
+                    itemLayout="horizontal"
+                    dataSource={categoryList}
+                    renderItem={(item) => (<List.Item>
+                        <List.Item.Meta
+                            title={isUpdateId === item.id ? (<Row gutter={[12, 12]} justify="start">
                                 <Col className={"gutter-row"} span={18}>
-                                    <Row gutter={[12, 12]} justify="start">
-                                        <Col className={"gutter-row"} span={24}>
-                                            {isUpdateId === item.id ? (<FormItem
-                                                name="categoryImage"
-                                                label={"Kategori Resmi"}
-                                                onChange={onSelectImage}
-                                                type={"file"}
-                                                // errors={errors.image}
-                                            />) : <CategoryImage image={item.image}/>}
-                                        </Col>
-                                        <Col className={"gutter-row"} span={24}>
-                                            {isUpdateId === item.id ? (
-                                                <JoditEditor ref={editor} value={item.detail}
-                                                             onChange={(data) => setCategoryDetail(data)}/>
-                                            ) : <JoditEditor config={{
-                                                readonly: true,
-                                                useSearch: false,
-                                                toolbar: false,
-                                                showCharsCounter: false,
-                                                showWordsCounter: false,
-                                                showXPathInStatusbar: false
-                                            }} ref={editor} value={item.detail} disable={true}/>
-                                            }
-                                        </Col>
-                                    </Row>
+                                    <FormItem
+                                        name="categoryName"
+                                        label={"Kategori Adı"}
+                                        defaultValue={item.name}
+                                        // errors={errors.branchName}
+                                        onChange={(e) => setCategoryName(e.target.value)}
+                                    />
                                 </Col>
-                                <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
-                                    {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {
-                                        editingHandler(e, item)
-                                    }}>
-                                        <Radio.Button className={"save"} value="save">Kaydet</Radio.Button>
-                                        <Radio.Button className={"cancel"} value="cancel"
-                                                      danger>İptal</Radio.Button>
-                                    </Radio.Group>) : (<Radio.Group onChange={(e) => {
-                                        editHandler(e, item)
-                                    }}>
-                                        <Radio.Button className={"update"} value={"update"}>Düzenle</Radio.Button>
-                                        <Radio.Button className={"delete"} value={"delete"}
-                                                      danger>Sil</Radio.Button>
-                                    </Radio.Group>)}
-                                </Col>
-                            </Row>}
-                    />
-                </List.Item>)}
-            />
+                            </Row>) : <>
+                                <label className='form-label' htmlFor={item.name + "_description"}> Kategori Adı
+                                    : </label> <span>{item.name}</span>
+                            </>
+                            }
+                            description={
+                                <Row gutter={[12, 12]} justify="start">
+                                    <Col className={"gutter-row"} span={18}>
+                                        <Row gutter={[12, 12]} justify="start">
+                                            <Col className={"gutter-row"} span={24}>
+                                                {isUpdateId === item.id ? (<FormItem
+                                                    name="categoryImage"
+                                                    label={"Kategori Resmi"}
+                                                    onChange={onSelectImage}
+                                                    type={"file"}
+                                                    // errors={errors.image}
+                                                />) : <>
+                                                    <label className='form-label' htmlFor={item.name + "_description"}>Kategori
+                                                        Resmi ;</label>
+                                                    <CategoryImage image={item.image} style={{maxWidth:"150px", maxHeight:"150px", margin:"20px"}}/>
+                                                </>}
+                                            </Col>
+                                            <Col className={"gutter-row"} span={24}>
+                                                {isUpdateId === item.id ? (
+                                                    <JoditEditor ref={editor} value={item.detail}
+                                                                 onChange={(data) => setCategoryDetail(data)}/>
+                                                ) : <>
+                                                    <label className='form-label' htmlFor={item.name + "_description"}>Kategori
+                                                        Açıklaması ;</label>
+                                                    <ReadEditor
+                                                        ref={editorRead}
+                                                        value={item.detail}
+                                                        disable={true}
+                                                    />
+                                                </>
+                                                }
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col className={"gutter-row custom-radio-btn"} span={6}
+                                         style={{textAlign: "right"}}>
+                                        {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {
+                                            editingHandler(e, item)
+                                        }}>
+                                            <Radio.Button className={"save"} value="save">Kaydet</Radio.Button>
+                                            <Radio.Button className={"cancel"} value="cancel"
+                                                          danger>İptal</Radio.Button>
+                                        </Radio.Group>) : (<Radio.Group onChange={(e) => {
+                                            editHandler(e, item)
+                                        }}>
+                                            <Radio.Button className={"update"} value={"update"}>Düzenle</Radio.Button>
+                                            <Radio.Button className={"delete"} value={"delete"}
+                                                          danger>Sil</Radio.Button>
+                                        </Radio.Group>)}
+                                    </Col>
+                                </Row>}
+                        />
+                    </List.Item>)}
+                />
+            </div>
         </div>
-    </div>);
+    );
 };
 
 export default Categories;

@@ -110,7 +110,7 @@ export const loadCategory = () => {
 }
 
 // Kategori Bilgilerini Güncelleme Alanı.
-export const updateCategory= (body, token = null) => {
+export const updateCategory = (body, token = null) => {
     return http.put(getBaseUrl() + `/categories`, body, token);
 }
 
@@ -126,12 +126,12 @@ export const addProduct = (body, token = null) => {
     return http.post(getBaseUrl() + '/newProducts', body, token);
 }
 // Ürün listesini getirir.
-export const loadProduct = () => {
-    return http.get(getBaseUrl() + `/products`);
+export const loadProduct = (page = 0, size = 10, token = null) => {
+    return http.get(getBaseUrl() + `/products`, {params: {page, size}}, token);
 }
 
 // Ürün Bilgilerini Güncelleme Alanı.
-export const updateProduct= (body, token = null) => {
+export const updateProduct = (body, token = null) => {
     return http.put(getBaseUrl() + `/products`, body, token);
 }
 
@@ -143,4 +143,14 @@ export const deleteProduct = (id, token = null) => {
 // Ürün Resmi Ekleme Alanı.
 export const addProductImage = (body, token = null) => {
     return http.post(getBaseUrl() + '/newProductToImage', body, token);
+}
+
+// Ürün Resmi Listeleme Alanı.
+export const listProductImage = (productId,token = null) => {
+    return http.get(getBaseUrl() + `/productToImage/${productId}`, token);
+}
+
+// Ürün Bilgilerini Silme Alanı.
+export const deleteImage = (id, token = null) => {
+    return http.delete(getBaseUrl() + `/productToImage/${id}`, token);
 }

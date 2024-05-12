@@ -1,17 +1,30 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import {addProduct, addProductImage, deleteProduct, loadCategory, loadProduct, updateProduct} from "@/api/apiCalls.js";
-import {Button, Col, List, Radio, Row} from "antd";
+import {
+    addProduct,
+    addProductImage,
+    deleteImage,
+    deleteProduct,
+    listProductImage,
+    loadCategory,
+    loadProduct,
+    loadUser,
+    updateProduct
+} from "@/api/apiCalls.js";
+import {Button, Col, List, Radio, Row, Upload, Image, Spin} from "antd";
 import FormItem from "@/components/formItem/FormItem.jsx";
-import JoditEditor from "jodit-react";
-import {PlusOutlined} from "@ant-design/icons";
+import {LoadingOutlined, PlusOutlined} from "@ant-design/icons";
 import CustomSelect from "@/components/customSelect/CustomSelect.jsx";
 import _ from "lodash";
-import {Image, Upload} from 'antd';
-import ImgCrop from 'antd-img-crop';
+import './index.scss';
+import ReadEditor from "@/components/editor/ReadEditor.jsx";
+import EditingEditor from "@/components/editor/EditingEditor.jsx";
+import {useTranslation} from "react-i18next";
 
 function Index(props) {
+    const {t} = useTranslation();
     const editor = useRef(null);
+    const editorRead = useRef(null);
     const [errorMessage, setErrorMessage] = useState("");
     const [productList, setProductList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
@@ -25,35 +38,31 @@ function Index(props) {
     const [fileList, setFileList] = useState([]);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
+    const [page, setPage] = useState({});
+    const [imgList, setImgList] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        getCategoryAndProduct().then();
+        getCategory().then();
+        getProducts().then();
     }, []);
 
     useEffect(() => {
-        for (let i = 0; i < productList.length; i++) {
-            if (productList.length > 0 && productList.id === isUpdateId) {
-                let img = [];
-                for (let j = 0; j < productList[i].productToImages.length; j++) {
+        let img = [];
+        if (!_.isEmpty(imgList)) {
+            for (let i = 0; i < imgList.length; i++) {
+                if (imgList.length > 0) {
                     img.push({
-                        uid: productList[i].productToImages[j].id,
-                        name: productList[i].productToImages[j].image,
+                        id: imgList[i].id,
+                        name: imgList[i].image,
                         status: 'done',
-                        url: productList[i].productToImages[j].image,
+                        url: "/assets/product/" + imgList[i].image,
                     })
                 }
-                setFileList(img);
             }
+            setFileList(img);
         }
-    }, [isUpdateId]);
-
-    const getCategoryAndProduct = useCallback(async () => {
-        const responseCategory = await loadCategory();
-        setCategoryList(responseCategory.data);
-        const responseProduct = await loadProduct();
-        setProductList(responseProduct.data);
-    }, []);
+    }, [imgList]);
 
     useEffect(() => {
         let options = [];
@@ -68,40 +77,74 @@ function Index(props) {
     }, [categoryList]);
 
     const editHandler = (e, item) => {
-        if (e.target.value === "update") {
+        if (e.target.value === "edit") {
             setIsUpdateId(item.id);
+            getImgList(item.id).then();
         } else {
             deleteProductData(item.id).then()
         }
     }
 
-    const editingHandler = (e, item) => {
+    const newCreateHandler = (e) => {
         const newData = {
             name: productName, detail: productDetail
         }
+        const indexCategory = _.findIndex(categoryList, (data) => {
+            return data.id === selectedCategory;
+        })
+        newData["categories"] = categoryList[indexCategory];
+        newProductData(newData).then();
+        navigate(0);
+    }
 
+    const editingHandler = (e, item) => {
         if (e.target.value === "save") {
             const index = _.findIndex(productList, (data) => {
                 return data.id === item.id;
             })
-            for(let i =0; i<newImage.length; i++){
+            for (let i = 0; i < newImage.length; i++) {
                 newImage[i]["products"] = productList[index];
             }
             newProductImageData(newImage).then();
-            newData["id"] = productList[index].id;
-            newData["productToImages"] = newImage;
+            const newData = {
+                id: productList[index].id,
+                name: !_.isEmpty(productName) ? productName : productList[index].name,
+                detail: !_.isEmpty(productDetail) ? productDetail : productList[index].detail
+            }
             updateProductData(newData).then();
-        } else if (e.target.value === "newItem") {
-            const indexCategory = _.findIndex(categoryList, (data) => {
-                return data.id === selectedCategory;
-            })
-            newData["categories"] = categoryList[indexCategory];
-            newProductData(newData).then();
+            navigate(0);
         } else {
             setIsUpdateId(0);
             setIsNewProduct(false);
         }
     }
+
+    const getImgList = useCallback(async (productId) => {
+        try {
+            const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
+            const list = await listProductImage(productId, token);
+            setImgList(list.data);
+        } catch (error) {
+        }
+    }, []);
+
+    const getCategory = useCallback(async () => {
+        try {
+            const responseCategory = await loadCategory();
+            setCategoryList(responseCategory.data);
+        } catch (error) {
+        }
+    }, []);
+
+    const getProducts = useCallback(async (page) => {
+        const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
+        try {
+            const responseProduct = await loadProduct(page, 5, token);
+            setProductList(responseProduct.data.content);
+            setPage({...responseProduct.data});
+        } catch (error) {
+        }
+    }, []);
 
     const newProductData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
@@ -121,6 +164,18 @@ function Index(props) {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
             const response = await addProductImage(item, token);
+        } catch (error) {
+            setErrorMessage(error.response.data.message);
+        } finally {
+            setIsNewProduct(false);
+        }
+
+    }, []);
+
+    const deleteProductImageData = useCallback(async (id) => {
+        const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
+        try {
+            const response = await deleteImage(id, token);
         } catch (error) {
             setErrorMessage(error.response.data.message);
         } finally {
@@ -166,16 +221,15 @@ function Index(props) {
         setSelectedCategory(e.key);
     }
 
-    const getBase64 = (event) =>
-        new Promise((resolve, reject) => {
-            if (!event) {
-                return;
-            }
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(event);
-            fileReader.onload = () => resolve(fileReader.result);
-            fileReader.onerror = "done";
-        });
+    const getBase64 = (event) => new Promise((resolve, reject) => {
+        if (!event) {
+            return;
+        }
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(event);
+        fileReader.onload = () => resolve(fileReader.result);
+        fileReader.onerror = "done";
+    });
 
     const onChange = async ({fileList: newFileList}) => {
         let data;
@@ -183,20 +237,26 @@ function Index(props) {
         setFileList(newFileList);
         for (let i = 0; i < newFileList.length; i++) {
             if (newFileList[i]) {
-                data = await getBase64(newFileList[i].originFileObj);
-                newList.push({image: data});
+                if (!newFileList[i].id) {
+                    data = await getBase64(newFileList[i].originFileObj);
+                    newList.push({image: data});
+                }
             }
         }
         setNewImage(newList);
     };
 
-    const onPreview = async (file) => {
+    const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj);
         }
         setPreviewImage(file.url || file.preview);
         setPreviewOpen(true);
     };
+
+    const onRemove = (data) => {
+        deleteProductImageData(data.id).then()
+    }
 
     const emptyForm = (<Row gutter={[12, 12]} justify="start">
         <Col className={"gutter-row"} span={18}>
@@ -221,111 +281,135 @@ function Index(props) {
         </Col>
         <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
             <Radio.Group onChange={(e) => {
-                editingHandler(e)
+                newCreateHandler(e)
             }}>
                 <Radio.Button className={"save"} value="newItem">Kaydet</Radio.Button>
-                <Radio.Button className={"cancel"} value="cancel"
-                              danger>İptal</Radio.Button>
+                <Radio.Button className={"cancel"} value="cancel" danger>İptal</Radio.Button>
             </Radio.Group>
         </Col>
     </Row>);
 
-    return (<div className={"card"}>
-        <div className={"card-header text-center fs-4"}>Ürün Ekleme Sayfası</div>
-        <div className={"card-body"}>
-            <Button className={"success"} title={"Yeni Ürün Ekle"} icon={<PlusOutlined/>}
-                    onClick={newProduct}>
-                Yeni Ürün Ekle
-            </Button>
-        </div>
-        <div className={"productList card-body"}>
-            {isNewProduct && (emptyForm)}
-            <List
-                itemLayout="horizontal"
-                dataSource={productList}
-                renderItem={(item) => (<List.Item>
-                    <List.Item.Meta
-                        title={isUpdateId === item.id ? (<Row gutter={[12, 12]} justify="start">
-                            <Col className={"gutter-row"} span={18}>
-                                <FormItem
-                                    name="productName"
-                                    label={"Ürün Adı"}
-                                    defaultValue={item.name}
-                                    // errors={errors.branchName}
-                                    onChange={(e) => setProductName(e.target.value)}
-                                />
-                            </Col>
-                        </Row>) : <span>{item.name}</span>}
-                        description={<Row gutter={[12, 12]} justify="start">
-                            <Col className={"gutter-row"} span={18}>
-                                <Row gutter={[12, 12]} justify="start">
-                                    <Col className={"gutter-row"} span={24}>
-                                        {isUpdateId === item.id && (
-                                            <ImgCrop rotationSlider>
+    return (
+        <div className={"card"}>
+            <div className={"card-header text-center fs-4"}>Ürün Ekleme Sayfası</div>
+            <div className={"card-body"}>
+                <Button className={"success"} title={"Yeni Ürün Ekle"} icon={<PlusOutlined/>}
+                        onClick={newProduct}>
+                    Yeni Ürün Ekle
+                </Button>
+            </div>
+            <div className={"productList card-body"}>
+                {isNewProduct && (emptyForm)}
+                <List
+                    itemLayout="horizontal"
+                    dataSource={productList}
+                    renderItem={(item) => (<List.Item>
+                        <List.Item.Meta
+                            title={isUpdateId === item.id ? (<Row gutter={[12, 12]} justify="start">
+                                <Col className={"gutter-row"} span={18}>
+                                    <FormItem
+                                        name="productName"
+                                        label={"Ürün Adı"}
+                                        defaultValue={item.name}
+                                        // errors={errors.branchName}
+                                        onChange={(e) => setProductName(e.target.value)}
+                                    />
+                                </Col>
+                            </Row>) : <><label className='form-label' htmlFor={item.name+"_title"}>Ürün Adı : </label> <span>{item.name}</span></>}
+                            description={<Row gutter={[12, 12]} justify="start">
+                                <Col className={"gutter-row"} span={18}>
+                                    <Row gutter={[12, 12]} justify="start">
+                                        <Col className={"gutter-row"} span={24}>
+                                            {isUpdateId === item.id && (<>
                                                 <Upload
                                                     listType="picture-card"
+                                                    type={'drag'}
+                                                    multiple={true}
                                                     fileList={fileList}
+                                                    onRemove={onRemove}
                                                     onChange={onChange}
-                                                    preview={{
-                                                        visible: previewOpen,
-                                                        onVisibleChange: (visible) => setPreviewOpen(visible),
-                                                        afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                                                    }}
-                                                    onPreview={onPreview}
+                                                    onPreview={handlePreview}
                                                 >
                                                     {fileList.length < 5 && '+ Upload'}
                                                 </Upload>
-                                            </ImgCrop>
-                                        )}
-                                        {previewImage && (
-                                            <Image
-                                                wrapperStyle={{
-                                                    display: 'none',
-                                                }}
-                                                preview={{
-                                                    visible: previewOpen,
-                                                    onVisibleChange: (visible) => setPreviewOpen(visible),
-                                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                                                }}
-                                                src={previewImage}
-                                            />
-                                        )}
-                                    </Col>
-                                    <Col className={"gutter-row"} span={24}>
-                                        {isUpdateId === item.id ? (<JoditEditor ref={editor} value={item.detail}
-                                                                                onChange={(data) => setProductDetail(data)}/>) :
-                                            <JoditEditor config={{
-                                                readonly: true,
-                                                useSearch: false,
-                                                toolbar: false,
-                                                showCharsCounter: false,
-                                                showWordsCounter: false,
-                                                showXPathInStatusbar: false
-                                            }} ref={editor} value={item.detail} disable={true}/>}
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
-                                {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {
-                                    editingHandler(e, item)
-                                }}>
-                                    <Radio.Button className={"save"} value="save">Kaydet</Radio.Button>
-                                    <Radio.Button className={"cancel"} value="cancel"
-                                                  danger>İptal</Radio.Button>
-                                </Radio.Group>) : (<Radio.Group onChange={(e) => {
-                                    editHandler(e, item)
-                                }}>
-                                    <Radio.Button className={"update"} value={"update"}>Düzenle</Radio.Button>
-                                    <Radio.Button className={"delete"} value={"delete"}
-                                                  danger>Sil</Radio.Button>
-                                </Radio.Group>)}
-                            </Col>
-                        </Row>}
-                    />
-                </List.Item>)}
-            />
+                                                {previewImage && (
+                                                    <Image
+                                                        wrapperStyle={{
+                                                            display: 'none',
+                                                        }}
+                                                        preview={{
+                                                            visible: previewOpen,
+                                                            onVisibleChange: (visible) => setPreviewOpen(visible),
+                                                            afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                                        }}
+                                                        src={previewImage}
+                                                    />
+                                                )}
+                                            </>)}
+                                        </Col>
+                                        <Col className={"gutter-row"} span={24}>
+                                            {isUpdateId === item.id ?
+                                                <EditingEditor
+                                                    ref={editor}
+                                                    value={item.detail}
+                                                    onChange={(data) => setProductDetail(data)}/>
+                                                :
+                                                <>
+                                                    <label className='form-label' htmlFor={item.name+"_description"}>Ürün Açıklaması ;</label> <ReadEditor
+                                                    ref={editorRead}
+                                                    value={item.detail}
+                                                    disable={true}
+                                                />
+                                                </>
+                                            }
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
+                                    {isUpdateId === item.id ? (
+                                        <Radio.Group onChange={(e) => {
+                                            editingHandler(e, item)
+                                        }}>
+                                            <Radio.Button className={"save"} value="save">Güncelle</Radio.Button>
+                                            <Radio.Button className={"cancel"} value="cancel"
+                                                          danger>İptal</Radio.Button>
+                                        </Radio.Group>) : (
+                                        <Radio.Group onChange={(e) => {
+                                            editHandler(e, item)
+                                        }}>
+                                            <Radio.Button className={"update"} value={"edit"}>Düzenle</Radio.Button>
+                                            <Radio.Button className={"delete"} value={"delete"}
+                                                          danger>Sil</Radio.Button>
+                                        </Radio.Group>)}
+                                </Col>
+                            </Row>}
+                        />
+                    </List.Item>)}
+                />
+            </div>
+            <div className="card-footer text-center">
+                {
+                    (!page.first) &&
+                    <button
+                        className="btn btn-outline-secondary btn-sm float-start"
+                        disabled={page.first}
+                        onClick={() => getProducts(page.number - 1)}>
+                        {t("preview")}
+                    </button>
+                }
+                {
+                    (!page.last) &&
+                    <button
+                        className="btn btn-outline-secondary btn-sm float-end"
+                        disabled={page.last}
+                        onClick={() => getProducts(page.number + 1)}>
+                        {t("next")}
+                    </button>
+                }
+
+            </div>
         </div>
-    </div>);
+    );
 }
 
 export default Index;

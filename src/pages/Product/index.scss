@@ -1,0 +1,31 @@
+
+.ant-upload-picture-card-wrapper {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px dashed #d9d9d9;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+
+  .ant-upload-wrapper {
+    padding: 10px;
+    position: relative;
+    background: none !important;
+    border: none !important;
+  }
+
+  .ant-upload-drag {
+    position: relative;
+  }
+  .ant-upload-list{
+    padding: 10px;
+  }
+}
+.title {
+  text-decoration: underline;
+  font-weight: 800;
+  color: #333;
+  text-transform: uppercase;
+}
