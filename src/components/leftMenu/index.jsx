@@ -22,13 +22,13 @@ const Index = () => {
     }
 
     const items = [
-        // getItem('Admin İşlemleri', 'adminMenu', <SecurityScanOutlined/>, [
-        //     getItem(<a href="/userList">Kullanıcı Listesi</a>, 'userListLink', <UserOutlined/>),
-        //     getItem(<a href="/userAdministratorPage">Kullanıcı Yetkilendirme</a>, 'userAdministratorPage',
-        //         <UserSwitchOutlined/>),
-        //     getItem(<a href="/mailSettings">Mail Ayarları</a>, 'mailSettings', <MailOutlined/>),
-        //     getItem(<a href="/siteSettings">Site Ayarları</a>, 'siteSettings', <SettingOutlined/>),
-        // ]),
+        getItem('Admin İşlemleri', 'adminMenu', <SecurityScanOutlined/>, [
+            getItem(<a href="/userList">Kullanıcı Listesi</a>, 'userListLink', <UserOutlined/>),
+            getItem(<a href="/userAdministratorPage">Kullanıcı Yetkilendirme</a>, 'userAdministratorPage',
+                <UserSwitchOutlined/>),
+            getItem(<a href="/mailSettings">Mail Ayarları</a>, 'mailSettings', <MailOutlined/>),
+            getItem(<a href="/siteSettings">Site Ayarları</a>, 'siteSettings', <SettingOutlined/>),
+        ]),
         getItem('Ana Sayfa İşlemleri', 'mainPage', <AppstoreOutlined/>, [
             getItem("Ana Sayfa", 'aboutUs', <ReadOutlined/>, [
                 getItem(<a href="/mainPage">Manşet-1</a>, 'mainHeadline1', <SlidersOutlined/>),
