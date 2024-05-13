@@ -27,4 +27,4 @@ br
 
 
 
-    ### Bu proje halen geliştirme aşamasındadır. İki günde bir güncellenmektedir. ###
+    ### Bu proje halen geliştirme aşamasındadır. İmkan buldukca iki günde bir güncellenmektedir. ###
