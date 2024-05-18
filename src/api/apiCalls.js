@@ -150,7 +150,30 @@ export const listProductImage = (productId,token = null) => {
     return http.get(getBaseUrl() + `/productToImage/${productId}`, token);
 }
 
-// Ürün Bilgilerini Silme Alanı.
+// Ürün Resmi Silme Alanı.
 export const deleteImage = (id, token = null) => {
     return http.delete(getBaseUrl() + `/productToImage/${id}`, token);
+}
+
+// ======================== Slider İşlemleri ===========================
+
+
+// Slider Resmi Ekleme Alanı.
+export const addSliderImage = (body, token = null) => {
+    return http.post(getBaseUrl() + '/newSlider', body, token);
+}
+
+// Slider Resmi Listeleme Alanı.
+export const listSliderImage = (token = null) => {
+    return http.get(getBaseUrl() + `/slider`, token);
+}
+
+// Slider Bilgilerini Güncelleme Alanı.
+export const updateSliderImage = (id, body, token = null) => {
+    return http.put(getBaseUrl() + `/slider/${id}`, body, token);
+}
+
+// Slider Resmi Silme Alanı.
+export const deleteSliderImage = (id, token = null) => {
+    return http.delete(getBaseUrl() + `/slider/${id}`, token);
 }

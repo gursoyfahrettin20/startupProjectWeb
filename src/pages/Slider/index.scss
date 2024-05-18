@@ -1,0 +1,27 @@
+.sliderList {
+  margin: 10px 20px;
+  padding: 10px 20px;
+  border: 1px solid #cccccc;
+  border-radius: 15px;
+}
+
+.custom-radio-btn {
+  .ant-radio-button-wrapper {
+    &.update,
+    &.save {
+      color: #52c41a;
+      border-color: #52c41a;
+    }
+
+    &.delete,
+    &.cancel {
+      color: #ff4d4f;
+      border-color: #ff4d4f;
+    }
+  }
+}
+
+.success {
+  color: #52c41a;
+  border-color: #52c41a;
+}
