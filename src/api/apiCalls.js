@@ -177,3 +177,27 @@ export const updateSliderImage = (id, body, token = null) => {
 export const deleteSliderImage = (id, token = null) => {
     return http.delete(getBaseUrl() + `/slider/${id}`, token);
 }
+
+
+// ======================== News İşlemleri ===========================
+
+
+// Slider Resmi Ekleme Alanı.
+export const addNews = (body, token = null) => {
+    return http.post(getBaseUrl() + '/newNews', body, token);
+}
+
+// Slider Resmi Listeleme Alanı.
+export const listNews = (token = null) => {
+    return http.get(getBaseUrl() + `/news`, token);
+}
+
+// Slider Bilgilerini Güncelleme Alanı.
+export const updateNews = (id, body, token = null) => {
+    return http.put(getBaseUrl() + `/news/${id}`, body, token);
+}
+
+// Slider Resmi Silme Alanı.
+export const deleteNews = (id, token = null) => {
+    return http.delete(getBaseUrl() + `/news/${id}`, token);
+}
