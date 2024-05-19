@@ -16,14 +16,22 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/api/.*': 'http://localhost:5555',
-            '^/assets/.*': 'http://localhost:5555/'
+            '/api/.*': {
+                target: 'http://localhost:5555',
+                changeOrigin: true,
+                secure: false,
+            },
+            '/assets/.*': {
+                target: 'http://localhost:5555',
+                changeOrigin: true,
+                secure: false,
+            },
         },
         port: 3434,
         open: true,
         host: "localhost",
     },
-    review: {
+    preview: {
         port: 3401,
         open: true,
         host: "localhost"
