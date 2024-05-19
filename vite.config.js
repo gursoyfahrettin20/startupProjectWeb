@@ -16,12 +16,12 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '/api/.*': {
+            '/api': {
                 target: 'http://localhost:5555',
                 changeOrigin: true,
                 secure: false,
             },
-            '/assets/.*': {
+            '/assets': {
                 target: 'http://localhost:5555',
                 changeOrigin: true,
                 secure: false,

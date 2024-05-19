@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Button, Col, List, Row, Radio} from 'antd';
+import {Button, Col, List, Radio, Row} from 'antd';
 import './index.scss'
 import {deleteContact, loadContact, newAddContact, updateContact} from "@/api/apiCalls.js";
 import {PlusOutlined} from "@ant-design/icons";
@@ -49,7 +49,7 @@ const Index = () => {
     }
     const updateItemHandler = (e, value) => {
         let _value = _.cloneDeep(value);
-        if (e.target.name === "maps" && value !== "") {
+        if (e.target.name === "maps" && value !== "" && _value.search('src="') !== -1) {
             _value = _value.split('src="')[1].split('" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>')[0];
         }
         const newData = {
