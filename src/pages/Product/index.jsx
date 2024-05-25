@@ -8,31 +8,31 @@ import {
     listProductImage,
     loadCategory,
     loadProduct,
-    loadUser,
     updateProduct
 } from "@/api/apiCalls.js";
-import {Button, Col, List, Radio, Row, Upload, Image, Spin} from "antd";
+import {Button, Col, Image, List, Radio, Row, Upload} from "antd";
 import FormItem from "@/components/formItem/FormItem.jsx";
-import {LoadingOutlined, PlusOutlined} from "@ant-design/icons";
+import {PlusOutlined} from "@ant-design/icons";
 import CustomSelect from "@/components/customSelect/CustomSelect.jsx";
 import _ from "lodash";
 import './index.scss';
 import ReadEditor from "@/components/editor/ReadEditor.jsx";
 import EditingEditor from "@/components/editor/EditingEditor.jsx";
 import {useTranslation} from "react-i18next";
+import {VALIDATION} from "@/shared/validate/Validation.js";
+import {isValidCheck} from "@/shared/validate/IsValidCheck.js";
 
 function Index(props) {
     const {t} = useTranslation();
     const editor = useRef(null);
     const editorRead = useRef(null);
-    const [errorMessage, setErrorMessage] = useState("");
     const [productList, setProductList] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
     const [categoryOptions, setCategoryOptions] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const [isUpdateId, setIsUpdateId] = useState(0);
     const [isNewProduct, setIsNewProduct] = useState(false);
-    const [productName, setProductName] = useState({});
+    const [productName, setProductName] = useState(null);
     const [newImage, setNewImage] = useState([]);
     const [productDetail, setProductDetail] = useState("");
     const [fileList, setFileList] = useState([]);
@@ -41,6 +41,16 @@ function Index(props) {
     const [page, setPage] = useState({});
     const [imgList, setImgList] = useState([]);
     const navigate = useNavigate();
+    const [validation, setValidation] = useState({
+        selectCategory: true,
+        productName: true,
+    });
+    const [validPage, setValidPage] = useState(false);
+
+    useEffect(() => {
+        setValidPage(!isValidCheck(validation));
+    }, [validation]);
+
 
     useEffect(() => {
         getCategory().then();
@@ -86,15 +96,19 @@ function Index(props) {
     }
 
     const newCreateHandler = (e) => {
-        const newData = {
-            name: productName, detail: productDetail
+        if(e.target.value !=="cancel"){
+            const newData = {
+                name: productName, detail: productDetail
+            }
+            const indexCategory = _.findIndex(categoryList, (data) => {
+                return data.id === selectedCategory;
+            })
+            newData["categories"] = categoryList[indexCategory];
+            newProductData(newData).then();
+            navigate(0);
+        } else {
+            setIsNewProduct(false);
         }
-        const indexCategory = _.findIndex(categoryList, (data) => {
-            return data.id === selectedCategory;
-        })
-        newData["categories"] = categoryList[indexCategory];
-        newProductData(newData).then();
-        navigate(0);
     }
 
     const editingHandler = (e, item) => {
@@ -149,11 +163,11 @@ function Index(props) {
     const newProductData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await addProduct(item, token);
+            await addProduct(item, token);
             setIsNewProduct(false);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewProduct(false);
         }
@@ -163,9 +177,9 @@ function Index(props) {
     const newProductImageData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await addProductImage(item, token);
+            await addProductImage(item, token);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            v(error.response.data.message);
         } finally {
             setIsNewProduct(false);
         }
@@ -175,9 +189,9 @@ function Index(props) {
     const deleteProductImageData = useCallback(async (id) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await deleteImage(id, token);
+            await deleteImage(id, token);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewProduct(false);
         }
@@ -187,11 +201,11 @@ function Index(props) {
     const updateProductData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await updateProduct(item, token);
+            await updateProduct(item, token);
             setIsUpdateId(0);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsUpdateId(0);
         }
@@ -201,11 +215,11 @@ function Index(props) {
     const deleteProductData = useCallback(async (id) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await deleteProduct(id, token);
+            await deleteProduct(id, token);
             setIsNewProduct(false);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewProduct(false);
         }
@@ -214,7 +228,7 @@ function Index(props) {
 
     const newProduct = () => {
         setIsNewProduct(true);
-        setProductName({})
+        setProductName(null)
     }
 
     const onHandlerSelectedCategory = (e) => {
@@ -258,14 +272,25 @@ function Index(props) {
         deleteProductImageData(data.id).then()
     }
 
+    const onHandlerProductName = (e) => {
+        const isValidProductName = VALIDATION.PRODUCT_CATEGORY[e.target.name].test(e.target.value);
+        if (isValidProductName) {
+            setProductName(e.target.value);
+        }
+        setValidation({
+            selectCategory: selectedCategory !== null,
+            productName: isValidProductName
+        });
+    }
+
     const emptyForm = (<Row gutter={[12, 12]} justify="start">
         <Col className={"gutter-row"} span={18}>
             <Row gutter={[12, 12]} justify="start">
                 <Col className={"gutter-row"} span={24}>
                     <CustomSelect
                         name="selectCategory"
-                        label={"Kategori Seçimi"}
-                        placeholder={"Seçim yapınız."}
+                        label={t("productCategory.selectCategory")}
+                        placeholder={t("select")}
                         options={categoryOptions}
                         onChange={(e) => onHandlerSelectedCategory(e)}
                     />
@@ -273,8 +298,10 @@ function Index(props) {
                 <Col className={"gutter-row"} span={24}>
                     <FormItem
                         name="productName"
-                        label={"Ürün Adı"}
-                        onChange={(e) => setProductName(e.target.value)}
+                        label={t("productCategory.productName")}
+                        errors={t("validation.productCategory.productName")}
+                        validation={validation}
+                        onChange={(e) => onHandlerProductName(e)}
                     />
                 </Col>
             </Row>
@@ -283,19 +310,19 @@ function Index(props) {
             <Radio.Group onChange={(e) => {
                 newCreateHandler(e)
             }}>
-                <Radio.Button className={"save"} value="newItem">Kaydet</Radio.Button>
-                <Radio.Button className={"cancel"} value="cancel" danger>İptal</Radio.Button>
+                <Radio.Button className={"save"} value="newItem" disabled={!validPage}>{t("save")}</Radio.Button>
+                <Radio.Button className={"cancel"} value="cancel" danger>{t("cancel")}</Radio.Button>
             </Radio.Group>
         </Col>
     </Row>);
 
     return (
         <div className={"card"}>
-            <div className={"card-header text-center fs-4"}>Ürün Ekleme Sayfası</div>
+            <div className={"card-header text-center fs-4"}>{t("productCategory.productAddPage")}</div>
             <div className={"card-body"}>
-                <Button className={"success"} title={"Yeni Ürün Ekle"} icon={<PlusOutlined/>}
+                <Button className={"success"} title={t("productCategory.productAdd")} icon={<PlusOutlined/>}
                         onClick={newProduct}>
-                    Yeni Ürün Ekle
+                    {t("productCategory.productAdd")}
                 </Button>
             </div>
             <div className={"productList card-body"}>
@@ -309,13 +336,16 @@ function Index(props) {
                                 <Col className={"gutter-row"} span={18}>
                                     <FormItem
                                         name="productName"
-                                        label={"Ürün Adı"}
+                                        label={t("productCategory.productName")}
+                                        errors={t("validation.productCategory.productName")}
+                                        validation={validation}
+                                        onChange={(e) => onHandlerProductName(e)}
                                         defaultValue={item.name}
-                                        // errors={errors.branchName}
-                                        onChange={(e) => setProductName(e.target.value)}
                                     />
                                 </Col>
-                            </Row>) : <><label className='form-label' htmlFor={item.name+"_title"}>Ürün Adı : </label> <span>{item.name}</span></>}
+                            </Row>) : <><label className='form-label'
+                                               htmlFor={item.name + "_title"}>{t("productCategory.productName")} : </label>
+                                <span>{item.name}</span></>}
                             description={<Row gutter={[12, 12]} justify="start">
                                 <Col className={"gutter-row"} span={18}>
                                     <Row gutter={[12, 12]} justify="start">
@@ -370,16 +400,15 @@ function Index(props) {
                                         <Radio.Group onChange={(e) => {
                                             editingHandler(e, item)
                                         }}>
-                                            <Radio.Button className={"save"} value="save">Güncelle</Radio.Button>
-                                            <Radio.Button className={"cancel"} value="cancel"
-                                                          danger>İptal</Radio.Button>
+                                            <Radio.Button className={"save"} value="save" disabled={!validPage}>{t("update")}</Radio.Button>
+                                            <Radio.Button className={"cancel"} value="cancel" danger>{t("cancel")}</Radio.Button>
                                         </Radio.Group>) : (
                                         <Radio.Group onChange={(e) => {
                                             editHandler(e, item)
                                         }}>
-                                            <Radio.Button className={"update"} value={"edit"}>Düzenle</Radio.Button>
-                                            <Radio.Button className={"delete"} value={"delete"}
-                                                          danger>Sil</Radio.Button>
+                                            <Radio.Button className={"update"} value={"edit"} disabled={isNewProduct}>{t("edit")}</Radio.Button>
+                                            <Radio.Button className={"delete"} value={"delete"} disabled={isNewProduct}
+                                                          danger>{t("delete")}</Radio.Button>
                                         </Radio.Group>)}
                                 </Col>
                             </Row>}

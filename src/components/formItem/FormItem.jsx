@@ -12,14 +12,15 @@ export function FormItem(props) {
                     <input
                         id={props.name}
                         name={props.name}
-                        className={props.errors ? 'form-control is-invalid' : 'form-control'}
+                        className={(props.validation && !props.validation[props.name]) ? 'form-control is-invalid' : 'form-control'}
                         type={props.type ? props.type : "text"}
                         onChange={props.onChange}
                         defaultValue={props.defaultValue}
                     />
                 </Col>
             </Row>
-            <div className='invalid-feedback'>{props.errors}</div>
+            <div className='invalid-feedback'
+                 style={(props.validation && !props.validation[props.name]) ? {display: "inline-block"} : {display: "none"}}>{props.errors}</div>
         </div>
     );
 }

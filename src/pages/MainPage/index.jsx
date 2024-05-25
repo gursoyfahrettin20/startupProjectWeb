@@ -6,7 +6,6 @@ import {Col, Radio, Row} from 'antd';
 import {useNavigate} from "react-router-dom";
 import _ from "lodash";
 import FormItem from "@/components/formItem/FormItem.jsx";
-import CategoryImage from "@/components/Image/CategoryImage.jsx";
 import PageImage from "@/components/Image/PageImage.jsx";
 
 function Index(props) {
@@ -81,7 +80,7 @@ function Index(props) {
 
                 <Col className={"gutter-row"} span={24}>
                     <FormItem
-                        name="categoryImage"
+                        name="MainImage"
                         label={"Resim Yükle"}
                         onChange={onSelectImage}
                         type={"file"}

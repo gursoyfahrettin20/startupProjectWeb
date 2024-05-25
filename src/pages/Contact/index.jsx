@@ -7,15 +7,31 @@ import FormItem from "@/components/formItem/FormItem.jsx";
 import {usePropState} from "@/shared/context.jsx";
 import {useNavigate} from "react-router-dom";
 import _ from "lodash";
+import {VALIDATION} from "@/shared/validate/Validation.js";
+import {useTranslation} from "react-i18next";
+import {isValidCheck} from "@/shared/validate/IsValidCheck.js";
 
 const Index = () => {
+    const {t} = useTranslation();
     const propState = usePropState();
-    const [errorMessage, setErrorMessage] = useState("");
     const [contactList, setContactList] = useState([]);
     const [isUpdateId, setIsUpdateId] = useState(0);
     const [isNewContact, setIsNewContact] = useState(false);
     const [updateItem, setUpdateItem] = useState({});
+    const [validation, setValidation] = useState({
+        branchName: true,
+        address: true,
+        mobilNumber: true,
+        branchNumber: true,
+        mail: true,
+        maps: true,
+    });
+    const [validPage, setValidPage] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setValidPage(!isValidCheck(validation));
+    }, [validation]);
 
     const getContact = useCallback(async () => {
         const response = await loadContact();
@@ -30,8 +46,16 @@ const Index = () => {
         if (e.target.value === "update") {
             setIsUpdateId(item.id);
         } else {
-            deleteContactData(item.id).then()
+            deleteContactData(item.id).then();
         }
+        setValidation({
+            branchName: true,
+            address: true,
+            mobilNumber: true,
+            branchNumber: true,
+            mail: true,
+            maps: true,
+        });
     }
 
     const editingHandler = (e, item) => {
@@ -46,12 +70,25 @@ const Index = () => {
             setIsUpdateId(0);
             setIsNewContact(false);
         }
+        setValidation({
+            branchName: true,
+            address: true,
+            mobilNumber: true,
+            branchNumber: true,
+            mail: true,
+            maps: true,
+        });
     }
     const updateItemHandler = (e, value) => {
         let _value = _.cloneDeep(value);
         if (e.target.name === "maps" && value !== "" && _value.search('src="') !== -1) {
             _value = _value.split('src="')[1].split('" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>')[0];
         }
+        const isValid = VALIDATION.CONTACT[e.target.name].test(_value);
+        setValidation({
+            ...validation,
+            [e.target.name]: isValid
+        })
         const newData = {
             ...updateItem, [e.target.id]: _value
         }
@@ -61,11 +98,11 @@ const Index = () => {
     const newContactData = useCallback(async (id, item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await newAddContact(id, item, token);
+            await newAddContact(id, item, token);
             setIsNewContact(false);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewContact(false);
         }
@@ -75,11 +112,11 @@ const Index = () => {
     const updateContactData = useCallback(async (id, item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await updateContact(id, item, token);
+            await updateContact(id, item, token);
             setIsUpdateId(0);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsUpdateId(0);
         }
@@ -89,15 +126,14 @@ const Index = () => {
     const deleteContactData = useCallback(async (id) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await deleteContact(id, token);
+            await deleteContact(id, token);
             setIsNewContact(false);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewContact(false);
         }
-
     }, []);
 
     const newContact = () => {
@@ -112,42 +148,54 @@ const Index = () => {
                     <Col className={"gutter-row"} span={24}>
                         <FormItem
                             name="branchName"
-                            label={"Şube Adı"}
+                            label={t("contact.branchName") + " : "}
+                            errors={t("validation.contact.branchName")}
+                            validation={validation}
                             onChange={(e) => updateItemHandler(e, e.target.value)}
                         />
                     </Col>
                     <Col className={"gutter-row"} span={24}>
                         <FormItem
                             name="address"
-                            label={"Şube Adresi"}
+                            label={t("contact.address") + " : "}
+                            errors={t("validation.contact.address")}
+                            validation={validation}
                             onChange={(e) => updateItemHandler(e, e.target.value)}
                         />
                     </Col>
                     <Col className={"gutter-row"} span={24}>
                         <FormItem
                             name="mobilNumber"
-                            label={"Cep Numarası"}
+                            label={t("contact.mobilNumber") + " : "}
+                            errors={t("validation.contact.mobilNumber")}
+                            validation={validation}
                             onChange={(e) => updateItemHandler(e, e.target.value)}
                         />
                     </Col>
                     <Col className={"gutter-row"} span={24}>
                         <FormItem
                             name="branchNumber"
-                            label={"Şirket Numarası"}
+                            label={t("contact.branchNumber") + " : "}
+                            errors={t("validation.contact.branchNumber")}
+                            validation={validation}
                             onChange={(e) => updateItemHandler(e, e.target.value)}
                         />
                     </Col>
                     <Col className={"gutter-row"} span={24}>
                         <FormItem
                             name="mail"
-                            label={"Şirket Mail"}
+                            label={t("contact.mail") + " : "}
+                            errors={t("validation.contact.mail")}
+                            validation={validation}
                             onChange={(e) => updateItemHandler(e, e.target.value)}
                         />
                     </Col>
                     <Col className={"gutter-row"} span={24}>
                         <FormItem
                             name="maps"
-                            label={"Harita"}
+                            label={t("contact.maps") + " : "}
+                            errors={t("validation.contact.maps")}
+                            validation={validation}
                             onChange={(e) => updateItemHandler(e, e.target.value)}
                         />
                     </Col>
@@ -157,9 +205,9 @@ const Index = () => {
                 <Radio.Group onChange={(e) => {
                     editingHandler(e)
                 }}>
-                    <Radio.Button className={"save"} value="newItem">Kaydet</Radio.Button>
+                    <Radio.Button className={"save"} value="newItem" disabled={!validPage}>{t("save")}</Radio.Button>
                     <Radio.Button className={"cancel"} value="cancel"
-                                  danger>İptal</Radio.Button>
+                                  danger>{t("cancel")}</Radio.Button>
                 </Radio.Group>
             </Col>
         </Row>
@@ -167,11 +215,11 @@ const Index = () => {
 
     return (
         <div className={"card"}>
-            <div className={"card-header text-center fs-4"}>İletişim Sayfası Düzenleme</div>
+            <div className={"card-header text-center fs-4"}>{t("contact.contactPageEditing")}</div>
             <div className={"card-body"}>
-                <Button className={"success"} title={"Yeni İletişim Bilgileri Ekle"} icon={<PlusOutlined/>}
+                <Button className={"success"} title={t("contact.addNewContactInformation")} disabled={isNewContact} icon={<PlusOutlined/>}
                         onClick={newContact}>
-                    Yeni İletişim Bilgileri Ekle
+                    {t("contact.addNewContactInformation")}
                 </Button>
             </div>
             <div className={"contactList card-body"}>
@@ -185,9 +233,10 @@ const Index = () => {
                                 <Col className={"gutter-row"} span={18}>
                                     <FormItem
                                         name="branchName"
-                                        label={"Şube Adı"}
+                                        label={t("contact.branchName") + " : "}
                                         defaultValue={item.branchName}
-                                        // errors={errors.branchName}
+                                        errors={t("validation.contact.branchName")}
+                                        validation={validation}
                                         onChange={(e) => updateItemHandler(e, e.target.value)}
                                     />
                                 </Col>
@@ -198,36 +247,40 @@ const Index = () => {
                                         <Col className={"gutter-row"} span={24}>
                                             {isUpdateId === item.id ? (<FormItem
                                                 name="address"
-                                                label={"Şube Adresi"}
+                                                label={t("contact.address") + " : "}
                                                 defaultValue={item.address}
-                                                // errors={errors.address}
+                                                errors={t("validation.contact.address")}
+                                                validation={validation}
                                                 onChange={(e) => updateItemHandler(e, e.target.value)}
                                             />) : <span>{item.address}</span>}
                                         </Col>
                                         <Col className={"gutter-row"} span={24}>
                                             {isUpdateId === item.id ? (<FormItem
                                                 name="mobilNumber"
-                                                label={"Cep Numarası"}
+                                                label={t("contact.mobilNumber") + " : "}
                                                 defaultValue={item.mobilNumber}
-                                                // errors={errors.mobilNumber}
+                                                errors={t("validation.contact.mobilNumber")}
+                                                validation={validation}
                                                 onChange={(e) => updateItemHandler(e, e.target.value)}
                                             />) : <span>{item.mobilNumber}</span>}
                                         </Col>
                                         <Col className={"gutter-row"} span={24}>
                                             {isUpdateId === item.id ? (<FormItem
                                                 name="branchNumber"
-                                                label={"Şirket Numarası"}
+                                                label={t("contact.branchNumber") + " : "}
                                                 defaultValue={item.branchNumber}
-                                                // errors={errors.mobilNumber}
+                                                errors={t("validation.contact.branchNumber")}
+                                                validation={validation}
                                                 onChange={(e) => updateItemHandler(e, e.target.value)}
                                             />) : <span>{item.branchNumber}</span>}
                                         </Col>
                                         <Col className={"gutter-row"} span={24}>
                                             {isUpdateId === item.id ? (<FormItem
                                                 name="mail"
-                                                label={"Şirket Mail"}
+                                                label={t("contact.mail") + " : "}
                                                 defaultValue={item.mail}
-                                                // errors={errors.mail}
+                                                errors={t("validation.contact.mail")}
+                                                validation={validation}
                                                 onChange={(e) => updateItemHandler(e, e.target.value)}
                                             />) : <span>{item.mail}</span>}
                                         </Col>
@@ -235,9 +288,10 @@ const Index = () => {
                                             {
                                                 isUpdateId === item.id ? (<FormItem
                                                         name="maps"
-                                                        label={"Harita"}
+                                                        label={t("contact.maps") + " : "}
                                                         defaultValue={item.maps}
-                                                        // errors={errors.maps}
+                                                        errors={t("validation.contact.maps")}
+                                                        validation={validation}
                                                         onChange={(e) => updateItemHandler(e, e.target.value)}
                                                     />) :
                                                     item.maps && (
@@ -247,9 +301,7 @@ const Index = () => {
                                                             allowFullScreen=""
                                                             loading="lazy"
                                                             referrerPolicy="no-referrer-when-downgrade"></iframe>
-
                                                     )
-
                                             }
                                         </Col>
                                     </Row>
@@ -258,15 +310,15 @@ const Index = () => {
                                     {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {
                                         editingHandler(e, item)
                                     }}>
-                                        <Radio.Button className={"save"} value="save">Kaydet</Radio.Button>
+                                        <Radio.Button className={"save"} value="save" disabled={!validPage}>{t("save")}</Radio.Button>
                                         <Radio.Button className={"cancel"} value="cancel"
-                                                      danger>İptal</Radio.Button>
+                                                      danger>{t("cancel")}</Radio.Button>
                                     </Radio.Group>) : (<Radio.Group onChange={(e) => {
                                         editHandler(e, item)
                                     }}>
-                                        <Radio.Button className={"update"} value={"update"}>Düzenle</Radio.Button>
-                                        <Radio.Button className={"delete"} value={"delete"}
-                                                      danger>Sil</Radio.Button>
+                                        <Radio.Button className={"update"} value={"update"} disabled={isNewContact}>{t("edit")}</Radio.Button>
+                                        <Radio.Button className={"delete"} value={"delete"}  disabled={isNewContact}
+                                                      danger>{t("delete")}</Radio.Button>
                                     </Radio.Group>)}
                                 </Col>
                             </Row>}

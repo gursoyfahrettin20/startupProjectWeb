@@ -40,7 +40,7 @@ const CustomSelect = (props) => {
                 />
             </Col>
         </Row>
-        <div className='invalid-feedback'>{props.errors}</div>
+        <div className='invalid-feedback' style={(props.validation && !props.validation[props.name]) ? {display: "inline-block"} : {display: "none"}}>{props.errors}</div>
     </div>);
 };
 

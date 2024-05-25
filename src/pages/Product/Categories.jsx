@@ -9,8 +9,12 @@ import JoditEditor from 'jodit-react';
 import CategoryImage from "@/components/Image/CategoryImage.jsx";
 import ReadEditor from "@/components/editor/ReadEditor.jsx";
 import _ from "lodash";
+import {useTranslation} from "react-i18next";
+import {VALIDATION} from "@/shared/validate/Validation.js";
+import {isValidCheck} from "@/shared/validate/IsValidCheck.js";
 
 const Categories = () => {
+    const {t} = useTranslation();
     const propState = usePropState();
     const editor = useRef(null);
     const editorRead = useRef(null);
@@ -22,6 +26,14 @@ const Categories = () => {
     const [newImage, setNewImage] = useState();
     const [categoryDetail, setCategoryDetail] = useState("");
     const navigate = useNavigate();
+    const [validation, setValidation] = useState({
+        categoryName: true,
+    });
+    const [validPage, setValidPage] = useState(false);
+
+    useEffect(() => {
+        setValidPage(!isValidCheck(validation));
+    }, [validation]);
 
     const getCategory = useCallback(async () => {
         const response = await loadCategory();
@@ -40,6 +52,20 @@ const Categories = () => {
         }
     }
 
+    const newCreateHandler = (e) => {
+        if (e.target.value !== "cancel") {
+            const newData = {
+                name: categoryName,
+                image: newImage,
+                detail: categoryDetail
+            }
+            newCategoryData(newData).then();
+            navigate(0);
+        } else {
+            setIsNewCategory(false);
+        }
+    }
+
     const editingHandler = (e, item) => {
         const newData = {
             name: !_.isEmpty(categoryName) ? categoryName : item.name,
@@ -49,8 +75,6 @@ const Categories = () => {
         if (e.target.value === "save") {
             newData["id"] = item.id;
             updateCategoryData(newData).then();
-        } else if (e.target.value === "newItem") {
-            newCategoryData(newData).then();
         } else {
             setIsUpdateId(0);
             setIsNewCategory(false);
@@ -60,7 +84,7 @@ const Categories = () => {
     const newCategoryData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await addCategories(item, token);
+            await addCategories(item, token);
             setIsNewCategory(false);
             navigate(0);
         } catch (error) {
@@ -74,7 +98,7 @@ const Categories = () => {
     const updateCategoryData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await updateCategory(item, token);
+            await updateCategory(item, token);
             setIsUpdateId(0);
             navigate(0);
         } catch (error) {
@@ -88,7 +112,7 @@ const Categories = () => {
     const deleteCategoryData = useCallback(async (id) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await deleteCategory(id, token);
+            await deleteCategory(id, token);
             setIsNewCategory(false);
             navigate(0);
         } catch (error) {
@@ -118,14 +142,27 @@ const Categories = () => {
         setCategoryName({})
     }
 
+    const onHandlerCategoryName = (e) => {
+        const isValidCategoryName = VALIDATION.PRODUCT_CATEGORY[e.target.name].test(e.target.value);
+        if (isValidCategoryName) {
+            setCategoryName(e.target.value);
+        }
+        setValidation({
+            categoryName: isValidCategoryName
+        });
+    }
+
+
     const emptyForm = (<Row gutter={[12, 12]} justify="start">
         <Col className={"gutter-row"} span={18}>
             <Row gutter={[12, 12]} justify="start">
                 <Col className={"gutter-row"} span={24}>
                     <FormItem
                         name="categoryName"
-                        label={"Kategori Adı"}
-                        onChange={(e) => setCategoryName(e.target.value)}
+                        label={t("productCategory.categoryName")}
+                        errors={t("validation.productCategory.categoryName")}
+                        validation={validation}
+                        onChange={(e) => onHandlerCategoryName(e)}
                     />
                 </Col>
                 <Col className={"gutter-row"} span={24}>
@@ -134,7 +171,6 @@ const Categories = () => {
                         label={"Kategori Resmi"}
                         onChange={onSelectImage}
                         type={"file"}
-                        // errors={errors.image}
                     />
                 </Col>
                 <Col className={"gutter-row"} span={24}>
@@ -144,23 +180,20 @@ const Categories = () => {
             </Row>
         </Col>
         <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
-            <Radio.Group onChange={(e) => {
-                editingHandler(e)
-            }}>
-                <Radio.Button className={"save"} value="newItem">Kaydet</Radio.Button>
-                <Radio.Button className={"cancel"} value="cancel"
-                              danger>İptal</Radio.Button>
+            <Radio.Group onChange={(e) => newCreateHandler(e)}>
+                <Radio.Button className={"save"} value="newItem" disabled={!validPage}>{t("save")}</Radio.Button>
+                <Radio.Button className={"cancel"} value="cancel" danger>{t("cancel")}</Radio.Button>
             </Radio.Group>
         </Col>
     </Row>);
 
     return (
         <div className={"card"}>
-            <div className={"card-header text-center fs-4"}>Kategori Ekleme Sayfası</div>
+            <div className={"card-header text-center fs-4"}>{t("productCategory.categoryAddPage")}</div>
             <div className={"card-body"}>
-                <Button className={"success"} title={"Yeni Kategori Ekle"} icon={<PlusOutlined/>}
+                <Button className={"success"} title={t("productCategory.categoryAdd")} icon={<PlusOutlined/>}
                         onClick={newCategory}>
-                    Yeni Kategori Ekle
+                    {t("productCategory.categoryAdd")}
                 </Button>
             </div>
             <div className={"categoryList card-body"}>
@@ -174,10 +207,11 @@ const Categories = () => {
                                 <Col className={"gutter-row"} span={18}>
                                     <FormItem
                                         name="categoryName"
-                                        label={"Kategori Adı"}
+                                        label={t("productCategory.categoryName")}
+                                        errors={t("validation.productCategory.categoryName")}
+                                        validation={validation}
                                         defaultValue={item.name}
-                                        // errors={errors.branchName}
-                                        onChange={(e) => setCategoryName(e.target.value)}
+                                        onChange={(e) => onHandlerCategoryName(e)}
                                     />
                                 </Col>
                             </Row>) : <>
@@ -192,10 +226,9 @@ const Categories = () => {
                                             <Col className={"gutter-row"} span={24}>
                                                 {isUpdateId === item.id ? (<FormItem
                                                     name="categoryImage"
-                                                    label={"Kategori Resmi"}
+                                                    label={t("productCategory.categoryImage")}
                                                     onChange={onSelectImage}
                                                     type={"file"}
-                                                    // errors={errors.image}
                                                 />) : <>
                                                     <label className='form-label' htmlFor={item.name + "_description"}>Kategori
                                                         Resmi ;</label>
@@ -207,8 +240,8 @@ const Categories = () => {
                                                     <JoditEditor ref={editor} value={item.detail}
                                                                  onChange={(data) => setCategoryDetail(data)}/>
                                                 ) : <>
-                                                    <label className='form-label' htmlFor={item.name + "_description"}>Kategori
-                                                        Açıklaması ;</label>
+                                                    <label className='form-label'
+                                                           htmlFor={item.name + "_description"}>{t("productCategory.categoryDesc")} ;</label>
                                                     <ReadEditor
                                                         ref={editorRead}
                                                         value={item.detail}
@@ -224,15 +257,17 @@ const Categories = () => {
                                         {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {
                                             editingHandler(e, item)
                                         }}>
-                                            <Radio.Button className={"save"} value="save">Kaydet</Radio.Button>
+                                            <Radio.Button className={"save"} value="save"
+                                                          disabled={!validPage}>{t("update")}</Radio.Button>
                                             <Radio.Button className={"cancel"} value="cancel"
-                                                          danger>İptal</Radio.Button>
+                                                          danger>{t("cancel")}</Radio.Button>
                                         </Radio.Group>) : (<Radio.Group onChange={(e) => {
                                             editHandler(e, item)
                                         }}>
-                                            <Radio.Button className={"update"} value={"update"}>Düzenle</Radio.Button>
-                                            <Radio.Button className={"delete"} value={"delete"}
-                                                          danger>Sil</Radio.Button>
+                                            <Radio.Button className={"update"} value={"update"}
+                                                          disabled={isNewCategory}>{t("edit")}</Radio.Button>
+                                            <Radio.Button className={"delete"} value={"delete"} danger
+                                                          disabled={isNewCategory}>{t("delete")}</Radio.Button>
                                         </Radio.Group>)}
                                     </Col>
                                 </Row>}

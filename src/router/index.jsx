@@ -18,7 +18,6 @@ import Product from "@/pages/Product/index.jsx";
 import Categories from "@/pages/Product/Categories.jsx";
 import Content from "@/pages/Content/index.jsx";
 import News from "@/pages/News/index.jsx";
-import ProductNews from "@/pages/Product/ProductNews.jsx";
 
 export default createBrowserRouter([
     {
@@ -60,9 +59,6 @@ export default createBrowserRouter([
             }, {
                 path: '/product',
                 Component: Product
-            }, {
-                path: '/productNews',
-                Component: ProductNews
             }, {
                 path: '/content',
                 Component: Content
