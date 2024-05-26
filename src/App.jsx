@@ -23,7 +23,7 @@ function App() {
     useEffect(() => {
         const _isLogin = loadAuthState();
         if (_isLogin.id === 0) {
-            navigate("/login")
+            navigate("/adminPanel/login")
         }
     }, [isLogin]);
 

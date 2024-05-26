@@ -30,6 +30,9 @@ export const tr = {
         "reset": "Reset",
         "update": "Güncelle",
         "resetPassword": "Yeni Şifre Oluştur",
+        "uploadImage":"Resim Yükle",
+        "tr": "Türkçe Gösterim",
+        "en": "İngilizce Gösterim",
         "leftMenu": {
             "homePageTransactions": "Ana Sayfa İşlemleri",
             "homePage": "Ana Sayfa",
@@ -60,6 +63,10 @@ export const tr = {
             "ourVision": "Vizyonumuz Sayfasını Düzenle",
             "ourMission": "Misyonumuz Sayfasını Düzenle",
             "contact": "İletişim Sayfasını Düzenle",
+            "mainPage": "Manşet 1 Sayfasını Düzenle",
+            "mainHeadline": "Manşet 2 Sayfasını Düzenle",
+            "breakHeadline": "Manşet 3 Sayfasını Düzenle",
+            "lastHeadline": "Manşet 4 Sayfasını Düzenle",
         },
         "productCategory": {
             "productName": "Ürün Adı",
@@ -72,6 +79,24 @@ export const tr = {
             "categoryImage": "Kategori Resmi",
             "categoryDesc": "Kategori Açıklaması",
         },
+        "slider": {
+            "sliderName": "Slider Adı",
+            "link": "Link",
+            "sliderImage": "Slider Resmi",
+            "sliderShortDescription": "Slider Kısa Açıklama",
+            "sliderDetailDescription": "Slider Detay Açıklama",
+            "sliderAddPage": "Slider Ekleme Sayfası",
+            "sliderAdd": "Slider Ekle",
+        },
+        "news": {
+            "newsName": "Haber Adı",
+            "link": "Link",
+            "newsImage": "Haber Resmi",
+            "newsShortDescription": "Haber Kısa Açıklama",
+            "newsDetailDescription": "Haber Detay Açıklama",
+            "newsAddPage": "Haber Ekleme Sayfası",
+            "newsAdd": "Haber Ekle",
+        },
         "validation": {
             "contact": {
                 "branchName": "Büyük küçük harf en az 10 en fazla 100 karakter olmalıdır.",
@@ -83,9 +108,15 @@ export const tr = {
             },
             "productCategory": {
                 "categoryName": "En az 1 en fazla 100 karakter olmalıdır.",
-                "productName": "En az 1 en fazla 100 karakter olmalıdır.",
+                "productName": "En az 1 en fazla 150 karakter olmalıdır.",
                 "makeYourChoice": "Seçim Yapın.",
-            }
+            },
+            "slider": {
+                "sliderName": "En az 1 en fazla 150 karakter olmalıdır.",
+            },
+            "news": {
+                "newsName": "En az 1 en fazla 150 karakter olmalıdır.",
+            },
         }
     }
 }

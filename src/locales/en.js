@@ -30,6 +30,10 @@ export const en = {
         "reset": "Reset",
         "update": "Update",
         "resetPassword": "New Password Create",
+        "uploadImage":"Upload Image",
+        "uploadedImage":"Uploaded Image",
+        "tr": "Türkçe Notation",
+        "en": "English Notation",
         "leftMenu": {
             "homePageTransactions": "Home Page Transactions",
             "homePage": "Home Page",
@@ -60,12 +64,39 @@ export const en = {
             "ourVision": "Our Vision Page Edit",
             "ourMission": "Our Mission Page Edit",
             "contact": "Contact Page Edit",
+            "mainPage": "Headlines 1 Page Edit",
+            "mainHeadline": "Headlines 2 Page Edit",
+            "breakHeadline": "Headlines 3 Page Edit",
+            "lastHeadline": "Headlines 4 Page Edit",
         },
         "productCategory": {
             "productName": "Product Name",
             "selectCategory": "Select Category",
             "productAdd": "Product Add",
             "productAddPage": "Product Add Page",
+            "categoryName": "Category Name",
+            "categoryAdd": " Category Add",
+            "categoryAddPage": "Category Add Page",
+            "categoryImage": "Category Image",
+            "categoryDesc": "Category Description",
+        },
+        "slider": {
+            "sliderName": "Slider Name",
+            "link": "Link",
+            "sliderImage": "Slider Image",
+            "sliderShortDescription": "Slider Shot Description",
+            "sliderDetailDescription": "Slider Detail Description",
+            "sliderAddPage": "Slider Add Page",
+            "sliderAdd": "Slider Add",
+        },
+        "news": {
+            "newsName": "News Name",
+            "link": "Link",
+            "newsImage": "News Image",
+            "newsShortDescription": "News Shot Description",
+            "newsDetailDescription": "News Detail Description",
+            "newsAddPage": "News Add Page",
+            "newsAdd": "News Add",
         },
         "validation": {
             "contact": {
@@ -80,7 +111,13 @@ export const en = {
                 "categoryName": "It must be at least 1 and at most 150 characters.",
                 "productName": "It must be at least 1 and at most 150 characters.",
                 "makeYourChoice": "Make Your Choice",
-            }
+            },
+            "slider": {
+                "sliderName": "It must be at least 1 and at most 150 characters."
+            },
+            "news": {
+                "newsName": "It must be at least 1 and at most 150 characters."
+            },
         }
     }
 }

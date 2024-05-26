@@ -34,7 +34,7 @@ function ProfileCard(props) {
                 if (propState.id === props.user.id) {
                     dispatch({type: "logout-success", data: {}});
                 }
-                navigate("/");
+                navigate("/adminPanel");
             } catch {
 
             } finally {

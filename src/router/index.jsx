@@ -1,7 +1,6 @@
 import {createBrowserRouter} from 'react-router-dom'
 import SignUp from "@/pages/SingUp"
 import App from "@/App"
-import Dashboard from "@/pages/Dashboard/index.jsx"
 import Login from "@/pages/Login"
 import UserList from "@/pages/UserList";
 import {Activation} from '@/pages/Activation'
@@ -18,83 +17,91 @@ import Product from "@/pages/Product/index.jsx";
 import Categories from "@/pages/Product/Categories.jsx";
 import Content from "@/pages/Content/index.jsx";
 import News from "@/pages/News/index.jsx";
+import Dashboard from "@/pages/Dashboard/index.jsx";
 
 export default createBrowserRouter([
     {
-        path: '/',
+        path: '/adminPanel',
         Component: App,
         children: [
             // web panel ile alakalı url listesi
             {
-                path: '/',
+                path: '/adminPanel',
                 index: true,
                 Component: Dashboard,
             }, {
-                path: '/login',
+                path: '/adminPanel/login',
                 Component: Login
             }, {
-                path: '/singUp',
+                path: '/adminPanel/singUp',
                 Component: SignUp
             }, {
-                path: '/activation/:token',
+                path: '/adminPanel/activation/:token',
                 Component: Activation
             }, {
-                path: '/password-reset/request',
+                path: '/adminPanel/password-reset/request',
                 Component: PasswordResetRequest
             }, {
-                path: '/contact',
+                path: '/adminPanel/contact',
                 Component: Contact
             }, {
-                path: '/ourMission',
-                element: <OurWeb id={1} elementName={"ourMission"}/>
+                path: '/adminPanel/ourMission',
+                element: localStorage.lang === 'tr' ? <OurWeb id={1} elementName={"Hakkımızda"}/> :
+                    <OurWeb id={2} elementName={"ourMission"}/>
             }, {
-                path: '/ourVision',
-                element: <OurWeb id={2} elementName={"ourVision"}/>
+                path: '/adminPanel/ourVision',
+                element: localStorage.lang === 'tr' ? <OurWeb id={3} elementName={"ourVision"}/> :
+                    <OurWeb id={4} elementName={"ourVision"}/>
             }, {
-                path: '/aboutUs',
-                element: <OurWeb id={3} elementName={"aboutUs"}/>
+                path: '/adminPanel/aboutUs',
+                element: localStorage.lang === 'tr' ? <OurWeb id={5} elementName={"aboutUs"}/> :
+                    <OurWeb id={6} elementName={"aboutUs"}/>
             }, {
-                path: '/categories',
+                path: '/adminPanel/categories',
                 Component: Categories
             }, {
-                path: '/product',
+                path: '/adminPanel/product',
                 Component: Product
             }, {
-                path: '/content',
+                path: '/adminPanel/content',
                 Component: Content
             }, {
-                path: '/news',
+                path: '/adminPanel/news',
                 Component: News
             }, {
-                path: '/slider',
+                path: '/adminPanel/slider',
                 Component: Slider
             }, {
-                path: '/user/:id',
+                path: '/adminPanel/user/:id',
                 Component: User
             }, {
-                path: '/userList',
+                path: '/adminPanel/userList',
                 Component: UserList
             }, {
-                path: '/userAdministratorPage',
+                path: '/adminPanel/userAdministratorPage',
                 Component: UserAdministrator
             }, {
-                path: '/mailSettings',
+                path: '/adminPanel/mailSettings',
                 Component: MailSettings
             }, {
-                path: '/siteSettings',
+                path: '/adminPanel/siteSettings',
                 Component: SiteSettings
             }, {
-                path: '/mainPage',
-                element: <MainPage id={4} elementName={"mainPage"}/>
+                path: '/adminPanel/mainPage',
+                element: localStorage.lang === 'tr' ? <MainPage id={7} elementName={"mainPage"}/> :
+                    <MainPage id={8} elementName={"mainPage"}/>
             }, {
-                path: '/mainHeadline',
-                element: <MainPage id={5} elementName={"mainHeadline"}/>
+                path: '/adminPanel/mainHeadline',
+                element: localStorage.lang === 'tr' ? <MainPage id={9} elementName={"mainHeadline"}/> :
+                    <MainPage id={10} elementName={"mainHeadline"}/>
             }, {
-                path: '/breakHeadline',
-                element: <MainPage id={6} elementName={"breakHeadline"}/>
+                path: '/adminPanel/breakHeadline',
+                element: localStorage.lang === 'tr' ? <MainPage id={11} elementName={"breakHeadline"}/> :
+                    <MainPage id={12} elementName={"breakHeadline"}/>
             }, {
-                path: '/lastHeadline',
-                element: <MainPage id={7} elementName={"lastHeadline"}/>
+                path: '/adminPanel/lastHeadline',
+                element: localStorage.lang === 'tr' ? <MainPage id={13} elementName={"lastHeadline"}/> :
+                    <MainPage id={14} elementName={"lastHeadline"}/>
             },
         ]
     }

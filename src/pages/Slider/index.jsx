@@ -9,12 +9,15 @@ import JoditEditor from 'jodit-react';
 import SliderImage from "@/components/Image/SliderImage.jsx";
 import ReadEditor from "@/components/editor/ReadEditor.jsx";
 import _ from "lodash";
+import {isValidCheck} from "@/shared/validate/IsValidCheck.js";
+import {VALIDATION} from "@/shared/validate/Validation.js";
+import {useTranslation} from "react-i18next";
 
 const Index = () => {
+    const {t} = useTranslation();
     const propState = usePropState();
     const editor = useRef(null);
     const editorRead = useRef(null);
-    const [errorMessage, setErrorMessage] = useState("");
     const [sliderList, setSliderList] = useState([]);
     const [isUpdateId, setIsUpdateId] = useState(0);
     const [isNewSlider, setIsNewSlider] = useState(false);
@@ -24,10 +27,32 @@ const Index = () => {
     const [sliderShortDetail, setSliderShortDetail] = useState("");
     const [sliderDetail, setSliderDetail] = useState("");
     const navigate = useNavigate();
+    const [validation, setValidation] = useState({
+        sliderName: true
+    });
+    const [validPage, setValidPage] = useState(false);
+    const [lang, setLang] = useState(localStorage.lang);
+
+    useEffect(() => {
+        setValidPage(!isValidCheck(validation));
+    }, [validation]);
+
+    useEffect(() => {
+        if (!_.isEqual(lang, localStorage.lang)) {
+            navigate(0);
+        }
+    }, [localStorage.lang]);
 
     const getSlider = useCallback(async () => {
         const response = await listSliderImage();
-        setSliderList(response.data);
+        let langForList = [];
+        for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].language === localStorage.lang) {
+                langForList.push(response.data[i]);
+            }
+        }
+        setSliderList(langForList);
+        setLang(localStorage.lang);
     }, []);
 
     useEffect(() => {
@@ -42,13 +67,34 @@ const Index = () => {
         }
     }
 
+    const newSliderHandler = (e, item) => {
+        if (e.target.value !== "cancel") {
+            const newData = {
+                name: sliderName,
+                link: routerLink,
+                image: newImage,
+                detail: sliderDetail,
+                shortDetail: sliderShortDetail,
+                language: localStorage.lang
+            }
+            newSliderData(newData).then();
+            setIsNewSlider(false);
+        } else {
+            setIsNewSlider(false);
+            setValidation({
+                sliderName: true
+            });
+        }
+    }
+
     const editingHandler = (e, item) => {
         const newData = {
             name: !_.isEmpty(sliderName) ? sliderName : item.name,
             link: !_.isEmpty(routerLink) ? routerLink : item.link,
             image: !_.isEmpty(newImage) ? newImage : item.image,
             detail: !_.isEmpty(sliderDetail) ? sliderDetail : item.detail,
-            shortDetail: !_.isEmpty(sliderShortDetail) ? sliderShortDetail : item.shortDetail
+            shortDetail: !_.isEmpty(sliderShortDetail) ? sliderShortDetail : item.shortDetail,
+            language: localStorage.lang
         }
         if (e.target.value === "save") {
             newData["id"] = item.id;
@@ -64,11 +110,11 @@ const Index = () => {
     const newSliderData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await addSliderImage(item, token);
+            await addSliderImage(item, token);
             setIsNewSlider(false);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewSlider(false);
         }
@@ -78,11 +124,11 @@ const Index = () => {
     const updateSliderData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await updateSliderImage(propState.id,item, token);
+            await updateSliderImage(propState.id, item, token);
             setIsUpdateId(0);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsUpdateId(0);
         }
@@ -92,11 +138,11 @@ const Index = () => {
     const deleteSliderData = useCallback(async (id) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await deleteSliderImage(id, token);
+            await deleteSliderImage(id, token);
             setIsNewSlider(false);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewSlider(false);
         }
@@ -122,36 +168,47 @@ const Index = () => {
         setSliderName({})
     }
 
+    const onHandlerSliderName = (e) => {
+        const isValidSliderName = VALIDATION.SLIDER[e.target.name].test(e.target.value);
+        if (isValidSliderName) {
+            setSliderName(e.target.value);
+        }
+        setValidation({
+            sliderName: isValidSliderName
+        });
+    }
+
     const emptyForm = (<Row gutter={[12, 12]} justify="start">
         <Col className={"gutter-row"} span={18}>
             <Row gutter={[12, 12]} justify="start">
                 <Col className={"gutter-row"} span={24}>
                     <FormItem
                         name="sliderName"
-                        label={"Slider Adı"}
-                        onChange={(e) => setSliderName(e.target.value)}
+                        label={t("slider.sliderName")}
+                        errors={t("validation.slider.sliderName")}
+                        validation={validation}
+                        onChange={(e) => onHandlerSliderName(e)}
                     />
                 </Col>
                 <Col className={"gutter-row"} span={24}>
                     <FormItem
                         name="routerLink"
-                        label={"Gideceği Sayfa Linki"}
+                        label={t("slider.link")}
                         onChange={(e) => setRouterLink(e.target.value)}
                     />
                 </Col>
                 <Col className={"gutter-row"} span={24}>
                     <FormItem
                         name="sliderImage"
-                        label={"Slider Resmi"}
+                        label={t("slider.sliderImage")}
                         onChange={onSelectImage}
                         type={"file"}
-                        // errors={errors.image}
                     />
                 </Col>
                 <Col className={"gutter-row"} span={24}>
                     <Row gutter={[12, 12]}>
                         <Col className={"gutter-row"} span={6}>
-                            Slider Kısa Açıklama
+                            {t("slider.sliderShortDescription")}
                         </Col>
                         <Col className={"gutter-row"} span={18}>
                             <JoditEditor ref={editor} value={sliderShortDetail}
@@ -162,7 +219,7 @@ const Index = () => {
                 <Col className={"gutter-row"} span={24}>
                     <Row gutter={[12, 12]}>
                         <Col className={"gutter-row"} span={6}>
-                            Slider Detay
+                            {t("slider.sliderDetailDescription")}
                         </Col>
                         <Col className={"gutter-row"} span={18}>
                             <JoditEditor ref={editor} value={sliderDetail}
@@ -173,23 +230,20 @@ const Index = () => {
             </Row>
         </Col>
         <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
-            <Radio.Group onChange={(e) => {
-                editingHandler(e)
-            }}>
-                <Radio.Button className={"save"} value="newItem">Kaydet</Radio.Button>
-                <Radio.Button className={"cancel"} value="cancel"
-                              danger>İptal</Radio.Button>
+            <Radio.Group onChange={(e) => newSliderHandler(e)}>
+                <Radio.Button className={"save"} value="newItem" disabled={!validPage}>{t("save")}</Radio.Button>
+                <Radio.Button className={"cancel"} value="cancel" danger>{t("cancel")}</Radio.Button>
             </Radio.Group>
         </Col>
     </Row>);
 
     return (
         <div className={"card"}>
-            <div className={"card-header text-center fs-4"}>Slider Ekleme Sayfası</div>
+            <div className={"card-header text-center fs-4"}>( {t(localStorage.lang)} )
+                - {t("slider.sliderAddPage")}</div>
             <div className={"card-body"}>
-                <Button className={"success"} title={"Yeni Slider Ekle"} icon={<PlusOutlined/>}
-                        onClick={newSlider}>
-                    Yeni Slider Ekle
+                <Button className={"success"} title={t("slider.sliderAdd")} icon={<PlusOutlined/>} onClick={newSlider}>
+                    {t("slider.sliderAdd")}
                 </Button>
             </div>
             <div className={"sliderList card-body"}>
@@ -203,9 +257,10 @@ const Index = () => {
                                 <Col className={"gutter-row"} span={18}>
                                     <FormItem
                                         name="sliderName"
-                                        label={"Slider Adı"}
+                                        label={t("slider.sliderName")}
                                         defaultValue={item.name}
-                                        // errors={errors.branchName}
+                                        errors={t("validation.slider.sliderName")}
+                                        validation={validation}
                                         onChange={(e) => setSliderName(e.target.value)}
                                     />
                                 </Col>
@@ -219,12 +274,12 @@ const Index = () => {
                                     <Col className={"gutter-row"} span={18}>
                                         {isUpdateId === item.id ? (<FormItem
                                             name="routerLink"
-                                            label={"Gideceği Sayfa Linki"}
+                                            label={t("slider.link")}
                                             defaultValue={item.link}
                                             onChange={(e) => setRouterLink(e.target.value)}
                                         />) : <>
-                                            <label className='form-label' htmlFor={item.link + "_description"}> Gideceği
-                                                Sayfa Linki
+                                            <label className='form-label'
+                                                   htmlFor={item.link + "_description"}> {t("slider.link")}
                                                 : </label> <span>{item.link}</span>
                                         </>
                                         }
@@ -237,17 +292,15 @@ const Index = () => {
                                                         <Col className={"gutter-row"} span={24}>
                                                             <FormItem
                                                                 name="sliderImage"
-                                                                label={"Slider Resmi"}
+                                                                label={t("slider.sliderImage")}
                                                                 onChange={onSelectImage}
                                                                 type={"file"}
-                                                                // errors={errors.image}
                                                             />
                                                         </Col>
                                                     ) : <>
                                                         <Col className={"gutter-row"} span={6}>
                                                             <label className='form-label'
-                                                                   htmlFor={item.name + "_description"}>Slider
-                                                                Resmi ;</label>
+                                                                   htmlFor={item.name + "_description"}>{t("slider.sliderImage")} ;</label>
                                                         </Col>
                                                         <Col className={"gutter-row"} span={18} style={{textAlign: "center"}}>
                                                             <SliderImage image={item.image} style={{
@@ -262,7 +315,7 @@ const Index = () => {
                                             <Col className={"gutter-row"} span={24}>
                                                 <Row gutter={[12, 12]} justify="start">
                                                     <Col className={"gutter-row"} span={6}>
-                                                        Slider Kısa Açıklama
+                                                        {t("slider.sliderShortDescription")}
                                                     </Col>
                                                     <Col className={"gutter-row"} span={18}>
                                                         {isUpdateId === item.id ? (
@@ -282,7 +335,7 @@ const Index = () => {
                                             <Col className={"gutter-row"} span={24}>
                                                 <Row gutter={[12, 12]} justify="start">
                                                     <Col className={"gutter-row"} span={6}>
-                                                        Slider Detay
+                                                        {t("slider.sliderLongDescription")}
                                                     </Col>
                                                     <Col className={"gutter-row"} span={18}>
                                                         {isUpdateId === item.id ? (
@@ -306,15 +359,17 @@ const Index = () => {
                                         {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {
                                             editingHandler(e, item)
                                         }}>
-                                            <Radio.Button className={"save"} value="save">Kaydet</Radio.Button>
+                                            <Radio.Button className={"save"} value="save"
+                                                          disabled={!validPage}>{t("update")}</Radio.Button>
                                             <Radio.Button className={"cancel"} value="cancel"
-                                                          danger>İptal</Radio.Button>
+                                                          danger>{t("cancel")}</Radio.Button>
                                         </Radio.Group>) : (<Radio.Group onChange={(e) => {
                                             editHandler(e, item)
                                         }}>
-                                            <Radio.Button className={"update"} value={"update"}>Düzenle</Radio.Button>
-                                            <Radio.Button className={"delete"} value={"delete"}
-                                                          danger>Sil</Radio.Button>
+                                            <Radio.Button className={"update"} value={"update"}
+                                                          disabled={isNewSlider}>{t("edit")}</Radio.Button>
+                                            <Radio.Button className={"delete"} value={"delete"} disabled={isNewSlider}
+                                                          danger>{t("delete")}</Radio.Button>
                                         </Radio.Group>)}
                                     </Col>
                                 </Row>}

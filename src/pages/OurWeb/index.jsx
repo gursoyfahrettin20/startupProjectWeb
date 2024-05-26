@@ -13,6 +13,7 @@ function Index(props) {
     const editor = useRef(null);
     const [content, setContent] = useState("");
     const navigate = useNavigate();
+    const [lang, setLang] = useState(localStorage.lang);
 
     const getContact = useCallback(async (id) => {
         const response = await loadOurWeb();
@@ -20,18 +21,26 @@ function Index(props) {
             return o.id === id;
         })
         setContent(response.data[_id].detail);
+        setLang(localStorage.lang)
     }, []);
 
     useEffect(() => {
         getContact(props.id).then(props.id);
     }, []);
 
+    useEffect(() => {
+        if (!_.isEqual(lang, localStorage.lang)) {
+            navigate(0);
+        }
+    }, [localStorage.lang]);
+
     const saveHandler = (buttonName) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         if (buttonName === "save") {
             let _content = {
                 id: props.id,
-                detail: content
+                detail: content,
+                language: localStorage.lang
             }
             updateOurWebData(propState.id, _content, token).then();
         } else if (buttonName === "clear") {
@@ -50,7 +59,7 @@ function Index(props) {
     }, []);
 
     return (<div className={"card"}>
-        <div className={"card-header text-center fs-4"}>{t("ourPage." + props.elementName)}</div>
+        <div className={"card-header text-center fs-4"}>( {t(localStorage.lang)} ) - {t("ourPage." + props.elementName)}</div>
         <div className={"card-body"}>
             <JoditEditor ref={editor} value={content} onChange={(newContent) => setContent(newContent)}/>
         </div>

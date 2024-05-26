@@ -46,11 +46,17 @@ function Index(props) {
         productName: true,
     });
     const [validPage, setValidPage] = useState(false);
+    const [lang, setLang] = useState(localStorage.lang);
 
     useEffect(() => {
         setValidPage(!isValidCheck(validation));
     }, [validation]);
 
+    useEffect(() => {
+        if (!_.isEqual(lang, localStorage.lang)) {
+            navigate(0);
+        }
+    }, [localStorage.lang]);
 
     useEffect(() => {
         getCategory().then();
@@ -98,7 +104,7 @@ function Index(props) {
     const newCreateHandler = (e) => {
         if(e.target.value !=="cancel"){
             const newData = {
-                name: productName, detail: productDetail
+                name: productName, detail: productDetail,  language: localStorage.lang
             }
             const indexCategory = _.findIndex(categoryList, (data) => {
                 return data.id === selectedCategory;
@@ -108,6 +114,10 @@ function Index(props) {
             navigate(0);
         } else {
             setIsNewProduct(false);
+            setValidation({
+                selectCategory: true,
+                productName: true
+            });
         }
     }
 
@@ -123,7 +133,8 @@ function Index(props) {
             const newData = {
                 id: productList[index].id,
                 name: !_.isEmpty(productName) ? productName : productList[index].name,
-                detail: !_.isEmpty(productDetail) ? productDetail : productList[index].detail
+                detail: !_.isEmpty(productDetail) ? productDetail : productList[index].detail,
+                language: localStorage.lang
             }
             updateProductData(newData).then();
             navigate(0);
@@ -145,7 +156,14 @@ function Index(props) {
     const getCategory = useCallback(async () => {
         try {
             const responseCategory = await loadCategory();
-            setCategoryList(responseCategory.data);
+            let langForList = [];
+            for (let i = 0; i < responseCategory.data.length; i++) {
+                if (responseCategory.data[i].language === localStorage.lang) {
+                    langForList.push(responseCategory.data[i]);
+                }
+            }
+            setCategoryList(langForList);
+            setLang(localStorage.lang);
         } catch (error) {
         }
     }, []);
@@ -154,8 +172,15 @@ function Index(props) {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
             const responseProduct = await loadProduct(page, 5, token);
-            setProductList(responseProduct.data.content);
+            let langForList = [];
+            for (let i = 0; i < responseProduct.data.content.length; i++) {
+                if (responseProduct.data.content[i].language === localStorage.lang) {
+                    langForList.push(responseProduct.data.content[i]);
+                }
+            }
+            setProductList(langForList);
             setPage({...responseProduct.data});
+            setLang(localStorage.lang);
         } catch (error) {
         }
     }, []);

@@ -9,12 +9,15 @@ import JoditEditor from 'jodit-react';
 import NewsImage from "@/components/Image/NewsImage.jsx";
 import ReadEditor from "@/components/editor/ReadEditor.jsx";
 import _ from "lodash";
+import {VALIDATION} from "@/shared/validate/Validation.js";
+import {isValidCheck} from "@/shared/validate/IsValidCheck.js";
+import {useTranslation} from "react-i18next";
 
 const Index = () => {
+    const {t} = useTranslation();
     const propState = usePropState();
     const editor = useRef(null);
     const editorRead = useRef(null);
-    const [errorMessage, setErrorMessage] = useState("");
     const [newsList, setNewsList] = useState([]);
     const [isUpdateId, setIsUpdateId] = useState(0);
     const [isNewNews, setIsNewNews] = useState(false);
@@ -24,21 +27,62 @@ const Index = () => {
     const [newsShortDetail, setNewsShortDetail] = useState("");
     const [newsDetail, setNewsDetail] = useState("");
     const navigate = useNavigate();
+    const [validation, setValidation] = useState({
+        newsName: true
+    });
+    const [validPage, setValidPage] = useState(false);
+    const [lang, setLang] = useState(localStorage.lang);
+
+    useEffect(() => {
+        setValidPage(!isValidCheck(validation));
+    }, [validation]);
 
     const getNews = useCallback(async () => {
         const response = await listNews();
-        setNewsList(response.data);
+        let langForList = [];
+        for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].language === localStorage.lang) {
+                langForList.push(response.data[i]);
+            }
+        }
+        setNewsList(langForList);
+        setLang(localStorage.lang);
     }, []);
 
     useEffect(() => {
         getNews().then();
     }, []);
 
+    useEffect(() => {
+        if (!_.isEqual(lang, localStorage.lang)) {
+            navigate(0);
+        }
+    }, [localStorage.lang]);
+
     const editHandler = (e, item) => {
         if (e.target.value === "update") {
             setIsUpdateId(item.id);
         } else {
             deleteNewsData(item.id).then()
+        }
+    }
+    const newNewsHandler = (e, item) => {
+        if (e.target.value !== "cancel") {
+            const newData = {
+                name: newsName,
+                link: routerLink,
+                image: newImage,
+                detail: newsDetail,
+                shortDetail: newsShortDetail,
+                language: localStorage.lang
+            }
+
+            newNewsData(newData).then();
+        } else {
+            setIsNewNews(false);
+            setValidation({
+                newsName: true
+            });
         }
     }
 
@@ -48,13 +92,12 @@ const Index = () => {
             link: !_.isEmpty(routerLink) ? routerLink : item.link,
             image: !_.isEmpty(newImage) ? newImage : item.image,
             detail: !_.isEmpty(newsDetail) ? newsDetail : item.detail,
-            shortDetail: !_.isEmpty(newsShortDetail) ? newsShortDetail : item.shortDetail
+            shortDetail: !_.isEmpty(newsShortDetail) ? newsShortDetail : item.shortDetail,
+            language: localStorage.lang
         }
         if (e.target.value === "save") {
             newData["id"] = item.id;
             updateNewsData(newData).then();
-        } else if (e.target.value === "newItem") {
-            newNewsData(newData).then();
         } else {
             setIsUpdateId(0);
             setIsNewNews(false);
@@ -64,11 +107,11 @@ const Index = () => {
     const newNewsData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await addNews(item, token);
+            await addNews(item, token);
             setIsNewNews(false);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewNews(false);
         }
@@ -78,11 +121,11 @@ const Index = () => {
     const updateNewsData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await updateNews(propState.id, item, token);
+            await updateNews(propState.id, item, token);
             setIsUpdateId(0);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsUpdateId(0);
         }
@@ -92,15 +135,14 @@ const Index = () => {
     const deleteNewsData = useCallback(async (id) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const response = await deleteNews(id, token);
+            await deleteNews(id, token);
             setIsNewNews(false);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewNews(false);
         }
-
     }, []);
 
 
@@ -122,36 +164,47 @@ const Index = () => {
         setNewsName({})
     }
 
+    const onHandlerNewsName = (e) => {
+        const isValidNewsName = VALIDATION.NEWS[e.target.name].test(e.target.value);
+        if (isValidNewsName) {
+            setNewsName(e.target.value);
+        }
+        setValidation({
+            newsName: isValidNewsName
+        });
+    }
+
     const emptyForm = (<Row gutter={[12, 12]} justify="start">
         <Col className={"gutter-row"} span={18}>
             <Row gutter={[12, 12]} justify="start">
                 <Col className={"gutter-row"} span={24}>
                     <FormItem
                         name="newsName"
-                        label={"Haber Adı"}
-                        onChange={(e) => setNewsName(e.target.value)}
+                        label={t("news.newsName")}
+                        errors={t("validation.news.newsName")}
+                        validation={validation}
+                        onChange={(e) => onHandlerNewsName(e)}
                     />
                 </Col>
                 <Col className={"gutter-row"} span={24}>
                     <FormItem
                         name="routerLink"
-                        label={"Gideceği Sayfa Linki"}
+                        label={t("news.link")}
                         onChange={(e) => setRouterLink(e.target.value)}
                     />
                 </Col>
                 <Col className={"gutter-row"} span={24}>
                     <FormItem
                         name="newsImage"
-                        label={"Haber Resmi"}
+                        label={t("news.newsImage")}
                         onChange={onSelectImage}
                         type={"file"}
-                        // errors={errors.image}
                     />
                 </Col>
                 <Col className={"gutter-row"} span={24}>
                     <Row gutter={[12, 12]}>
                         <Col className={"gutter-row"} span={6}>
-                            Haber Kısa Açıklama
+                            label={t("news.newsShortDescription")}
                         </Col>
                         <Col className={"gutter-row"} span={18}>
                             <JoditEditor ref={editor} value={newsShortDetail}
@@ -162,7 +215,7 @@ const Index = () => {
                 <Col className={"gutter-row"} span={24}>
                     <Row gutter={[12, 12]}>
                         <Col className={"gutter-row"} span={6}>
-                            Haber Detay
+                            label={t("news.newsDetailDescription")}
                         </Col>
                         <Col className={"gutter-row"} span={18}>
                             <JoditEditor ref={editor} value={newsDetail}
@@ -174,22 +227,22 @@ const Index = () => {
         </Col>
         <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
             <Radio.Group onChange={(e) => {
-                editingHandler(e)
+                newNewsHandler(e)
             }}>
-                <Radio.Button className={"save"} value="newItem">Kaydet</Radio.Button>
+                <Radio.Button className={"save"} value="newItem" disabled={!validPage}>{t("save")}</Radio.Button>
                 <Radio.Button className={"cancel"} value="cancel"
-                              danger>İptal</Radio.Button>
+                              danger>{t("cancel")}</Radio.Button>
             </Radio.Group>
         </Col>
     </Row>);
 
     return (
         <div className={"card"}>
-            <div className={"card-header text-center fs-4"}>Haber Ekleme Sayfası</div>
+            <div className={"card-header text-center fs-4"}>{t("news.newsAddPage")}</div>
             <div className={"card-body"}>
-                <Button className={"success"} title={"Yeni Haber Ekle"} icon={<PlusOutlined/>}
+                <Button className={"success"} title={t("news.newsAdd")} icon={<PlusOutlined/>}
                         onClick={newNews}>
-                    Yeni Haber Ekle
+                    {t("news.newsAdd")}
                 </Button>
             </div>
             <div className={"newsList card-body"}>
@@ -203,14 +256,15 @@ const Index = () => {
                                 <Col className={"gutter-row"} span={18}>
                                     <FormItem
                                         name="newsName"
-                                        label={"Haber Adı"}
+                                        label={t("news.newsName")}
                                         defaultValue={item.name}
-                                        // errors={errors.branchName}
+                                        errors={t("validation.news.newsName")}
+                                        validation={validation}
                                         onChange={(e) => setNewsName(e.target.value)}
                                     />
                                 </Col>
                             </Row>) : <>
-                                <label className='form-label' htmlFor={item.name + "_description"}> Haber Adı
+                                <label className='form-label' htmlFor={item.name + "_description"}> {t("news.newsName")}
                                     : </label> <span>{item.name}</span>
                             </>
                             }
@@ -219,12 +273,12 @@ const Index = () => {
                                     <Col className={"gutter-row"} span={18}>
                                         {isUpdateId === item.id ? (<FormItem
                                             name="routerLink"
-                                            label={"Gideceği Sayfa Linki"}
+                                            label={t("news.link")}
                                             defaultValue={item.link}
                                             onChange={(e) => setRouterLink(e.target.value)}
                                         />) : <>
-                                            <label className='form-label' htmlFor={item.link + "_description"}> Gideceği
-                                                Sayfa Linki
+                                            <label className='form-label'
+                                                   htmlFor={item.link + "_description"}>{t("news.link")}
                                                 : </label> <span>{item.link}</span>
                                         </>
                                         }
@@ -237,17 +291,15 @@ const Index = () => {
                                                         <Col className={"gutter-row"} span={24}>
                                                             <FormItem
                                                                 name="newsImage"
-                                                                label={"Haber Resmi"}
+                                                                label={t("news.newsImage")}
                                                                 onChange={onSelectImage}
                                                                 type={"file"}
-                                                                // errors={errors.image}
                                                             />
                                                         </Col>
                                                     ) : <>
                                                         <Col className={"gutter-row"} span={6}>
                                                             <label className='form-label'
-                                                                   htmlFor={item.name + "_description"}>Haber
-                                                                Resmi ;</label>
+                                                                   htmlFor={item.name + "_description"}>  {t("news.newsImage")} ;</label>
                                                         </Col>
                                                         <Col className={"gutter-row"} span={18}
                                                              style={{textAlign: "center"}}>
@@ -263,7 +315,7 @@ const Index = () => {
                                             <Col className={"gutter-row"} span={24}>
                                                 <Row gutter={[12, 12]} justify="start">
                                                     <Col className={"gutter-row"} span={6}>
-                                                        Haber Kısa Açıklama
+                                                        {t("news.newsShortDescription")}
                                                     </Col>
                                                     <Col className={"gutter-row"} span={18}>
                                                         {isUpdateId === item.id ? (
@@ -283,7 +335,7 @@ const Index = () => {
                                             <Col className={"gutter-row"} span={24}>
                                                 <Row gutter={[12, 12]} justify="start">
                                                     <Col className={"gutter-row"} span={6}>
-                                                        Haber Detay
+                                                        {t("news.newsLongDescription")}
                                                     </Col>
                                                     <Col className={"gutter-row"} span={18}>
                                                         {isUpdateId === item.id ? (
@@ -307,15 +359,17 @@ const Index = () => {
                                         {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {
                                             editingHandler(e, item)
                                         }}>
-                                            <Radio.Button className={"save"} value="save">Kaydet</Radio.Button>
+                                            <Radio.Button className={"save"} value="save"
+                                                          disabled={!validPage}>{t("update")}</Radio.Button>
                                             <Radio.Button className={"cancel"} value="cancel"
-                                                          danger>İptal</Radio.Button>
+                                                          danger>{t("cancel")}</Radio.Button>
                                         </Radio.Group>) : (<Radio.Group onChange={(e) => {
                                             editHandler(e, item)
                                         }}>
-                                            <Radio.Button className={"update"} value={"update"}>Düzenle</Radio.Button>
-                                            <Radio.Button className={"delete"} value={"delete"}
-                                                          danger>Sil</Radio.Button>
+                                            <Radio.Button className={"update"} value={"update"}
+                                                          disabled={isNewNews}>{t("edit")}</Radio.Button>
+                                            <Radio.Button className={"delete"} value={"delete"} disabled={isNewNews}
+                                                          danger>{t("delete")}</Radio.Button>
                                         </Radio.Group>)}
                                     </Col>
                                 </Row>}

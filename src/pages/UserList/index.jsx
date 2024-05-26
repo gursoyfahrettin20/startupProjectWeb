@@ -43,7 +43,7 @@ function UserList() {
                     userPage.content.map((user, key) => {
                         return (
                             <a className='text-decoration-none' key={uuidv4()} style={{textDecoration: "none"}}
-                               href={`/user/${user.id}`}>
+                               href={`/adminPanel/user/${user.id}`}>
                                 <UserListItem key={uuidv4()} user={user}/>
                             </a>
                         )

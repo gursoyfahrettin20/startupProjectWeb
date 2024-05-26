@@ -7,8 +7,10 @@ import {useNavigate} from "react-router-dom";
 import _ from "lodash";
 import FormItem from "@/components/formItem/FormItem.jsx";
 import PageImage from "@/components/Image/PageImage.jsx";
+import {useTranslation} from "react-i18next";
 
 function Index(props) {
+    const {t} = useTranslation();
     const propState = usePropState();
     const editor = useRef(null);
     const [content, setContent] = useState("");
@@ -16,6 +18,7 @@ function Index(props) {
     const navigate = useNavigate();
     const [image, setImage] = useState();
     const [name, setName] = useState();
+    const [lang, setLang] = useState(localStorage.lang);
 
     const getContact = useCallback(async (id) => {
         const response = await loadOurWeb();
@@ -25,11 +28,18 @@ function Index(props) {
         setContent(response.data[_id].detail);
         setName(response.data[_id].name);
         setImage(response.data[_id].image);
+        setLang(localStorage.lang)
     }, []);
 
     useEffect(() => {
         getContact(props.id).then(props.id);
     }, []);
+
+    useEffect(() => {
+        if (!_.isEqual(lang, localStorage.lang)) {
+           navigate(0);
+        }
+    }, [localStorage.lang]);
 
     const saveHandler = (buttonName) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
@@ -38,7 +48,8 @@ function Index(props) {
                 id: props.id,
                 detail: content,
                 image: image,
-                name: props.elementName
+                name: props.elementName,
+                language: localStorage.lang
             }
             updateOurWebData(propState.id, _content, token).then();
         } else if (buttonName === "clear") {
@@ -74,22 +85,21 @@ function Index(props) {
 
 
     return (<div className={"card"}>
-        <div className={"card-header text-center fs-4"}>{props.elementName} Düzenleme</div>
+        <div className={"card-header text-center fs-4"}>( {t(localStorage.lang)} )
+            - {t("ourPage." + props.elementName)}</div>
         <div className={"card-body"}>
             <Row gutter={[12, 12]} justify="start">
-
                 <Col className={"gutter-row"} span={24}>
                     <FormItem
                         name="MainImage"
-                        label={"Resim Yükle"}
+                        label={t("uploadImage")}
                         onChange={onSelectImage}
                         type={"file"}
-                        // errors={errors.image}
                     />
                 </Col>
                 <Col className={"gutter-row"} span={24}>
                     <label className='form-label' htmlFor={name + "_description"}>
-                        Yüklü Resim :
+                        {t("uploadedImage")} :
                     </label>
                     <PageImage image={image} style={{maxWidth: "150px", maxHeight: "150px", margin: "20px"}}/>
                 </Col>
@@ -98,8 +108,8 @@ function Index(props) {
         </div>
         <div className={"card-footer text-end"}>
             <Radio.Group onChange={(e) => saveHandler(e.target.value)}>
-                <Radio.Button value="clear">Clear</Radio.Button>
-                <Radio.Button value="save">Save</Radio.Button>
+                <Radio.Button value="clear">{t("clear")}</Radio.Button>
+                <Radio.Button value="save">{t("save")}</Radio.Button>
             </Radio.Group>
         </div>
     </div>);

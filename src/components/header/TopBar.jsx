@@ -19,7 +19,7 @@ const TopBar = () => {
     useEffect(() => {
         const _isLogin = loadAuthState();
         if (_isLogin.id === 0) {
-            navigate("/login");
+            navigate("/adminPanel/login");
         }
     }, []);
 
@@ -40,7 +40,7 @@ const TopBar = () => {
                 <div className='header-container' style={{display: "contents"}}>
                     <Row gutter={16} style={{display: "contents"}}>
                         <Col span={16}>
-                            <Link className="navbar-brand" to={"/"}>
+                            <Link className="navbar-brand" to={"/adminPanel"}>
                                 <img src={logo} width={60} alt={"Empty Project"} title={"Empty Project"}/>
                                 Empty Project - web
                             </Link>
@@ -49,14 +49,14 @@ const TopBar = () => {
                             <ul className="navbar-nav navbar-right" style={{float: "right", marginTop: "-15px"}}>
                                 {authState.id === 0 ? <>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={"/login"}>{t("login")}</Link>
+                                        <Link className="nav-link" to={"/adminPanel/login"}>{t("login")}</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={"/singUp"}>{t("singUp")}</Link>
+                                        <Link className="nav-link" to={"/adminPanel/singUp"}>{t("singUp")}</Link>
                                     </li>
                                 </> : <>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to={`/user/${authState.id}`}>
+                                        <Link className="nav-link" to={`/adminPanel/user/${authState.id}`}>
                                             {<>
                                                 <ProfileImage style={{width: 20, height: 20}} image={authState.image}/>
                                                 <span className={"ms-2"}>

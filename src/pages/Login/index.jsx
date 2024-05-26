@@ -44,7 +44,7 @@ function Index() {
         try {
             const response = await Login(data);
             dispatch({type: "login-success", data: response.data});
-            navigate("/");
+            navigate("/adminPanel");
             setPassword();
             setEmail();
         } catch (responseError) {

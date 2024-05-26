@@ -15,10 +15,8 @@ import {isValidCheck} from "@/shared/validate/IsValidCheck.js";
 
 const Categories = () => {
     const {t} = useTranslation();
-    const propState = usePropState();
     const editor = useRef(null);
     const editorRead = useRef(null);
-    const [errorMessage, setErrorMessage] = useState("");
     const [categoryList, setCategoryList] = useState([]);
     const [isUpdateId, setIsUpdateId] = useState(0);
     const [isNewCategory, setIsNewCategory] = useState(false);
@@ -30,6 +28,7 @@ const Categories = () => {
         categoryName: true,
     });
     const [validPage, setValidPage] = useState(false);
+    const [lang, setLang] = useState(localStorage.lang);
 
     useEffect(() => {
         setValidPage(!isValidCheck(validation));
@@ -37,12 +36,24 @@ const Categories = () => {
 
     const getCategory = useCallback(async () => {
         const response = await loadCategory();
-        setCategoryList(response.data);
+        let langForList = [];
+        for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].language === localStorage.lang) {
+                langForList.push(response.data[i]);
+            }
+        }
+        setCategoryList(langForList);
     }, []);
 
     useEffect(() => {
         getCategory().then();
     }, []);
+
+    useEffect(() => {
+        if (!_.isEqual(lang, localStorage.lang)) {
+            navigate(0);
+        }
+    }, [localStorage.lang]);
 
     const editHandler = (e, item) => {
         if (e.target.value === "update") {
@@ -57,12 +68,15 @@ const Categories = () => {
             const newData = {
                 name: categoryName,
                 image: newImage,
-                detail: categoryDetail
+                detail: categoryDetail,
+                language: localStorage.lang
             }
             newCategoryData(newData).then();
-            navigate(0);
         } else {
             setIsNewCategory(false);
+            setValidation({
+                categoryName: true
+            });
         }
     }
 
@@ -70,7 +84,8 @@ const Categories = () => {
         const newData = {
             name: !_.isEmpty(categoryName) ? categoryName : item.name,
             image: !_.isEmpty(newImage) ? newImage : item.image,
-            detail: !_.isEmpty(categoryDetail) ? categoryDetail : item.detail
+            detail: !_.isEmpty(categoryDetail) ? categoryDetail : item.detail,
+            language: localStorage.lang
         }
         if (e.target.value === "save") {
             newData["id"] = item.id;
@@ -88,7 +103,7 @@ const Categories = () => {
             setIsNewCategory(false);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewCategory(false);
         }
@@ -102,7 +117,7 @@ const Categories = () => {
             setIsUpdateId(0);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsUpdateId(0);
         }
@@ -116,7 +131,7 @@ const Categories = () => {
             setIsNewCategory(false);
             navigate(0);
         } catch (error) {
-            setErrorMessage(error.response.data.message);
+            console.log(error.response.data.message);
         } finally {
             setIsNewCategory(false);
         }

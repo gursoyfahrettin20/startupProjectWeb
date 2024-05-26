@@ -26,31 +26,31 @@ const Index = () => {
 
     const items = [
      /*   getItem('Admin İşlemleri', 'adminMenu', <SecurityScanOutlined/>, [
-            getItem(<a href="/userList">Kullanıcı Listesi</a>, 'userListLink', <UserOutlined/>),
-            getItem(<a href="/userAdministratorPage">Kullanıcı Yetkilendirme</a>, 'userAdministratorPage',
+            getItem(<a href="/adminPanel/userList">Kullanıcı Listesi</a>, 'userListLink', <UserOutlined/>),
+            getItem(<a href="/adminPanel/userAdministratorPage">Kullanıcı Yetkilendirme</a>, 'userAdministratorPage',
                 <UserSwitchOutlined/>),
-            getItem(<a href="/mailSettings">Mail Ayarları</a>, 'mailSettings', <MailOutlined/>),
-            getItem(<a href="/siteSettings">Site Ayarları</a>, 'siteSettings', <SettingOutlined/>),
+            getItem(<a href="/adminPanel/mailSettings">Mail Ayarları</a>, 'mailSettings', <MailOutlined/>),
+            getItem(<a href="/adminPanel/siteSettings">Site Ayarları</a>, 'siteSettings', <SettingOutlined/>),
         ]),*/
         getItem(t("leftMenu.homePageTransactions"), 'mainPageAndSliderAndNews', <AppstoreOutlined/>, [
             getItem(t("leftMenu.homePage"), 'mainPages', <ReadOutlined/>, [
-                getItem(<a href="/mainPage">{t("leftMenu.headline") + "- 1"}</a>, 'mainHeadline1', <SlidersOutlined/>),
-                getItem(<a href="/mainHeadline">{t("leftMenu.headline") + "- 2"}</a>, 'mainHeadline2', <SlidersOutlined/>),
-                getItem(<a href="/breakHeadline">{t("leftMenu.headline") + "- 3"}</a>, 'mainHeadline3', <SlidersOutlined/>),
-                getItem(<a href="/lastHeadline">{t("leftMenu.headline") + "- 4"}</a>, 'mainHeadline4', <SlidersOutlined/>),
+                getItem(<a href="/adminPanel/mainPage">{t("leftMenu.headline") + "- 1"}</a>, 'mainHeadline1', <SlidersOutlined/>),
+                getItem(<a href="/adminPanel/mainHeadline">{t("leftMenu.headline") + "- 2"}</a>, 'mainHeadline2', <SlidersOutlined/>),
+                getItem(<a href="/adminPanel/breakHeadline">{t("leftMenu.headline") + "- 3"}</a>, 'mainHeadline3', <SlidersOutlined/>),
+                getItem(<a href="/adminPanel/lastHeadline">{t("leftMenu.headline") + "- 4"}</a>, 'mainHeadline4', <SlidersOutlined/>),
             ]),
-            getItem(<a href="/slider">{t("leftMenu.slider")}</a>, 'slider', <SlidersOutlined/>),
-            getItem(<a href="/news">{t("leftMenu.newsSlider")}</a>, 'news', <SlidersOutlined/>)
+            getItem(<a href="/adminPanel/slider">{t("leftMenu.slider")}</a>, 'slider', <SlidersOutlined/>),
+            getItem(<a href="/adminPanel/news">{t("leftMenu.newsSlider")}</a>, 'news', <SlidersOutlined/>)
         ]),
         getItem(t("leftMenu.productCategory"), 'categoryAndProduct', <ShareAltOutlined/>, [
-            getItem(<a href="/categories">{t("leftMenu.createListCategory")}</a>, 'categories', <AppstoreAddOutlined/>),
-            getItem(<a href="/product">{t("leftMenu.createListProduct")}</a>, 'product', <MobileOutlined/>,),
+            getItem(<a href="/adminPanel/categories">{t("leftMenu.createListCategory")}</a>, 'categories', <AppstoreAddOutlined/>),
+            getItem(<a href="/adminPanel/product">{t("leftMenu.createListProduct")}</a>, 'product', <MobileOutlined/>,),
         ]),
         getItem(t("leftMenu.siteDetail"), 'siteDetail', <InfoCircleOutlined/>, [
-            getItem(<a href="/aboutUs">{t("leftMenu.aboutUs")}</a>, 'aboutUs', <ReadOutlined/>),
-            getItem(<a href="/ourVision">{t("leftMenu.ourVision")}</a>, 'ourVision', <FlagOutlined/>),
-            getItem(<a href="/ourMission">{t("leftMenu.ourMission")}</a>, 'ourMission', <FlagOutlined/>),
-            getItem(<a href="/contact">{t("leftMenu.contact")}</a>, 'contact', <EnvironmentOutlined/>),
+            getItem(<a href="/adminPanel/aboutUs">{t("leftMenu.aboutUs")}</a>, 'aboutUs', <ReadOutlined/>),
+            getItem(<a href="/adminPanel/ourVision">{t("leftMenu.ourVision")}</a>, 'ourVision', <FlagOutlined/>),
+            getItem(<a href="/adminPanel/ourMission">{t("leftMenu.ourMission")}</a>, 'ourMission', <FlagOutlined/>),
+            getItem(<a href="/adminPanel/contact">{t("leftMenu.contact")}</a>, 'contact', <EnvironmentOutlined/>),
         ])
     ];
     return (

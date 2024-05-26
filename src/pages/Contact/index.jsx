@@ -28,14 +28,28 @@ const Index = () => {
     });
     const [validPage, setValidPage] = useState(false);
     const navigate = useNavigate();
+    const [lang, setLang] = useState(localStorage.lang);
 
     useEffect(() => {
         setValidPage(!isValidCheck(validation));
     }, [validation]);
 
+    useEffect(() => {
+        if (!_.isEqual(lang, localStorage.lang)) {
+            navigate(0);
+        }
+    }, [localStorage.lang]);
+
     const getContact = useCallback(async () => {
         const response = await loadContact();
-        setContactList(response.data);
+        let langForList = [];
+        for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].language === localStorage.lang) {
+                langForList.push(response.data[i]);
+            }
+        }
+        setContactList(langForList);
+        setLang(localStorage.lang)
     }, []);
 
     useEffect(() => {
@@ -60,6 +74,7 @@ const Index = () => {
 
     const editingHandler = (e, item) => {
         const newData = {
+            language: localStorage.lang,
             ...item, ...updateItem
         }
         if (e.target.value === "save") {
@@ -90,6 +105,7 @@ const Index = () => {
             [e.target.name]: isValid
         })
         const newData = {
+            language: localStorage.lang,
             ...updateItem, [e.target.id]: _value
         }
         setUpdateItem(newData);
@@ -215,7 +231,7 @@ const Index = () => {
 
     return (
         <div className={"card"}>
-            <div className={"card-header text-center fs-4"}>{t("contact.contactPageEditing")}</div>
+            <div className={"card-header text-center fs-4"}>( {t(localStorage.lang)} ) -{t("contact.contactPageEditing")}</div>
             <div className={"card-body"}>
                 <Button className={"success"} title={t("contact.addNewContactInformation")} disabled={isNewContact} icon={<PlusOutlined/>}
                         onClick={newContact}>
@@ -240,7 +256,8 @@ const Index = () => {
                                         onChange={(e) => updateItemHandler(e, e.target.value)}
                                     />
                                 </Col>
-                            </Row>) : <span>{item.branchName}</span>}
+                                </Row>) :
+                                <span>{item.branchName}</span>}
                             description={<Row gutter={[12, 12]} justify="start">
                                 <Col className={"gutter-row"} span={18}>
                                     <Row gutter={[12, 12]} justify="start">

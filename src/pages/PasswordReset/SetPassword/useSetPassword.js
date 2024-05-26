@@ -21,7 +21,7 @@ export function useSetPassword() {
         try {
             const response = await resetPassword(searchParams.get("tk"), { password });
             setSuccess(response.data.message);
-            navigate("/login")
+            navigate("/adminPanel/login")
         } catch (axiosError) {
             if(axiosError.response.data.status === 400) {
                 setErrors(axiosError.response?.data.validationErrors);
