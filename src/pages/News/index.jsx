@@ -204,7 +204,7 @@ const Index = () => {
                 <Col className={"gutter-row"} span={24}>
                     <Row gutter={[12, 12]}>
                         <Col className={"gutter-row"} span={6}>
-                            label={t("news.newsShortDescription")}
+                            {t("news.newsShortDescription")}
                         </Col>
                         <Col className={"gutter-row"} span={18}>
                             <JoditEditor ref={editor} value={newsShortDetail}
@@ -215,7 +215,7 @@ const Index = () => {
                 <Col className={"gutter-row"} span={24}>
                     <Row gutter={[12, 12]}>
                         <Col className={"gutter-row"} span={6}>
-                            label={t("news.newsDetailDescription")}
+                            {t("news.newsDetailDescription")}
                         </Col>
                         <Col className={"gutter-row"} span={18}>
                             <JoditEditor ref={editor} value={newsDetail}
