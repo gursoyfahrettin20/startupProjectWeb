@@ -11,7 +11,6 @@ import {usePropState} from "@/shared/context.jsx";
 const {Header, Footer, Sider, Content} = Layout;
 
 function App() {
-    const propState = usePropState();
     const [isLogin, setIsLogin] = useState(0);
     const navigate = useNavigate();
 
@@ -40,7 +39,7 @@ function App() {
                     <Home/>
                 </Content>
             </Layout>
-            <Footer>Fahrettin Gürsoy</Footer>
+            <Footer>Fahrettin Gürsoy - 0536 995 73 39</Footer>
         </AuthenticationContext>
     );
 }

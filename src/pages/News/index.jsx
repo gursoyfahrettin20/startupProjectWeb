@@ -335,7 +335,7 @@ const Index = () => {
                                             <Col className={"gutter-row"} span={24}>
                                                 <Row gutter={[12, 12]} justify="start">
                                                     <Col className={"gutter-row"} span={6}>
-                                                        {t("news.newsLongDescription")}
+                                                        {t("news.newsDetailDescription")}
                                                     </Col>
                                                     <Col className={"gutter-row"} span={18}>
                                                         {isUpdateId === item.id ? (

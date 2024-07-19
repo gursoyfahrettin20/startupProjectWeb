@@ -1,6 +1,7 @@
 import React from 'react';
 import {Menu} from "antd";
 import {
+    AlertOutlined,
     AppstoreAddOutlined,
     AppstoreOutlined,
     EnvironmentOutlined,
@@ -9,7 +10,7 @@ import {
     MobileOutlined,
     ReadOutlined,
     ShareAltOutlined,
-    SlidersOutlined
+    SlidersOutlined, XOutlined
 } from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 
@@ -46,6 +47,11 @@ const Index = () => {
             getItem(<a href="/adminPanel/categories">{t("leftMenu.createListCategory")}</a>, 'categories', <AppstoreAddOutlined/>),
             getItem(<a href="/adminPanel/product">{t("leftMenu.createListProduct")}</a>, 'product', <MobileOutlined/>,),
         ]),
+        getItem(t("leftMenu.referenceCategory"), 'categoryAndReferences', <AlertOutlined />, [
+            getItem(<a href="/adminPanel">{t("leftMenu.createListCategory")}</a>, 'categories', <AppstoreAddOutlined/>),
+            getItem(<a href="/adminPanel">{t("leftMenu.createListReferences")}</a>, 'references', <FlagOutlined />,),
+        ]),
+        getItem(<a href="/adminPanel">{t("leftMenu.socialsNetworks")}</a>, 'socialsNetworks', <XOutlined />),
         getItem(t("leftMenu.siteDetail"), 'siteDetail', <InfoCircleOutlined/>, [
             getItem(<a href="/adminPanel/aboutUs">{t("leftMenu.aboutUs")}</a>, 'aboutUs', <ReadOutlined/>),
             getItem(<a href="/adminPanel/ourVision">{t("leftMenu.ourVision")}</a>, 'ourVision', <FlagOutlined/>),

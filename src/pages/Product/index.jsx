@@ -20,7 +20,7 @@ import ReadEditor from "@/components/editor/ReadEditor.jsx";
 import EditingEditor from "@/components/editor/EditingEditor.jsx";
 import {useTranslation} from "react-i18next";
 import {VALIDATION} from "@/shared/validate/Validation.js";
-import {isValidCheck} from "@/shared/validate/IsValidCheck.js";
+import {isValidCheck, turkishCharactersToEnglishCharacters} from "@/shared/validate/IsValidCheck.js";
 
 function Index(props) {
     const {t} = useTranslation();
@@ -33,6 +33,7 @@ function Index(props) {
     const [isUpdateId, setIsUpdateId] = useState(0);
     const [isNewProduct, setIsNewProduct] = useState(false);
     const [productName, setProductName] = useState(null);
+    const [productUrl, setProductUrl] = useState(null);
     const [newImage, setNewImage] = useState([]);
     const [productDetail, setProductDetail] = useState("");
     const [fileList, setFileList] = useState([]);
@@ -44,6 +45,7 @@ function Index(props) {
     const [validation, setValidation] = useState({
         selectCategory: true,
         productName: true,
+        productUrl: true,
     });
     const [validPage, setValidPage] = useState(false);
     const [lang, setLang] = useState(localStorage.lang);
@@ -104,7 +106,7 @@ function Index(props) {
     const newCreateHandler = (e) => {
         if(e.target.value !=="cancel"){
             const newData = {
-                name: productName, detail: productDetail,  language: localStorage.lang
+                name: productName, url: productUrl, detail: productDetail, language: localStorage.lang
             }
             const indexCategory = _.findIndex(categoryList, (data) => {
                 return data.id === selectedCategory;
@@ -116,7 +118,8 @@ function Index(props) {
             setIsNewProduct(false);
             setValidation({
                 selectCategory: true,
-                productName: true
+                productName: true,
+                productUrl: true,
             });
         }
     }
@@ -133,12 +136,16 @@ function Index(props) {
             const newData = {
                 id: productList[index].id,
                 name: !_.isEmpty(productName) ? productName : productList[index].name,
+                url: !_.isEmpty(productUrl) ? productUrl : productList[index].url,
                 detail: !_.isEmpty(productDetail) ? productDetail : productList[index].detail,
                 language: localStorage.lang
             }
             updateProductData(newData).then();
             navigate(0);
         } else {
+            setProductName(null);
+            setProductUrl(null);
+            setNewImage([]);
             setIsUpdateId(0);
             setIsNewProduct(false);
         }
@@ -254,6 +261,7 @@ function Index(props) {
     const newProduct = () => {
         setIsNewProduct(true);
         setProductName(null)
+        setProductUrl(null)
     }
 
     const onHandlerSelectedCategory = (e) => {
@@ -298,13 +306,31 @@ function Index(props) {
     }
 
     const onHandlerProductName = (e) => {
+        let _turkishCharactersToEnglishCharacters = turkishCharactersToEnglishCharacters(e.target.value);
         const isValidProductName = VALIDATION.PRODUCT_CATEGORY[e.target.name].test(e.target.value);
         if (isValidProductName) {
             setProductName(e.target.value);
+            setProductUrl(_turkishCharactersToEnglishCharacters.replace(/\s/g, ''));
         }
         setValidation({
+            ...validation,
             selectCategory: selectedCategory !== null,
-            productName: isValidProductName
+            productName: isValidProductName,
+            productUrl: true
+        });
+
+
+    }
+    const onHandlerProductUrl = (e) => {
+        let _turkishCharactersToEnglishCharacters = turkishCharactersToEnglishCharacters(e.target.value);
+        const isValidProductUrl = VALIDATION.PRODUCT_CATEGORY[e.target.name].test(_turkishCharactersToEnglishCharacters);
+        if (isValidProductUrl) {
+            setProductUrl(_turkishCharactersToEnglishCharacters);
+        }
+        setValidation({
+            ...validation,
+            selectCategory: selectedCategory !== null,
+            productUrl: isValidProductUrl
         });
     }
 
@@ -329,12 +355,19 @@ function Index(props) {
                         onChange={(e) => onHandlerProductName(e)}
                     />
                 </Col>
+                <Col className={"gutter-row"} span={24}>
+                    <FormItem
+                        name="productUrl"
+                        label={t("url")}
+                        errors={t("validation.productCategory.productUrl")}
+                        validation={validation}
+                        onChange={(e) => onHandlerProductUrl(e)}
+                    />
+                </Col>
             </Row>
         </Col>
         <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
-            <Radio.Group onChange={(e) => {
-                newCreateHandler(e)
-            }}>
+            <Radio.Group onChange={(e) => {newCreateHandler(e)}}>
                 <Radio.Button className={"save"} value="newItem" disabled={!validPage}>{t("save")}</Radio.Button>
                 <Radio.Button className={"cancel"} value="cancel" danger>{t("cancel")}</Radio.Button>
             </Radio.Group>
@@ -355,90 +388,119 @@ function Index(props) {
                 <List
                     itemLayout="horizontal"
                     dataSource={productList}
-                    renderItem={(item) => (<List.Item>
-                        <List.Item.Meta
-                            title={isUpdateId === item.id ? (<Row gutter={[12, 12]} justify="start">
-                                <Col className={"gutter-row"} span={18}>
-                                    <FormItem
-                                        name="productName"
-                                        label={t("productCategory.productName")}
-                                        errors={t("validation.productCategory.productName")}
-                                        validation={validation}
-                                        onChange={(e) => onHandlerProductName(e)}
-                                        defaultValue={item.name}
-                                    />
-                                </Col>
-                            </Row>) : <><label className='form-label'
-                                               htmlFor={item.name + "_title"}>{t("productCategory.productName")} : </label>
-                                <span>{item.name}</span></>}
-                            description={<Row gutter={[12, 12]} justify="start">
-                                <Col className={"gutter-row"} span={18}>
+                    renderItem={(item) => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={isUpdateId === item.id ? (
                                     <Row gutter={[12, 12]} justify="start">
-                                        <Col className={"gutter-row"} span={24}>
-                                            {isUpdateId === item.id && (<>
-                                                <Upload
-                                                    listType="picture-card"
-                                                    type={'drag'}
-                                                    multiple={true}
-                                                    fileList={fileList}
-                                                    onRemove={onRemove}
-                                                    onChange={onChange}
-                                                    onPreview={handlePreview}
-                                                >
-                                                    {fileList.length < 5 && '+ Upload'}
-                                                </Upload>
-                                                {previewImage && (
-                                                    <Image
-                                                        wrapperStyle={{
-                                                            display: 'none',
-                                                        }}
-                                                        preview={{
-                                                            visible: previewOpen,
-                                                            onVisibleChange: (visible) => setPreviewOpen(visible),
-                                                            afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                                                        }}
-                                                        src={previewImage}
-                                                    />
-                                                )}
-                                            </>)}
+                                        <Col className={"gutter-row"} span={18}>
+                                            <FormItem
+                                                name="productName"
+                                                label={t("productCategory.productName")}
+                                                errors={t("validation.productCategory.productName")}
+                                                validation={validation}
+                                                onChange={(e) => onHandlerProductName(e)}
+                                                defaultValue={productName || item.name}
+                                            />
                                         </Col>
-                                        <Col className={"gutter-row"} span={24}>
-                                            {isUpdateId === item.id ?
-                                                <EditingEditor
-                                                    ref={editor}
-                                                    value={item.detail}
-                                                    onChange={(data) => setProductDetail(data)}/>
-                                                :
-                                                <>
-                                                    <label className='form-label' htmlFor={item.name+"_description"}>Ürün Açıklaması ;</label> <ReadEditor
-                                                    ref={editorRead}
-                                                    value={item.detail}
-                                                    disable={true}
-                                                />
-                                                </>
-                                            }
+                                        <Col className={"gutter-row"} span={18}>
+                                            <FormItem
+                                                name="productUrl"
+                                                label={t("url")}
+                                                errors={t("validation.productCategory.productUrl")}
+                                                validation={validation}
+                                                defaultValue={productUrl || item.url}
+                                                onChange={(e) => onHandlerProductUrl(e)}
+                                            />
                                         </Col>
                                     </Row>
-                                </Col>
-                                <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
-                                    {isUpdateId === item.id ? (
-                                        <Radio.Group onChange={(e) => {
-                                            editingHandler(e, item)
-                                        }}>
-                                            <Radio.Button className={"save"} value="save" disabled={!validPage}>{t("update")}</Radio.Button>
-                                            <Radio.Button className={"cancel"} value="cancel" danger>{t("cancel")}</Radio.Button>
-                                        </Radio.Group>) : (
-                                        <Radio.Group onChange={(e) => {
-                                            editHandler(e, item)
-                                        }}>
-                                            <Radio.Button className={"update"} value={"edit"} disabled={isNewProduct}>{t("edit")}</Radio.Button>
-                                            <Radio.Button className={"delete"} value={"delete"} disabled={isNewProduct}
-                                                          danger>{t("delete")}</Radio.Button>
-                                        </Radio.Group>)}
-                                </Col>
-                            </Row>}
-                        />
-                    </List.Item>)}
+                                ) : <>
+                                    <label className='form-label'
+                                           htmlFor={item.name + "_categoryTitle"}>{t("productCategory.categoryName")} : </label>
+                                    {item.category.name}
+                                    <br/>
+                                    <label className='form-label'
+                                           htmlFor={item.name + "_title"}>{t("productCategory.productName")} : </label>
+                                    <span>{item.name}</span>
+                                </>
+                                }
+                                description={
+                                    <Row gutter={[12, 12]} justify="start">
+                                        <Col className={"gutter-row"} span={18}>
+                                            <Row gutter={[12, 12]} justify="start">
+                                                <Col className={"gutter-row"} span={24}>
+                                                    {isUpdateId === item.id && (<>
+                                                        <Upload
+                                                            listType="picture-card"
+                                                            type={'drag'}
+                                                            multiple={true}
+                                                            fileList={fileList}
+                                                            onRemove={onRemove}
+                                                            onChange={onChange}
+                                                            onPreview={handlePreview}
+                                                        >
+                                                            {fileList.length < 5 && '+ Upload'}
+                                                        </Upload>
+                                                        {previewImage && (
+                                                            <Image
+                                                                wrapperStyle={{
+                                                                    display: 'none',
+                                                                }}
+                                                                preview={{
+                                                                    visible: previewOpen,
+                                                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                                                }}
+                                                                src={previewImage}
+                                                            />
+                                                        )}
+                                                    </>)}
+                                                </Col>
+                                                <Col className={"gutter-row"} span={24}>
+                                                    {isUpdateId === item.id ?
+                                                        <EditingEditor
+                                                            ref={editor}
+                                                            value={item.detail}
+                                                            onChange={(data) => setProductDetail(data)}/>
+                                                        :
+                                                        <>
+                                                            <label className='form-label'
+                                                                   htmlFor={item.name + "_description"}>Ürün Açıklaması
+                                                                ;</label> <ReadEditor
+                                                            ref={editorRead}
+                                                            value={item.detail}
+                                                            disable={true}
+                                                        />
+                                                        </>
+                                                    }
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        <Col className={"gutter-row custom-radio-btn"} span={6}
+                                             style={{textAlign: "right"}}>
+                                            {isUpdateId === item.id ? (
+                                                <Radio.Group onChange={(e) => {
+                                                    editingHandler(e, item)
+                                                }}>
+                                                    <Radio.Button className={"save"} value="save"
+                                                                  disabled={!validPage}>{t("update")}</Radio.Button>
+                                                    <Radio.Button className={"cancel"} value="cancel"
+                                                                  danger>{t("cancel")}</Radio.Button>
+                                                </Radio.Group>) : (
+                                                <Radio.Group onChange={(e) => {
+                                                    editHandler(e, item)
+                                                }}>
+                                                    <Radio.Button className={"update"} value={"edit"}
+                                                                  disabled={isNewProduct}>{t("edit")}</Radio.Button>
+                                                    <Radio.Button className={"delete"} value={"delete"}
+                                                                  disabled={isNewProduct}
+                                                                  danger>{t("delete")}</Radio.Button>
+                                                </Radio.Group>)}
+                                        </Col>
+                                    </Row>}
+                            />
+                        </List.Item>
+                    )}
                 />
             </div>
             <div className="card-footer text-center">

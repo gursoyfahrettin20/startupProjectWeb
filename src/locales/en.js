@@ -34,6 +34,7 @@ export const en = {
         "uploadedImage":"Uploaded Image",
         "tr": "Türkçe Notation",
         "en": "English Notation",
+        "url": "Url",
         "leftMenu": {
             "homePageTransactions": "Home Page Transactions",
             "homePage": "Home Page",
@@ -41,13 +42,16 @@ export const en = {
             "slider": "Slider",
             "newsSlider": "News Slider",
             "productCategory": "Product Category",
+            "referenceCategory": "Reference Category",
             "createListCategory": "Create / List Category",
             "createListProduct": "Create / List Product",
+            "createListReferences": "Create / List References",
             "siteDetail": "Site Detail",
             "aboutUs": "About Us",
             "ourVision": "Our Vision",
             "ourMission": "Our Mission",
             "contact": "Contact",
+            "socialsNetworks": "Socials Networks",
         },
         "contact": {
             "contactPageEditing": "Contact Page Editing",
@@ -111,6 +115,8 @@ export const en = {
                 "categoryName": "It must be at least 1 and at most 150 characters.",
                 "productName": "It must be at least 1 and at most 150 characters.",
                 "makeYourChoice": "Make Your Choice",
+                "productUrl": "To create your page, enter a Link that is not a Turkish character.",
+                "categoryUrl": "To create your page, enter a Link that is not a Turkish character.",
             },
             "slider": {
                 "sliderName": "It must be at least 1 and at most 150 characters."

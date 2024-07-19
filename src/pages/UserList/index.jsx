@@ -26,6 +26,7 @@ function UserList() {
         } catch (error) {
 
         } finally {
+            setUsersPage([]);
             setApiProgress(false);
         }
 
@@ -40,7 +41,7 @@ function UserList() {
             <div className="card-header text-center fs-4">User List</div>
             <ul className="list-group  list-group-flush" id={"user-list-group"}>
                 {
-                    userPage.content.map((user, key) => {
+                    userPage.content.map((user) => {
                         return (
                             <a className='text-decoration-none' key={uuidv4()} style={{textDecoration: "none"}}
                                href={`/adminPanel/user/${user.id}`}>

@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {usePropState} from "@/shared/context.jsx";
 import {useNavigate} from "react-router-dom";
 import {addCategories, deleteCategory, loadCategory, updateCategory} from "@/api/apiCalls.js";
 import {Button, Col, List, Radio, Row} from "antd";
@@ -11,7 +10,7 @@ import ReadEditor from "@/components/editor/ReadEditor.jsx";
 import _ from "lodash";
 import {useTranslation} from "react-i18next";
 import {VALIDATION} from "@/shared/validate/Validation.js";
-import {isValidCheck} from "@/shared/validate/IsValidCheck.js";
+import {isValidCheck, turkishCharactersToEnglishCharacters} from "@/shared/validate/IsValidCheck.js";
 
 const Categories = () => {
     const {t} = useTranslation();
@@ -20,12 +19,14 @@ const Categories = () => {
     const [categoryList, setCategoryList] = useState([]);
     const [isUpdateId, setIsUpdateId] = useState(0);
     const [isNewCategory, setIsNewCategory] = useState(false);
-    const [categoryName, setCategoryName] = useState({});
+    const [categoryName, setCategoryName] = useState(null);
+    const [categoryUrl, setCategoryUrl] = useState(null);
     const [newImage, setNewImage] = useState();
     const [categoryDetail, setCategoryDetail] = useState("");
     const navigate = useNavigate();
     const [validation, setValidation] = useState({
         categoryName: true,
+        categoryUrl: true,
     });
     const [validPage, setValidPage] = useState(false);
     const [lang, setLang] = useState(localStorage.lang);
@@ -67,6 +68,7 @@ const Categories = () => {
         if (e.target.value !== "cancel") {
             const newData = {
                 name: categoryName,
+                url: categoryUrl,
                 image: newImage,
                 detail: categoryDetail,
                 language: localStorage.lang
@@ -83,6 +85,7 @@ const Categories = () => {
     const editingHandler = (e, item) => {
         const newData = {
             name: !_.isEmpty(categoryName) ? categoryName : item.name,
+            url: !_.isEmpty(categoryUrl) ? categoryUrl : item.url,
             image: !_.isEmpty(newImage) ? newImage : item.image,
             detail: !_.isEmpty(categoryDetail) ? categoryDetail : item.detail,
             language: localStorage.lang
@@ -91,6 +94,8 @@ const Categories = () => {
             newData["id"] = item.id;
             updateCategoryData(newData).then();
         } else {
+            setCategoryName(null)
+            setCategoryUrl(null)
             setIsUpdateId(0);
             setIsNewCategory(false);
         }
@@ -154,16 +159,31 @@ const Categories = () => {
 
     const newCategory = () => {
         setIsNewCategory(true);
-        setCategoryName({})
+        setCategoryName(null)
+        setCategoryUrl(null)
     }
 
     const onHandlerCategoryName = (e) => {
+        let _turkishCharactersToEnglishCharacters = turkishCharactersToEnglishCharacters(e.target.value);
         const isValidCategoryName = VALIDATION.PRODUCT_CATEGORY[e.target.name].test(e.target.value);
         if (isValidCategoryName) {
             setCategoryName(e.target.value);
+            setCategoryUrl(_turkishCharactersToEnglishCharacters.replace(/\s/g, ''));
         }
         setValidation({
-            categoryName: isValidCategoryName
+            categoryName: isValidCategoryName,
+            categoryUrl: true
+        });
+    }
+
+    const onHandlerCategoryUrl = (e) => {
+        let _turkishCharactersToEnglishCharacters = turkishCharactersToEnglishCharacters(e.target.value);
+        const isValidCategoryUrl = VALIDATION.PRODUCT_CATEGORY[e.target.name].test(_turkishCharactersToEnglishCharacters);
+        if (isValidCategoryUrl) {
+            setCategoryUrl(_turkishCharactersToEnglishCharacters.replace(/\s/g, ''));
+        }
+        setValidation({
+            categoryUrl: isValidCategoryUrl
         });
     }
 
@@ -178,6 +198,15 @@ const Categories = () => {
                         errors={t("validation.productCategory.categoryName")}
                         validation={validation}
                         onChange={(e) => onHandlerCategoryName(e)}
+                    />
+                </Col>
+                <Col className={"gutter-row"} span={24}>
+                    <FormItem
+                        name="categoryUrl"
+                        label={t("url")}
+                        errors={t("validation.productCategory.categoryUrl")}
+                        validation={validation}
+                        onChange={(e) => onHandlerCategoryUrl(e)}
                     />
                 </Col>
                 <Col className={"gutter-row"} span={24}>
@@ -216,22 +245,37 @@ const Categories = () => {
                 <List
                     itemLayout="horizontal"
                     dataSource={categoryList}
-                    renderItem={(item) => (<List.Item>
+                    renderItem={(item) => (
+                        <List.Item>
                         <List.Item.Meta
-                            title={isUpdateId === item.id ? (<Row gutter={[12, 12]} justify="start">
-                                <Col className={"gutter-row"} span={18}>
-                                    <FormItem
-                                        name="categoryName"
-                                        label={t("productCategory.categoryName")}
-                                        errors={t("validation.productCategory.categoryName")}
-                                        validation={validation}
-                                        defaultValue={item.name}
-                                        onChange={(e) => onHandlerCategoryName(e)}
-                                    />
-                                </Col>
-                            </Row>) : <>
-                                <label className='form-label' htmlFor={item.name + "_description"}> Kategori Adı
-                                    : </label> <span>{item.name}</span>
+                            title={isUpdateId === item.id ? (
+                                <Row gutter={[12, 12]} justify="start">
+                                    <Col className={"gutter-row"} span={18}>
+                                        <FormItem
+                                            name="categoryName"
+                                            label={t("productCategory.categoryName")}
+                                            errors={t("validation.productCategory.categoryName")}
+                                            validation={validation}
+                                            defaultValue={categoryName || item.name}
+                                            onChange={(e) => onHandlerCategoryName(e)}
+                                        />
+                                    </Col>
+                                    <Col className={"gutter-row"} span={18}>
+                                        <FormItem
+                                            name="categoryUrl"
+                                            label={t("url")}
+                                            errors={t("validation.productCategory.categoryUrl")}
+                                            validation={validation}
+                                            defaultValue={categoryUrl || item.url}
+                                            onChange={(e) => onHandlerCategoryUrl(e)}
+                                        />
+                                    </Col>
+                                </Row>
+                            ) : <>
+                                <label className='form-label' htmlFor={item.name + "_description"}>
+                                    Kategori Adı :
+                                </label>
+                                <span>{item.name}</span>
                             </>
                             }
                             description={
@@ -287,7 +331,8 @@ const Categories = () => {
                                     </Col>
                                 </Row>}
                         />
-                    </List.Item>)}
+                        </List.Item>
+                    )}
                 />
             </div>
         </div>

@@ -25,7 +25,7 @@ function Index(props) {
     }, []);
 
     useEffect(() => {
-        getContact(props.id).then(props.id);
+        getContact(props.id).then();
     }, []);
 
     useEffect(() => {
@@ -58,7 +58,8 @@ function Index(props) {
         }
     }, []);
 
-    return (<div className={"card"}>
+    return (
+        <div className={"card"}>
         <div className={"card-header text-center fs-4"}>( {t(localStorage.lang)} ) - {t("ourPage." + props.elementName)}</div>
         <div className={"card-body"}>
             <JoditEditor ref={editor} value={content} onChange={(newContent) => setContent(newContent)}/>
@@ -69,7 +70,8 @@ function Index(props) {
                 <Radio.Button value="save">{t("save")}</Radio.Button>
             </Radio.Group>
         </div>
-    </div>);
+        </div>
+    );
 }
 
 export default Index;

@@ -33,6 +33,7 @@ export const tr = {
         "uploadImage":"Resim Yükle",
         "tr": "Türkçe Gösterim",
         "en": "İngilizce Gösterim",
+        "url": "Link",
         "leftMenu": {
             "homePageTransactions": "Ana Sayfa İşlemleri",
             "homePage": "Ana Sayfa",
@@ -40,13 +41,16 @@ export const tr = {
             "slider": "Slider",
             "newsSlider": "Haber Slider",
             "productCategory": "Ürün Kategorisi",
+            "referenceCategory": "Referans Kategorisi",
             "createListCategory": "Kategori Oluştur / Listele",
             "createListProduct": "Ürün Oluştur / Listele",
+            "createListReferences": "Referans Oluştur / Listele",
             "siteDetail": "Site Detay",
             "aboutUs": "Hakkımızda",
             "ourVision": "Vizyonumuz",
             "ourMission": "Misyonumuz",
             "contact": "İletişim",
+            "socialsNetworks": "Sosyal Ağ",
         },
         "contact": {
             "contactPageEditing": "İletişim Sayfası Düzenleme",
@@ -110,6 +114,8 @@ export const tr = {
                 "categoryName": "En az 1 en fazla 100 karakter olmalıdır.",
                 "productName": "En az 1 en fazla 150 karakter olmalıdır.",
                 "makeYourChoice": "Seçim Yapın.",
+                "productUrl": "Sayfanızı oluşturmak için Türkçe karakter olmayan Link giriniz.",
+                "categoryUrl": "Sayfanızı oluşturmak için Türkçe karakter olmayan Link giriniz.",
             },
             "slider": {
                 "sliderName": "En az 1 en fazla 150 karakter olmalıdır.",

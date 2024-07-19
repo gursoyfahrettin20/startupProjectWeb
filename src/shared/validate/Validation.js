@@ -10,6 +10,8 @@ export const VALIDATION = {
     PRODUCT_CATEGORY: {
         productName: new RegExp('(^(.{1,150})$)'),
         categoryName: new RegExp('(^(.{1,100})$)'),
+        categoryUrl: new RegExp('(^([a-zA-Z0-9]{1,100})$)'),
+        productUrl:  new RegExp('(^([a-zA-Z0-9]{1,100})$)'),
     },
     SLIDER: {
         sliderName: new RegExp('(^(.{1,150})$)'),

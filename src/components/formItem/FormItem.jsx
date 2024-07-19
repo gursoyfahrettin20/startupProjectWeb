@@ -15,7 +15,7 @@ export function FormItem(props) {
                         className={(props.validation && !props.validation[props.name]) ? 'form-control is-invalid' : 'form-control'}
                         type={props.type ? props.type : "text"}
                         onChange={props.onChange}
-                        defaultValue={props.defaultValue}
+                        value={props.defaultValue}
                     />
                 </Col>
             </Row>
