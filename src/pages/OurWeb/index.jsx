@@ -73,7 +73,7 @@ function Index(props) {
         <div className={"card"}>
             <div className={"card-header text-center fs-4"}>{t("ourPage." + props.elementName)}</div>
             {
-                props.id > 14 && propState.id < 25 ?
+                props.id > 14 && propState.id < 27 ?
                     <div className={"card-body"}>
                         <JoditEditor config={conf} ref={editor} value={content}
                                      onBlur={(newContent) => setContent(newContent)}/>

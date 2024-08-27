@@ -77,6 +77,7 @@ export const tr = {
             "linkedin": "Linkedin",
             "google": "Google",
             "youtube": "Youtube",
+            "instagram": "Instagram",
             "socialUrlLink": "Lütfen Sosyal Medya Link Adresinizi Yazınız"
         },
         "productCategory": {

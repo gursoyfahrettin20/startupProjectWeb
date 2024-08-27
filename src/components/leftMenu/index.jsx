@@ -6,7 +6,7 @@ import {
     AppstoreOutlined,
     EnvironmentOutlined, FacebookOutlined,
     FlagOutlined, GoogleOutlined,
-    InfoCircleOutlined, LinkedinOutlined,
+    InfoCircleOutlined, InstagramOutlined, LinkedinOutlined,
     MobileOutlined,
     ReadOutlined,
     ShareAltOutlined,
@@ -53,6 +53,7 @@ const Index = () => {
         ]),
         getItem(t("leftMenu.socialsNetworks"), 'socialsNetworks', <XOutlined/>, [
             getItem(<a href="/adminPanel/x">{t("ourPage.x")}</a>, 'x', <XOutlined/>),
+            getItem(<a href="/adminPanel/instagram">{t("ourPage.instagram")}</a>, 'instagram', <InstagramOutlined />),
             getItem(<a href="/adminPanel/facebook">{t("ourPage.facebook")}</a>, 'facebook', <FacebookOutlined />),
             getItem(<a href="/adminPanel/linkedin">{t("ourPage.linkedin")}</a>, 'linkedin', <LinkedinOutlined />),
             getItem(<a href="/adminPanel/google">{t("ourPage.google")}</a>, 'google', <GoogleOutlined />),

@@ -77,6 +77,7 @@ export const en = {
             "linkedin": "Linkedin",
             "google": "Google",
             "youtube": "Youtube",
+            "instagram": "Instagram",
             "socialUrlLink": "Please Write Your Social Media Link Address"
         },
         "productCategory": {

@@ -130,6 +130,10 @@ export default createBrowserRouter([
                 path: '/adminPanel/youtube',
                 element: localStorage.lang === 'tr' ? <OurWeb id={23} elementName={"youtube"}/> :
                     <OurWeb id={24} elementName={"youtube"}/>
+            }, {
+                path: '/adminPanel/instagram',
+                element: localStorage.lang === 'tr' ? <OurWeb id={25} elementName={"instagram"}/> :
+                    <OurWeb id={26} elementName={"instagram"}/>
             }
         ]
     }
