@@ -207,8 +207,8 @@ const Index = () => {
                             {t("news.newsShortDescription")}
                         </Col>
                         <Col className={"gutter-row"} span={18}>
-                            <JoditEditor ref={editor} value={newsShortDetail}
-                                         onChange={(data) => setNewsShortDetail(data)}/>
+                            <JoditEditor config={{language: localStorage.lang}} ref={editor} value={newsShortDetail}
+                                         onBlur={(data) => setNewsShortDetail(data)}/>
                         </Col>
                     </Row>
                 </Col>
@@ -218,8 +218,8 @@ const Index = () => {
                             {t("news.newsDetailDescription")}
                         </Col>
                         <Col className={"gutter-row"} span={18}>
-                            <JoditEditor ref={editor} value={newsDetail}
-                                         onChange={(data) => setNewsDetail(data)}/>
+                            <JoditEditor config={{language: localStorage.lang}} ref={editor} value={newsDetail}
+                                         onBlur={(data) => setNewsDetail(data)}/>
                         </Col>
                     </Row>
                 </Col>
@@ -319,8 +319,8 @@ const Index = () => {
                                                     </Col>
                                                     <Col className={"gutter-row"} span={18}>
                                                         {isUpdateId === item.id ? (
-                                                            <JoditEditor ref={editor} value={item.shortDetail}
-                                                                         onChange={(data) => setNewsShortDetail(data)}/>
+                                                            <JoditEditor config={{language: localStorage.lang}} ref={editor} value={item.shortDetail}
+                                                                         onBlur={(data) => setNewsShortDetail(data)}/>
                                                         ) : <>
                                                             <ReadEditor
                                                                 ref={editorRead}
@@ -339,8 +339,8 @@ const Index = () => {
                                                     </Col>
                                                     <Col className={"gutter-row"} span={18}>
                                                         {isUpdateId === item.id ? (
-                                                            <JoditEditor ref={editor} value={item.detail}
-                                                                         onChange={(data) => setNewsDetail(data)}/>
+                                                            <JoditEditor config={{language: localStorage.lang}} ref={editor} value={item.detail}
+                                                                         onBlur={(data) => setNewsDetail(data)}/>
                                                         ) : <>
                                                             <ReadEditor
                                                                 ref={editorRead}

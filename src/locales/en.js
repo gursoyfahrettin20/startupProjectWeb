@@ -72,6 +72,12 @@ export const en = {
             "mainHeadline": "Headlines 2 Page Edit",
             "breakHeadline": "Headlines 3 Page Edit",
             "lastHeadline": "Headlines 4 Page Edit",
+            "x": "X",
+            "facebook": "Facebook",
+            "linkedin": "Linkedin",
+            "google": "Google",
+            "youtube": "Youtube",
+            "socialUrlLink": "Please Write Your Social Media Link Address"
         },
         "productCategory": {
             "productName": "Product Name",
@@ -83,6 +89,19 @@ export const en = {
             "categoryAddPage": "Category Add Page",
             "categoryImage": "Category Image",
             "categoryDesc": "Category Description",
+            "productDesc": "Product Description",
+        },
+        "referencesCategory": {
+            "referencesName": "Reference Name",
+            "selectCategory": "Select Category",
+            "referencesAdd": "Reference Add",
+            "referencesAddPage": "Reference Add Page",
+            "categoryName": "Category Name",
+            "categoryAdd":  " Category Add",
+            "categoryAddPage": "Reference Category Add Page",
+            "categoryImage": "Category Image",
+            "categoryDesc": "Category Description",
+            "referencesDesc": "Reference Description",
         },
         "slider": {
             "sliderName": "Slider Name",
@@ -112,6 +131,13 @@ export const en = {
                 "maps": "Please enter a valid value from Google maps.",
             },
             "productCategory": {
+                "categoryName": "It must be at least 1 and at most 150 characters.",
+                "productName": "It must be at least 1 and at most 150 characters.",
+                "makeYourChoice": "Make Your Choice",
+                "productUrl": "To create your page, enter a Link that is not a Turkish character.",
+                "categoryUrl": "To create your page, enter a Link that is not a Turkish character.",
+            },
+            "referencesCategory": {
                 "categoryName": "It must be at least 1 and at most 150 characters.",
                 "productName": "It must be at least 1 and at most 150 characters.",
                 "makeYourChoice": "Make Your Choice",

@@ -5,9 +5,10 @@ function EditingEditor(props) {
     return (
         <>
             <JoditEditor
+                config={{language: localStorage.lang}}
                 ref={props.ref}
                 value={props.value}
-                onChange={props.onChange}/>
+                onBlur={props.onChange}/>
         </>
     );
 }

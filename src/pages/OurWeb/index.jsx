@@ -58,16 +58,38 @@ function Index(props) {
         }
     }, []);
 
+    const conf = (
+        {
+            style: {border: "2px solid #ccc", paddingTop: "10px", paddingLeft: "10px"},
+            toolbar: false,
+            showXPathInStatusbar: false,
+            language: localStorage.lang,
+            inline: true,
+            placeholder: t("ourPage.socialUrlLink")
+        }
+    )
+
     return (
         <div className={"card"}>
-        <div className={"card-header text-center fs-4"}>( {t(localStorage.lang)} ) - {t("ourPage." + props.elementName)}</div>
-        <div className={"card-body"}>
-            <JoditEditor ref={editor} value={content} onChange={(newContent) => setContent(newContent)}/>
-        </div>
-        <div className={"card-footer text-end"}>
-            <Radio.Group onChange={(e) => saveHandler(e.target.value)}>
-                <Radio.Button value="clear">{t("clear")}</Radio.Button>
-                <Radio.Button value="save">{t("save")}</Radio.Button>
+            <div className={"card-header text-center fs-4"}>{t("ourPage." + props.elementName)}</div>
+            {
+                props.id > 14 && propState.id < 25 ?
+                    <div className={"card-body"}>
+                        <JoditEditor config={conf} ref={editor} value={content}
+                                     onBlur={(newContent) => setContent(newContent)}/>
+                    </div>
+                    :
+                    <div className={"card-body"}>
+                        <JoditEditor config={{language: localStorage.lang}} ref={editor} value={content}
+                                     onBlur={(newContent) => setContent(newContent)}/>
+                    </div>
+            }
+
+
+            <div className={"card-footer text-end"}>
+                <Radio.Group onChange={(e) => saveHandler(e.target.value)}>
+                    <Radio.Button value="clear">{t("clear")}</Radio.Button>
+                    <Radio.Button value="save">{t("save")}</Radio.Button>
             </Radio.Group>
         </div>
         </div>

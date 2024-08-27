@@ -1,14 +1,14 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {
-    addProduct,
-    addProductImage,
-    deleteImage,
-    deleteProduct,
-    listProductImage,
-    loadCategory,
-    loadProduct,
-    updateProduct
+    addFinishedWorks,
+    addFinishedWorksImage,
+    deleteFinishedWorks,
+    deleteFinishedWorksImage,
+    listFinishedWorksImage,
+    loadFinishedWorks,
+    loadReferencesCategory,
+    updateFinishedWorks
 } from "@/api/apiCalls.js";
 import {Button, Col, Image, List, Radio, Row, Upload} from "antd";
 import FormItem from "@/components/formItem/FormItem.jsx";
@@ -74,7 +74,7 @@ function Index(props) {
                         id: imgList[i].id,
                         name: imgList[i].image,
                         status: 'done',
-                        url: "/assets/product/" + imgList[i].image,
+                        url: "/assets/finishedWorks/" + imgList[i].image,
                     })
                 }
             }
@@ -112,14 +112,14 @@ function Index(props) {
     }
 
     const newCreateHandler = (e) => {
-        if(e.target.value !=="cancel"){
+        if (e.target.value !== "cancel") {
             const newData = {
                 name: productName, url: productUrl, detail: productDetail, language: localStorage.lang
             }
             const indexCategory = _.findIndex(categoryList, (data) => {
                 return data.id === selectedCategory;
             })
-            newData["categories"] = categoryList[indexCategory];
+            newData["finishedWorksCategories"] = categoryList[indexCategory];
             newProductData(newData).then();
             navigate(0);
         } else {
@@ -138,7 +138,7 @@ function Index(props) {
                 return data.id === item.id;
             })
             for (let i = 0; i < newImage.length; i++) {
-                newImage[i]["products"] = productList[index];
+                newImage[i]["finishedWorks"] = productList[index];
             }
             newProductImageData(newImage).then();
             const newData = {
@@ -164,7 +164,7 @@ function Index(props) {
     const getImgList = useCallback(async (productId) => {
         try {
             const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
-            const list = await listProductImage(productId, token);
+            const list = await listFinishedWorksImage(productId, token);
             setImgList(list.data);
         } catch (error) {
         }
@@ -172,7 +172,7 @@ function Index(props) {
 
     const getCategory = useCallback(async () => {
         try {
-            const responseCategory = await loadCategory();
+            const responseCategory = await loadReferencesCategory();
             let langForList = [];
             for (let i = 0; i < responseCategory.data.length; i++) {
                 if (responseCategory.data[i].language === localStorage.lang) {
@@ -188,7 +188,7 @@ function Index(props) {
     const getProducts = useCallback(async (page) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            const responseProduct = await loadProduct(page, 5, token);
+            const responseProduct = await loadFinishedWorks(page, 5, token);
             let langForList = [];
             for (let i = 0; i < responseProduct.data.content.length; i++) {
                 if (responseProduct.data.content[i].language === localStorage.lang) {
@@ -205,7 +205,7 @@ function Index(props) {
     const newProductData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            await addProduct(item, token);
+            await addFinishedWorks(item, token);
             setIsNewProduct(false);
             navigate(0);
         } catch (error) {
@@ -219,19 +219,18 @@ function Index(props) {
     const newProductImageData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            await addProductImage(item, token);
+            await addFinishedWorksImage(item, token);
         } catch (error) {
             console.log(error.response.data.message);
         } finally {
             setIsNewProduct(false);
         }
-
     }, []);
 
     const deleteProductImageData = useCallback(async (id) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            await deleteImage(id, token);
+            await deleteFinishedWorksImage(id, token);
         } catch (error) {
             console.log(error.response.data.message);
         } finally {
@@ -243,7 +242,7 @@ function Index(props) {
     const updateProductData = useCallback(async (item) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            await updateProduct(item, token);
+            await updateFinishedWorks(item, token);
             setIsUpdateId(0);
             navigate(0);
         } catch (error) {
@@ -257,7 +256,7 @@ function Index(props) {
     const deleteProductData = useCallback(async (id) => {
         const token = JSON.parse(localStorage.getItem("token")) ? JSON.parse(localStorage.getItem("token")).token : null;
         try {
-            await deleteProduct(id, token);
+            await deleteFinishedWorks(id, token);
             setIsNewProduct(false);
             navigate(0);
         } catch (error) {
@@ -270,8 +269,8 @@ function Index(props) {
 
     const newProduct = () => {
         setIsNewProduct(true);
-        setProductName(null)
-        setProductUrl(null)
+        setProductName(null);
+        setProductUrl(null);
         setIsUpdateId(0);
         setNewImage([]);
         setImgList([]);
@@ -381,7 +380,9 @@ function Index(props) {
             </Row>
         </Col>
         <Col className={"gutter-row custom-radio-btn"} span={6} style={{textAlign: "right"}}>
-            <Radio.Group onChange={(e) => {newCreateHandler(e)}}>
+            <Radio.Group onChange={(e) => {
+                newCreateHandler(e)
+            }}>
                 <Radio.Button className={"save"} value="newItem" disabled={!validPage}>{t("save")}</Radio.Button>
                 <Radio.Button className={"cancel"} value="cancel" danger>{t("cancel")}</Radio.Button>
             </Radio.Group>
@@ -390,11 +391,11 @@ function Index(props) {
 
     return (
         <div className={"card"}>
-            <div className={"card-header text-center fs-4"}>{t("productCategory.productAddPage")}</div>
+            <div className={"card-header text-center fs-4"}>{t("referencesCategory.referencesAddPage")}</div>
             <div className={"card-body"}>
-                <Button className={"success"} title={t("productCategory.productAdd")} icon={<PlusOutlined/>}
+                <Button className={"success"} title={t("referencesCategory.referencesAdd")} icon={<PlusOutlined/>}
                         onClick={newProduct}>
-                    {t("productCategory.productAdd")}
+                    {t("referencesCategory.referencesAdd")}
                 </Button>
             </div>
             <div className={"productList card-body"}>
@@ -410,7 +411,7 @@ function Index(props) {
                                         <Col className={"gutter-row"} span={18}>
                                             <FormItem
                                                 name="productName"
-                                                label={t("productCategory.productName")}
+                                                label={t("referencesCategory.referencesName")}
                                                 errors={t("validation.productCategory.productName")}
                                                 validation={validation}
                                                 onChange={(e) => onHandlerProductName(e)}
@@ -430,11 +431,11 @@ function Index(props) {
                                     </Row>
                                 ) : <>
                                     <label className='form-label'
-                                           htmlFor={item.name + "_categoryTitle"}>{t("productCategory.categoryName")} : </label>
+                                           htmlFor={item.name + "_categoryTitle"}>{t("referencesCategory.categoryName")} : </label>
                                     {item.category.name}
                                     <br/>
                                     <label className='form-label'
-                                           htmlFor={item.name + "_title"}>{t("productCategory.productName")} : </label>
+                                           htmlFor={item.name + "_title"}>{t("referencesCategory.referencesName")} : </label>
                                     <span>{item.name}</span>
                                 </>
                                 }
@@ -480,7 +481,7 @@ function Index(props) {
                                                         <>
                                                             <label className='form-label'
                                                                    htmlFor={item.name + "_description"}>
-                                                                {t("productCategory.productDesc")} ;
+                                                                {t("referencesCategory.referencesDesc")} ;
                                                             </label>
                                                             <ReadEditor
                                                                 ref={editorRead}
@@ -497,35 +498,19 @@ function Index(props) {
                                                 <Radio.Group onChange={(e) => {
                                                     editingHandler(e, item)
                                                 }}>
-                                                    <Radio.Button
-                                                        className={"save"}
-                                                        value="save"
-                                                        disabled={!validPage}>
-                                                        {t("update")}
-                                                    </Radio.Button>
-                                                    <Radio.Button
-                                                        className={"cancel"}
-                                                        value="cancel"
-                                                        danger>
-                                                        {t("cancel")}
-                                                    </Radio.Button>
+                                                    <Radio.Button className={"save"} value="save"
+                                                                  disabled={!validPage}>{t("update")}</Radio.Button>
+                                                    <Radio.Button className={"cancel"} value="cancel"
+                                                                  danger>{t("cancel")}</Radio.Button>
                                                 </Radio.Group>) : (
                                                 <Radio.Group onChange={(e) => {
                                                     editHandler(e, item)
                                                 }}>
-                                                    <Radio.Button
-                                                        className={"update"}
-                                                        value={"edit"}
-                                                        disabled={isNewProduct || isUpdateId !== 0}>
-                                                        {t("edit")}
-                                                    </Radio.Button>
-                                                    <Radio.Button
-                                                        className={"delete"}
-                                                        value={"delete"}
-                                                        disabled={isNewProduct || isUpdateId !== 0}
-                                                        danger>
-                                                        {t("delete")}
-                                                    </Radio.Button>
+                                                    <Radio.Button className={"update"} value={"edit"}
+                                                                  disabled={isNewProduct || isUpdateId !== 0}>{t("edit")}</Radio.Button>
+                                                    <Radio.Button className={"delete"} value={"delete"}
+                                                                  disabled={isNewProduct || isUpdateId !== 0}
+                                                                  danger>{t("delete")}</Radio.Button>
                                                 </Radio.Group>)}
                                         </Col>
                                     </Row>}

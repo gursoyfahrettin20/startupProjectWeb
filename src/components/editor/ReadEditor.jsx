@@ -11,7 +11,7 @@ function ReadEditor(props) {
             showCharsCounter: false,
             showWordsCounter: false,
             showXPathInStatusbar: false,
-            language: "tr",
+            language: localStorage.lang,
             direction: "ltr",
             inline: true,
             toolbarInlineForSelection: true,

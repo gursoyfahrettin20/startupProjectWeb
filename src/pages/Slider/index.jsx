@@ -211,8 +211,8 @@ const Index = () => {
                             {t("slider.sliderShortDescription")}
                         </Col>
                         <Col className={"gutter-row"} span={18}>
-                            <JoditEditor ref={editor} value={sliderShortDetail}
-                                         onChange={(data) => setSliderShortDetail(data)}/>
+                            <JoditEditor config={{language: localStorage.lang}} ref={editor} value={sliderShortDetail}
+                                         onBlur={(data) => setSliderShortDetail(data)}/>
                         </Col>
                     </Row>
                 </Col>
@@ -222,8 +222,8 @@ const Index = () => {
                             {t("slider.sliderDetailDescription")}
                         </Col>
                         <Col className={"gutter-row"} span={18}>
-                            <JoditEditor ref={editor} value={sliderDetail}
-                                         onChange={(data) => setSliderDetail(data)}/>
+                            <JoditEditor config={{language: localStorage.lang}} ref={editor} value={sliderDetail}
+                                         onBlur={(data) => setSliderDetail(data)}/>
                         </Col>
                     </Row>
                 </Col>
@@ -239,8 +239,7 @@ const Index = () => {
 
     return (
         <div className={"card"}>
-            <div className={"card-header text-center fs-4"}>( {t(localStorage.lang)} )
-                - {t("slider.sliderAddPage")}</div>
+            <div className={"card-header text-center fs-4"}>{t("slider.sliderAddPage")}</div>
             <div className={"card-body"}>
                 <Button className={"success"} title={t("slider.sliderAdd")} icon={<PlusOutlined/>} onClick={newSlider}>
                     {t("slider.sliderAdd")}
@@ -319,8 +318,8 @@ const Index = () => {
                                                     </Col>
                                                     <Col className={"gutter-row"} span={18}>
                                                         {isUpdateId === item.id ? (
-                                                            <JoditEditor ref={editor} value={item.shortDetail}
-                                                                         onChange={(data) => setSliderShortDetail(data)}/>
+                                                            <JoditEditor config={{language: localStorage.lang}} ref={editor} value={item.shortDetail}
+                                                                         onBlur={(data) => setSliderShortDetail(data)}/>
                                                         ) : <>
                                                             <ReadEditor
                                                                 ref={editorRead}
@@ -339,8 +338,8 @@ const Index = () => {
                                                     </Col>
                                                     <Col className={"gutter-row"} span={18}>
                                                         {isUpdateId === item.id ? (
-                                                            <JoditEditor ref={editor} value={item.detail}
-                                                                         onChange={(data) => setSliderDetail(data)}/>
+                                                            <JoditEditor config={{language: localStorage.lang}} ref={editor} value={item.detail}
+                                                                         onBlur={(data) => setSliderDetail(data)}/>
                                                         ) : <>
                                                             <ReadEditor
                                                                 ref={editorRead}

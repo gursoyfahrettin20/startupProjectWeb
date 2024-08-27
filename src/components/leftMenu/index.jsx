@@ -4,13 +4,13 @@ import {
     AlertOutlined,
     AppstoreAddOutlined,
     AppstoreOutlined,
-    EnvironmentOutlined,
-    FlagOutlined,
-    InfoCircleOutlined,
+    EnvironmentOutlined, FacebookOutlined,
+    FlagOutlined, GoogleOutlined,
+    InfoCircleOutlined, LinkedinOutlined,
     MobileOutlined,
     ReadOutlined,
     ShareAltOutlined,
-    SlidersOutlined, XOutlined
+    SlidersOutlined, XOutlined, YoutubeOutlined
 } from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 
@@ -48,10 +48,16 @@ const Index = () => {
             getItem(<a href="/adminPanel/product">{t("leftMenu.createListProduct")}</a>, 'product', <MobileOutlined/>,),
         ]),
         getItem(t("leftMenu.referenceCategory"), 'categoryAndReferences', <AlertOutlined />, [
-            getItem(<a href="/adminPanel">{t("leftMenu.createListCategory")}</a>, 'categories', <AppstoreAddOutlined/>),
-            getItem(<a href="/adminPanel">{t("leftMenu.createListReferences")}</a>, 'references', <FlagOutlined />,),
+            getItem(<a href="/adminPanel/referencesCategories">{t("leftMenu.createListCategory")}</a>, 'categories', <AppstoreAddOutlined/>),
+            getItem(<a href="/adminPanel/referencesList">{t("leftMenu.createListReferences")}</a>, 'references', <FlagOutlined />,),
         ]),
-        getItem(<a href="/adminPanel">{t("leftMenu.socialsNetworks")}</a>, 'socialsNetworks', <XOutlined />),
+        getItem(t("leftMenu.socialsNetworks"), 'socialsNetworks', <XOutlined/>, [
+            getItem(<a href="/adminPanel/x">{t("ourPage.x")}</a>, 'x', <XOutlined/>),
+            getItem(<a href="/adminPanel/facebook">{t("ourPage.facebook")}</a>, 'facebook', <FacebookOutlined />),
+            getItem(<a href="/adminPanel/linkedin">{t("ourPage.linkedin")}</a>, 'linkedin', <LinkedinOutlined />),
+            getItem(<a href="/adminPanel/google">{t("ourPage.google")}</a>, 'google', <GoogleOutlined />),
+            getItem(<a href="/adminPanel/youtube">{t("ourPage.youtube")}</a>, 'youtube', <YoutubeOutlined />),
+        ]),
         getItem(t("leftMenu.siteDetail"), 'siteDetail', <InfoCircleOutlined/>, [
             getItem(<a href="/adminPanel/aboutUs">{t("leftMenu.aboutUs")}</a>, 'aboutUs', <ReadOutlined/>),
             getItem(<a href="/adminPanel/ourVision">{t("leftMenu.ourVision")}</a>, 'ourVision', <FlagOutlined/>),

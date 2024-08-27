@@ -85,8 +85,7 @@ function Index(props) {
 
 
     return (<div className={"card"}>
-        <div className={"card-header text-center fs-4"}>( {t(localStorage.lang)} )
-            - {t("ourPage." + props.elementName)}</div>
+        <div className={"card-header text-center fs-4"}>{t("ourPage." + props.elementName)}</div>
         <div className={"card-body"}>
             <Row gutter={[12, 12]} justify="start">
                 <Col className={"gutter-row"} span={24}>
@@ -104,7 +103,7 @@ function Index(props) {
                     <PageImage image={image} style={{maxWidth: "150px", maxHeight: "150px", margin: "20px"}}/>
                 </Col>
             </Row>
-            <JoditEditor ref={editor} value={content} onChange={(newContent) => setContent(newContent)}/>
+            <JoditEditor config={{language: localStorage.lang}} ref={editor} value={content} onBlur={(newContent) => setContent(newContent)}/>
         </div>
         <div className={"card-footer text-end"}>
             <Radio.Group onChange={(e) => saveHandler(e.target.value)}>

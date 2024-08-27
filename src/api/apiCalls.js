@@ -201,3 +201,62 @@ export const updateNews = (id, body, token = null) => {
 export const deleteNews = (id, token = null) => {
     return http.delete(getBaseUrl() + `/news/${id}`, token);
 }
+
+
+// ======================== Referans Kategori İşlemleri ===========================
+
+// Referans Kategorisi Ekleme Alanı.
+export const addReferencesCategories = (body, token = null) => {
+    return http.post(getBaseUrl() + '/newCategoriesFinishedWorks', body, token);
+}
+// Referans Kategorisi listesini getirir.
+export const loadReferencesCategory = () => {
+    return http.get(getBaseUrl() + `/categoriesFinishedWorks`);
+}
+
+// Referans Kategorisi Bilgilerini Güncelleme Alanı.
+export const updateReferencesCategory = (body, token = null) => {
+    return http.put(getBaseUrl() + `/categoriesFinishedWorks`, body, token);
+}
+
+// Referans Kategorisi Bilgilerini Silme Alanı.
+export const deleteReferencesCategory = (id, token = null) => {
+    return http.delete(getBaseUrl() + `/categoriesFinishedWorks/${id}`, token);
+}
+
+
+// ======================== Referans Ürün İşlemleri ===========================
+
+// Referans Ekleme Alanı.
+export const addFinishedWorks = (body, token = null) => {
+    return http.post(getBaseUrl() + '/newFinishedWorks', body, token);
+}
+// Referans listesini getirir.
+export const loadFinishedWorks = (page = 0, size = 10, token = null) => {
+    return http.get(getBaseUrl() + `/finishedWorks`, {params: {page, size}}, token);
+}
+
+// Referans Bilgilerini Güncelleme Alanı.
+export const updateFinishedWorks = (body, token = null) => {
+    return http.put(getBaseUrl() + `/finishedWorks`, body, token);
+}
+
+// Referans Bilgilerini Silme Alanı.
+export const deleteFinishedWorks = (id, token = null) => {
+    return http.delete(getBaseUrl() + `/finishedWorks/${id}`, token);
+}
+
+// Referans Resmi Ekleme Alanı.
+export const addFinishedWorksImage = (body, token = null) => {
+    return http.post(getBaseUrl() + '/newFinishedWorksToImage', body, token);
+}
+
+// Referans Resmi Listeleme Alanı.
+export const listFinishedWorksImage = (productId,token = null) => {
+    return http.get(getBaseUrl() + `/finishedWorksToImage/${productId}`, token);
+}
+
+// Referans Resmi Silme Alanı.
+export const deleteFinishedWorksImage = (id, token = null) => {
+    return http.delete(getBaseUrl() + `/finishedWorksToImage/${id}`, token);
+}
