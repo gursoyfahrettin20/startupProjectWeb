@@ -2,9 +2,16 @@ import { changeLanguage } from "@/api/apiCalls";
 import { useTranslation } from "react-i18next";
 import trFlag from "@/assets/tr.png"
 import enFlag from "@/assets/en.png"
+import {useEffect} from "react";
 
 const LanguageSelector = () => {
     const { i18n } = useTranslation();
+
+    useEffect(() => {
+        if (!localStorage.getItem("lang")) {
+            localStorage.setItem("lang", "tr");
+        }
+    }, []);
 
     const onChangeLanguage = lang => {
         i18n.changeLanguage(lang).then();

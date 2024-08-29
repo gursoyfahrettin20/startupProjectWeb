@@ -231,7 +231,7 @@ const Index = () => {
 
     return (
         <div className={"card"}>
-            <div className={"card-header text-center fs-4"}>( {t(localStorage.lang)} ) -{t("contact.contactPageEditing")}</div>
+            <div className={"card-header text-center fs-4"}>{t("contact.contactPageEditing")}</div>
             <div className={"card-body"}>
                 <Button className={"success"} title={t("contact.addNewContactInformation")} disabled={isNewContact} icon={<PlusOutlined/>}
                         onClick={newContact}>
