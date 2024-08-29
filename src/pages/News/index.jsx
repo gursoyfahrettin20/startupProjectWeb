@@ -10,7 +10,7 @@ import NewsImage from "@/components/Image/NewsImage.jsx";
 import ReadEditor from "@/components/editor/ReadEditor.jsx";
 import _ from "lodash";
 import {VALIDATION} from "@/shared/validate/Validation.js";
-import {isValidCheck} from "@/shared/validate/IsValidCheck.js";
+import {isValidCheck, turkishCharactersToEnglishCharacters} from "@/shared/validate/IsValidCheck.js";
 import {useTranslation} from "react-i18next";
 
 const Index = () => {
@@ -28,7 +28,8 @@ const Index = () => {
     const [newsDetail, setNewsDetail] = useState("");
     const navigate = useNavigate();
     const [validation, setValidation] = useState({
-        newsName: true
+        newsName: true,
+        routerLink: true
     });
     const [validPage, setValidPage] = useState(false);
     const [lang, setLang] = useState(localStorage.lang);
@@ -65,8 +66,14 @@ const Index = () => {
         } else {
             deleteNewsData(item.id).then()
         }
+        setNewsName({});
+        setNewsName("");
+        setRouterLink("");
+        setNewImage();
+        setNewsShortDetail("");
+        setNewsDetail("");
     }
-    const newNewsHandler = (e, item) => {
+    const newNewsHandler = (e) => {
         if (e.target.value !== "cancel") {
             const newData = {
                 name: newsName,
@@ -76,12 +83,12 @@ const Index = () => {
                 shortDetail: newsShortDetail,
                 language: localStorage.lang
             }
-
             newNewsData(newData).then();
         } else {
             setIsNewNews(false);
             setValidation({
-                newsName: true
+                newsName: true,
+                routerLink: true
             });
         }
     }
@@ -161,16 +168,38 @@ const Index = () => {
 
     const newNews = () => {
         setIsNewNews(true);
-        setNewsName({})
+        setNewsName({});
+        setIsUpdateId(0);
+        setNewsName("");
+        setRouterLink("");
+        setNewImage();
+        setNewsShortDetail("");
+        setNewsDetail("");
     }
 
     const onHandlerNewsName = (e) => {
+        const _turkishCharactersToEnglishCharacters = turkishCharactersToEnglishCharacters(e.target.value);
         const isValidNewsName = VALIDATION.NEWS[e.target.name].test(e.target.value);
         if (isValidNewsName) {
             setNewsName(e.target.value);
+            setRouterLink(_turkishCharactersToEnglishCharacters.replace(/\s/g, ''));
         }
         setValidation({
-            newsName: isValidNewsName
+            newsName: isValidNewsName,
+            routerLink: true
+        });
+    }
+
+    const onChangeNewsName = (e) => {
+        const _turkishCharactersToEnglishCharacters = turkishCharactersToEnglishCharacters(e.target.value);
+        const isValidNewsName = VALIDATION.NEWS[e.target.name].test(e.target.value);
+        if (isValidNewsName) {
+            setNewsName(e.target.value);
+            setRouterLink(_turkishCharactersToEnglishCharacters.replace(/\s/g, ''));
+        }
+        setValidation({
+            newsName: isValidNewsName,
+            routerLink: true
         });
     }
 
@@ -182,6 +211,7 @@ const Index = () => {
                         name="newsName"
                         label={t("news.newsName")}
                         errors={t("validation.news.newsName")}
+                        defaultValue={newsName}
                         validation={validation}
                         onChange={(e) => onHandlerNewsName(e)}
                     />
@@ -190,6 +220,7 @@ const Index = () => {
                     <FormItem
                         name="routerLink"
                         label={t("news.link")}
+                        defaultValue={routerLink}
                         onChange={(e) => setRouterLink(e.target.value)}
                     />
                 </Col>
@@ -252,18 +283,20 @@ const Index = () => {
                     dataSource={newsList}
                     renderItem={(item) => (<List.Item>
                         <List.Item.Meta
-                            title={isUpdateId === item.id ? (<Row gutter={[12, 12]} justify="start">
+                            title={isUpdateId === item.id ? (
+                                <Row gutter={[12, 12]} justify="start">
                                 <Col className={"gutter-row"} span={18}>
                                     <FormItem
                                         name="newsName"
                                         label={t("news.newsName")}
-                                        defaultValue={item.name}
+                                        defaultValue={newsName || item.name}
                                         errors={t("validation.news.newsName")}
                                         validation={validation}
-                                        onChange={(e) => setNewsName(e.target.value)}
+                                        onChange={(e) => onChangeNewsName(e)}
                                     />
                                 </Col>
-                            </Row>) : <>
+                                </Row>
+                            ) : <>
                                 <label className='form-label' htmlFor={item.name + "_description"}> {t("news.newsName")}
                                     : </label> <span>{item.name}</span>
                             </>
@@ -274,7 +307,7 @@ const Index = () => {
                                         {isUpdateId === item.id ? (<FormItem
                                             name="routerLink"
                                             label={t("news.link")}
-                                            defaultValue={item.link}
+                                            defaultValue={routerLink || item.link}
                                             onChange={(e) => setRouterLink(e.target.value)}
                                         />) : <>
                                             <label className='form-label'
@@ -356,20 +389,12 @@ const Index = () => {
                                     </Col>
                                     <Col className={"gutter-row custom-radio-btn"} span={6}
                                          style={{textAlign: "right"}}>
-                                        {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {
-                                            editingHandler(e, item)
-                                        }}>
-                                            <Radio.Button className={"save"} value="save"
-                                                          disabled={!validPage}>{t("update")}</Radio.Button>
-                                            <Radio.Button className={"cancel"} value="cancel"
-                                                          danger>{t("cancel")}</Radio.Button>
-                                        </Radio.Group>) : (<Radio.Group onChange={(e) => {
-                                            editHandler(e, item)
-                                        }}>
-                                            <Radio.Button className={"update"} value={"update"}
-                                                          disabled={isNewNews}>{t("edit")}</Radio.Button>
-                                            <Radio.Button className={"delete"} value={"delete"} disabled={isNewNews}
-                                                          danger>{t("delete")}</Radio.Button>
+                                        {isUpdateId === item.id ? (<Radio.Group onChange={(e) => {editingHandler(e, item)}}>
+                                            <Radio.Button className={"save"} value="save" disabled={!validPage || isNewNews}>{t("update")}</Radio.Button>
+                                            <Radio.Button className={"cancel"} value="cancel" danger disabled={isNewNews}>{t("cancel")}</Radio.Button>
+                                        </Radio.Group>) : (<Radio.Group onChange={(e) => {editHandler(e, item)}}>
+                                            <Radio.Button className={"update"} value={"update"} disabled={isNewNews || isUpdateId !== 0}>{t("edit")}</Radio.Button>
+                                            <Radio.Button className={"delete"} value={"delete"} disabled={isNewNews || isUpdateId !== 0} danger>{t("delete")}</Radio.Button>
                                         </Radio.Group>)}
                                     </Col>
                                 </Row>}

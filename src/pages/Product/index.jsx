@@ -22,7 +22,7 @@ import {useTranslation} from "react-i18next";
 import {VALIDATION} from "@/shared/validate/Validation.js";
 import {isValidCheck, turkishCharactersToEnglishCharacters} from "@/shared/validate/IsValidCheck.js";
 
-function Index(props) {
+function Index() {
     const {t} = useTranslation();
     const editor = useRef(null);
     const editorRead = useRef(null);
@@ -282,7 +282,7 @@ function Index(props) {
         setSelectedCategory(e.key);
     }
 
-    const getBase64 = (event) => new Promise((resolve, reject) => {
+    const getBase64 = (event) => new Promise((resolve) => {
         if (!event) {
             return;
         }
@@ -332,8 +332,6 @@ function Index(props) {
             productName: isValidProductName,
             productUrl: true
         });
-
-
     }
     const onHandlerProductUrl = (e) => {
         let _turkishCharactersToEnglishCharacters = turkishCharactersToEnglishCharacters(e.target.value);
