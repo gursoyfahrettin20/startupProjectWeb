@@ -35,6 +35,8 @@ export const tr = {
         "tr": "Türkçe Gösterim",
         "en": "İngilizce Gösterim",
         "url": "Link",
+        "shortcuts": "Kısayollar",
+        "noteOurWeb":"NOT : Türkçe dilinde iken, editöre \"gizle\" yazıldığında tüm sayfalarda ilgili sosyal medya linkinin gösterimini kaldırır.",
         "leftMenu": {
             "homePageTransactions": "Ana Sayfa İşlemleri",
             "homePage": "Ana Sayfa",

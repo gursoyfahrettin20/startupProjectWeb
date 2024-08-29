@@ -1,20 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Menu} from "antd";
 import {
     AlertOutlined,
     AppstoreAddOutlined,
     AppstoreOutlined,
-    EnvironmentOutlined, FacebookOutlined,
-    FlagOutlined, GoogleOutlined,
-    InfoCircleOutlined, InstagramOutlined, LinkedinOutlined,
+    EnvironmentOutlined,
+    FacebookOutlined,
+    FlagOutlined,
+    GoogleOutlined,
+    InfoCircleOutlined,
+    InstagramOutlined,
+    LinkedinOutlined,
     MobileOutlined,
     ReadOutlined,
     ShareAltOutlined,
-    SlidersOutlined, XOutlined, YoutubeOutlined
+    SlidersOutlined,
+    XOutlined,
+    YoutubeOutlined
 } from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 
 const Index = () => {
+    const [selectedMenu, setSelectedMenu] = useState([]);
     const {t} = useTranslation();
     function getItem(label, key, icon, children) {
         return {
@@ -48,7 +55,7 @@ const Index = () => {
             getItem(<a href="/adminPanel/product">{t("leftMenu.createListProduct")}</a>, 'product', <MobileOutlined/>,),
         ]),
         getItem(t("leftMenu.referenceCategory"), 'categoryAndReferences', <AlertOutlined />, [
-            getItem(<a href="/adminPanel/referencesCategories">{t("leftMenu.createListCategory")}</a>, 'categories', <AppstoreAddOutlined/>),
+            getItem(<a href="/adminPanel/referencesCategories">{t("leftMenu.createListCategory")}</a>, 'categoriesReferences', <AppstoreAddOutlined/>),
             getItem(<a href="/adminPanel/referencesList">{t("leftMenu.createListReferences")}</a>, 'references', <FlagOutlined />,),
         ]),
         getItem(t("leftMenu.socialsNetworks"), 'socialsNetworks', <XOutlined/>, [
@@ -66,11 +73,23 @@ const Index = () => {
             getItem(<a href="/adminPanel/contact">{t("leftMenu.contact")}</a>, 'contact', <EnvironmentOutlined/>),
         ])
     ];
+
+    useEffect(() => {
+        if (localStorage.getItem('leftMenuKey')) {
+            setSelectedMenu(localStorage.getItem('leftMenuKey').split(","));
+        }
+    }, []);
+
+    const onSelectMenu = (data) => {
+        localStorage.setItem('leftMenuKey', data.keyPath);
+    }
+
     return (
         <Menu
             style={{width: "299px"}}
-            defaultOpenKeys={['mainPage']}
-            mode={'inline'}
+            selectedKeys={selectedMenu}
+            onClick={onSelectMenu}
+            mode={'vertical'}
             theme={"light"}
             items={items}
         />

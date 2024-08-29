@@ -35,6 +35,8 @@ export const en = {
         "tr": "Türkçe Notation",
         "en": "English Notation",
         "url": "Url",
+        "shortcuts": "Shortcuts",
+        "noteOurWeb":"NOTE: In Turkish language, writing \"hide\" in the editor will remove the display of the relevant social media link on all pages.",
         "leftMenu": {
             "homePageTransactions": "Home Page Transactions",
             "homePage": "Home Page",

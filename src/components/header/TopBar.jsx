@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import LanguageSelector from "./LanguageSelector";
 import "./index.css"
 import {Link, useNavigate} from "react-router-dom";
-import {usePropState, usePropDispatch} from "@/shared/context";
+import {usePropDispatch, usePropState} from "@/shared/context";
 import ProfileImage from "@/components/Image/ProfileImage.jsx";
 import {logout} from "@/api/apiCalls.js";
 import {useEffect} from "react";
@@ -42,7 +42,7 @@ const TopBar = () => {
                         <Col span={16}>
                             <Link className="navbar-brand" to={"/adminPanel"}>
                                 <img src={logo} width={60} alt={"Empty Project"} title={"Empty Project"}/>
-                                Empty Project - web
+                                Admin Panel
                             </Link>
                         </Col>
                         <Col className="gutter-row" span={8} style={{textAlign: "right", padding:"0 20px"}}>

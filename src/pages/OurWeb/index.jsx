@@ -75,6 +75,7 @@ function Index(props) {
             {
                 props.id > 14 && propState.id < 27 ?
                     <div className={"card-body"}>
+                        <div>{t("noteOurWeb")}</div>
                         <JoditEditor config={conf} ref={editor} value={content}
                                      onBlur={(newContent) => setContent(newContent)}/>
                     </div>
