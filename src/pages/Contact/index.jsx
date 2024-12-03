@@ -70,6 +70,7 @@ const Index = () => {
             mail: true,
             maps: true,
         });
+        setUpdateItem({});
     }
 
     const editingHandler = (e, item) => {
@@ -93,6 +94,7 @@ const Index = () => {
             mail: true,
             maps: true,
         });
+        setUpdateItem({});
     }
     const updateItemHandler = (e, value) => {
         let _value = _.cloneDeep(value);
@@ -250,7 +252,7 @@ const Index = () => {
                                     <FormItem
                                         name="branchName"
                                         label={t("contact.branchName") + " : "}
-                                        defaultValue={item.branchName}
+                                        defaultValue={updateItem.branchName || item.branchName}
                                         errors={t("validation.contact.branchName")}
                                         validation={validation}
                                         onChange={(e) => updateItemHandler(e, e.target.value)}
@@ -265,7 +267,7 @@ const Index = () => {
                                             {isUpdateId === item.id ? (<FormItem
                                                 name="address"
                                                 label={t("contact.address") + " : "}
-                                                defaultValue={item.address}
+                                                defaultValue={updateItem.address || item.address}
                                                 errors={t("validation.contact.address")}
                                                 validation={validation}
                                                 onChange={(e) => updateItemHandler(e, e.target.value)}
@@ -275,7 +277,7 @@ const Index = () => {
                                             {isUpdateId === item.id ? (<FormItem
                                                 name="mobilNumber"
                                                 label={t("contact.mobilNumber") + " : "}
-                                                defaultValue={item.mobilNumber}
+                                                defaultValue={updateItem.mobilNumber || item.mobilNumber}
                                                 errors={t("validation.contact.mobilNumber")}
                                                 validation={validation}
                                                 onChange={(e) => updateItemHandler(e, e.target.value)}
@@ -285,7 +287,7 @@ const Index = () => {
                                             {isUpdateId === item.id ? (<FormItem
                                                 name="branchNumber"
                                                 label={t("contact.branchNumber") + " : "}
-                                                defaultValue={item.branchNumber}
+                                                defaultValue={updateItem.branchNumber || item.branchNumber}
                                                 errors={t("validation.contact.branchNumber")}
                                                 validation={validation}
                                                 onChange={(e) => updateItemHandler(e, e.target.value)}
@@ -295,7 +297,7 @@ const Index = () => {
                                             {isUpdateId === item.id ? (<FormItem
                                                 name="mail"
                                                 label={t("contact.mail") + " : "}
-                                                defaultValue={item.mail}
+                                                defaultValue={updateItem.mail || item.mail}
                                                 errors={t("validation.contact.mail")}
                                                 validation={validation}
                                                 onChange={(e) => updateItemHandler(e, e.target.value)}
@@ -306,7 +308,7 @@ const Index = () => {
                                                 isUpdateId === item.id ? (<FormItem
                                                         name="maps"
                                                         label={t("contact.maps") + " : "}
-                                                        defaultValue={item.maps}
+                                                        defaultValue={updateItem.maps || item.maps}
                                                         errors={t("validation.contact.maps")}
                                                         validation={validation}
                                                         onChange={(e) => updateItemHandler(e, e.target.value)}

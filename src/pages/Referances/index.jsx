@@ -374,6 +374,7 @@ function Index(props) {
                         label={t("url")}
                         errors={t("validation.productCategory.productUrl")}
                         validation={validation}
+                        defaultValue={productUrl}
                         onChange={(e) => onHandlerProductUrl(e)}
                     />
                 </Col>

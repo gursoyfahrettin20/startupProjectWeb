@@ -42,7 +42,7 @@ const TopBar = () => {
                         <Col span={16}>
                             <Link className="navbar-brand" to={"/adminPanel"}>
                                 <img src={logo} width={60} alt={"Empty Project"} title={"Empty Project"}/>
-                                Admin Panel
+                                BRS Sistem Admin Panel
                             </Link>
                         </Col>
                         <Col className="gutter-row" span={8} style={{textAlign: "right", padding:"0 20px"}}>

@@ -220,6 +220,7 @@ const Categories = () => {
                         label={t("url")}
                         errors={t("validation.productCategory.categoryUrl")}
                         validation={validation}
+                        defaultValue={categoryUrl}
                         onChange={(e) => onHandlerCategoryUrl(e)}
                     />
                 </Col>

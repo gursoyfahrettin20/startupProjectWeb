@@ -26,7 +26,7 @@ const Categories = () => {
     const navigate = useNavigate();
     const [validation, setValidation] = useState({
         categoryName: true,
-        categoryUrl: true,
+        categoryUrl: false,
     });
     const [validPage, setValidPage] = useState(false);
     const [lang, setLang] = useState(localStorage.lang);
@@ -98,6 +98,10 @@ const Categories = () => {
             setCategoryUrl(null)
             setIsUpdateId(0);
             setIsNewCategory(false);
+            setValidation({
+                categoryName: true,
+                categoryUrl: true,
+            })
         }
     }
 
@@ -206,6 +210,7 @@ const Categories = () => {
                         label={t("url")}
                         errors={t("validation.productCategory.categoryUrl")}
                         validation={validation}
+                        defaultValue={categoryUrl}
                         onChange={(e) => onHandlerCategoryUrl(e)}
                     />
                 </Col>

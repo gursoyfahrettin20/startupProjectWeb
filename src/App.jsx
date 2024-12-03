@@ -6,13 +6,12 @@ import LeftMenu from "@/components/leftMenu/index.jsx";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {loadAuthState} from "@/shared/localStorage.js";
-import {usePropState} from "@/shared/context.jsx";
 
 const {Header, Footer, Sider, Content} = Layout;
 
 function App() {
-    const [isLogin, setIsLogin] = useState(0);
     const navigate = useNavigate();
+    const [isLogin, setIsLogin] = useState(0);
 
     useEffect(() => {
         const _isLogin = loadAuthState();
@@ -31,10 +30,10 @@ function App() {
         <AuthenticationContext>
             <TopBar/>
             <Layout>
-                {isLogin !== 0 && <Sider width={"300px"} className={"leftMenu shadow-sm bg-light"}>
+                <Sider width={"300px"} className={"leftMenu shadow-sm bg-light"}>
                     <LeftMenu/>
                 </Sider>
-                }
+
                 <Content>
                     <Home/>
                 </Content>

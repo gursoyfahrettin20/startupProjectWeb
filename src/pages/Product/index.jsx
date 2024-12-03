@@ -45,7 +45,7 @@ function Index() {
     const [validation, setValidation] = useState({
         selectCategory: true,
         productName: true,
-        productUrl: true,
+        productUrl: false,
     });
     const [validPage, setValidPage] = useState(false);
     const [lang, setLang] = useState(localStorage.lang);
@@ -374,6 +374,7 @@ function Index() {
                         errors={t("validation.productCategory.productUrl")}
                         validation={validation}
                         onChange={(e) => onHandlerProductUrl(e)}
+                        defaultValue={productUrl}
                     />
                 </Col>
             </Row>

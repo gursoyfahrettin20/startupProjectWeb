@@ -68,6 +68,17 @@ function Index(props) {
             placeholder: t("ourPage.socialUrlLink")
         }
     )
+    const onblurHandler = (newContent) => {
+        let _newContent = _.cloneDeep(newContent);
+        if (newContent === "<p>gizle</p>") {
+            _newContent = "gizle";
+        } else if (newContent.split("<")[2].split(">")[1]) {
+            _newContent = newContent.split("<")[2].split(">")[1];
+        } else if (newContent.split("<")[1].split(">")[1]) {
+            _newContent = newContent.split("<")[1].split(">")[1];
+        }
+        setContent(_newContent);
+    }
 
     return (
         <div className={"card"}>
@@ -77,7 +88,7 @@ function Index(props) {
                     <div className={"card-body"}>
                         <div>{t("noteOurWeb")}</div>
                         <JoditEditor config={conf} ref={editor} value={content}
-                                     onBlur={(newContent) => setContent(newContent)}/>
+                                     onBlur={(newContent) => onblurHandler(newContent)}/>
                     </div>
                     :
                     <div className={"card-body"}>
